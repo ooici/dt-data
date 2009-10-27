@@ -1,0 +1,18 @@
+{
+  "description": "Installs Twisted package starts agent",
+  "replacing": { },
+  "recipes": { "twisted": "" },
+  "platforms": { "ubuntu": [ ">= 8.10" ] },
+  "maintainer": "OOICI",
+  "version": "0.1",
+  "recommendations": { },
+  "name": "twisted",
+  "maintainer_email": "clemesha@ucsd.edu",
+  "attributes": { },
+  "suggestions": { },
+  "license": "Apache 2.0",
+  "conflicting": { },
+  "dependencies": { },
+  "providing": { "twisted": [ ] },
+  "long_description": "Installs Twisted"
+}

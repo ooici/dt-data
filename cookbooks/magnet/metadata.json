@@ -1,0 +1,40 @@
+{
+  "description": "Installs Magnet package",
+  "replacing": {
+
+  },
+  "recipes": {
+    "magnet": ""
+  },
+  "platforms": {
+    "ubuntu": [
+      ">= 8.10"
+    ]
+  },
+  "maintainer": "OOICI",
+  "version": "0.1",
+  "recommendations": {
+
+  },
+  "name": "magnet",
+  "maintainer_email": "clemesha@ucsd.edu",
+  "attributes": {
+
+  },
+  "suggestions": {
+
+  },
+  "license": "Apache 2.0",
+  "conflicting": {
+
+  },
+  "dependencies": {
+
+  },
+  "providing": {
+    "magnet": [
+
+    ]
+  },
+  "long_description": "Installs Magnet"
+}

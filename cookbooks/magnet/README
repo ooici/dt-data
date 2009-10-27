@@ -1,0 +1,6 @@
+A Magnet "Chef" Cookbook
+
+- install deps: twisted, txamqp
+- user: create magnet user
+- template magnet.conf
+- permissions: templates, dir, startup
