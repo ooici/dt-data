@@ -1,0 +1,16 @@
+{
+  "description": "Create a new system user",
+  "replacing": { },
+  "recipes": { "user": "" },
+  "maintainer": "OOICI",
+  "version": "0.1",
+  "recommendations": { },
+  "name": "user",
+  "maintainer_email": "clemesha@ucsd.edu",
+  "attributes": { },
+  "suggestions": { },
+  "license": "Apache 2.0",
+  "conflicting": { },
+  "dependencies": { },
+  "providing": { "user": [ ] },
+}
