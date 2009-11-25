@@ -26,13 +26,17 @@ http {
     include /etc/nginx/conf.d/*.conf;
     include /etc/nginx/sites-enabled/*;
 
+    upstream webapps {
+        <% for app in @webapps %>
+            server <%= app %>:<%= @webapp_port %>;
+        <% end %>
+    }
+
     server {
         listen 80;
         server_name <%= @public_hostname %>;
         location / {
-            <% for app in @webapps %>
-                proxy_pass http://<% app %>;
-            <% end %>
+            proxy_pass http://webapps;
         }
     }
 }
