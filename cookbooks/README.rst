@@ -2,9 +2,9 @@ Chef cookbooks for the OOI CEI
 ==============================
 
 
-Install on Ubuntu 9.04
-----------------------
-See 'userdata.sh' for complete install script.
+Install on Ubuntu 10.04
+-----------------------
+See 'chef_install.sh' for complete Chef install script.
 
 
 Examples

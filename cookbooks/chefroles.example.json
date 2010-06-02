@@ -1,4 +1,4 @@
-#json attributes (used with '-j' flag)
+#This file is used with the Chef '-j' flag.
 
 {
  "username":"magnet",
