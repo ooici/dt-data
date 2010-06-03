@@ -1,5 +1,4 @@
 bash "install-carrot" do
-  user "root"
   code <<-EOH
   cd /home/#{node[:username]}
   git clone git://amoeba.ucsd.edu/carrot.git
@@ -10,20 +9,28 @@ bash "install-carrot" do
 end
 
 
-bash "install-carrot" do
-  user "root"
+bash "install-magnet" do
   code <<-EOH
   cd /home/#{node[:username]}
   git clone git://amoeba.ucsd.edu/magnet.git
   cd magnet
-  git checkout -b space origin/space
   python setup.py install
+  EOH
+end
+
+bash "install-lcaarch" do
+  code <<-EOH
+  cd /home/#{node[:username]}
+  git clone http://github.com/clemesha-ooi/lcaarch.git
+  cd lcaarch
+  git checkout #{node[:capabilitycontainer][:lcaarch_branch]}
+  git fetch
+  git reset --hard #{node[:capabilitycontainer][:lcaarch_commit_hash]}
   EOH
 end
 
 
 bash "give-container-user-ownership" do
-  user "root"
   code <<-EOH
   chown -R #{node[:username]}:#{node[:username]} /home/#{node[:username]}
   EOH
@@ -33,8 +40,8 @@ end
 bash "start-capabilitycontainer" do
   user node[:username]
   code <<-EOH
-  cd /home/#{node[:username]}/magnet
-  twistd magnet -n -h #{node[:capabilitycontainer][:broker]} -b #{node[:capabilitycontainer][:bootscript]}
+  cd /home/#{node[:username]}/lcaarch
+  twistd magnet -n -h #{node[:capabilitycontainer][:broker]} -a sysname=#{node[:capabilitycontainer][:sysname]} #{node[:capabilitycontainer][:bootscript]}
   EOH
 end
 
