@@ -36,12 +36,27 @@ bash "give-container-user-ownership" do
   EOH
 end
 
+node[:services].each do |service, service_spec|
 
-bash "start-capabilitycontainer" do
-  user node[:username]
-  code <<-EOH
-  cd /home/#{node[:username]}/lcaarch
-  twistd magnet -n -h #{node[:capabilitycontainer][:broker]} -a sysname=#{node[:capabilitycontainer][:sysname]} #{node[:capabilitycontainer][:bootscript]}
-  EOH
+  service_config = "/home/#{node[:username]}/lcaarch/res/config/#{service}-ionservices.cfg"
+
+  template "#{service_config}" do
+    source "ionservices.cfg.erb"
+    owner "#{node[:username]}"
+    variables(:service_spec => service_spec)
+  end
+
+  bash "start-service" do
+    user node[:username]
+    code <<-EOH
+    cd /home/#{node[:username]}/lcaarch
+    twistd --pidfile=#{service}-service.pid --logfile=#{service}-service.log magnet -n -h #{node[:capabilitycontainer][:broker]} -a processes=#{service_config},sysname=#{node[:capabilitycontainer][:sysname]} #{node[:capabilitycontainer][:bootscript]}
+    EOH
+  end
+
 end
+
+
+
+
 
