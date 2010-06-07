@@ -33,6 +33,7 @@ end
 bash "give-container-user-ownership" do
   code <<-EOH
   chown -R #{node[:username]}:#{node[:username]} /home/#{node[:username]}
+  chown #{node[:username]}:#{node[:username]} /opt/cei_environment
   EOH
 end
 
@@ -49,6 +50,7 @@ node[:services].each do |service, service_spec|
   bash "start-service" do
     user node[:username]
     code <<-EOH
+    source /opt/cei_environment
     cd /home/#{node[:username]}/lcaarch
     twistd --pidfile=#{service}-service.pid --logfile=#{service}-service.log magnet -n -h #{node[:capabilitycontainer][:broker]} -a processes=#{service_config},sysname=#{node[:capabilitycontainer][:sysname]} #{node[:capabilitycontainer][:bootscript]}
     EOH
