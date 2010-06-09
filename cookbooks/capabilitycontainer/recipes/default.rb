@@ -50,7 +50,9 @@ node[:services].each do |service, service_spec|
   bash "start-service" do
     user node[:username]
     code <<-EOH
-    source /opt/cei_environment
+    if [ -f /opt/cei_environment ]; then
+      source /opt/cei_environment
+    fi
     cd /home/#{node[:username]}/lcaarch
     twistd --pidfile=#{service}-service.pid --logfile=#{service}-service.log magnet -n -h #{node[:capabilitycontainer][:broker]} -a processes=#{service_config},sysname=#{node[:capabilitycontainer][:sysname]} #{node[:capabilitycontainer][:bootscript]}
     EOH
