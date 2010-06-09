@@ -33,7 +33,9 @@ end
 bash "give-container-user-ownership" do
   code <<-EOH
   chown -R #{node[:username]}:#{node[:username]} /home/#{node[:username]}
-  chown #{node[:username]}:#{node[:username]} /opt/cei_environment
+  if [ -f /opt/cei_environment ]; then
+    chown #{node[:username]}:#{node[:username]} /opt/cei_environment
+  fi
   EOH
 end
 
