@@ -12,6 +12,7 @@ bash "install-nimbus-context-agent" do
     tar zxf nimbus-ctx-agent-2.2.1.tar.gz
     mv nimbus-ctx-agent-2.2.1/* /opt/nimbus/
     chmod -R +x /opt/nimbus/ctx-scripts/*
-    cp /opt/chef/cookbooks/nimbus_context_agent/resources/chef-install-work-consumer /opt/nimbus/ctx-scripts/3-data/
+    cp /opt/chef/cookbooks/nimbus_context_agent/extra/chef-install-work-consumer /opt/nimbus/ctx-scripts/3-data/
+    chmod +x /opt/nimbus/ctx-scripts/3-data/chef-install-work-consumer
   EOH
 end
