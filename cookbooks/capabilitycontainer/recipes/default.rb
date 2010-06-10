@@ -43,7 +43,7 @@ end
 template "/home/#{node[:username]}/lcaarch/res/logging/loglevels.cfg" do
   source "loglevels.cfg.erb"
   owner "#{node[:username]}"
-  variables(:log_level => log_level)
+  variables(:log_level => node[:capabilitycontainer][:log_level])
 end
 
 
