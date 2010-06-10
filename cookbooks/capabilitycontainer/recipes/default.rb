@@ -39,6 +39,14 @@ bash "give-container-user-ownership" do
   EOH
 end
 
+
+template "/home/#{node[:username]}/lcaarch/res/logging/loglevels.cfg" do
+  source "loglevels.cfg.erb"
+  owner "#{node[:username]}"
+  variables(:log_level => log_level)
+end
+
+
 node[:services].each do |service, service_spec|
 
   service_config = "/home/#{node[:username]}/lcaarch/res/config/#{service}-ionservices.cfg"
@@ -61,8 +69,3 @@ node[:services].each do |service, service_spec|
   end
 
 end
-
-
-
-
-
