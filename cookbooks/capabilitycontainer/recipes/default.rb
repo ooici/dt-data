@@ -8,6 +8,12 @@ bash "install-carrot" do
   EOH
 end
 
+bash "install-magnet-deps" do
+  code <<-EOH
+  apt-get -y install python-dev
+  easy_install msgpack-python
+  EOH
+end
 
 bash "install-magnet" do
   code <<-EOH
