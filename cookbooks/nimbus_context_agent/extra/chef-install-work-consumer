@@ -1,4 +1,4 @@
 #!/bin/sh
 
 # The following assumes a 'work_consumer' cookbook exists in '/opt/chef/cookbooks':
-sudo chef-solo -l debug -c /opt/chef/cookbooks/nimbus_context_agent/extra/chefconf.rb -j $1
+sudo chef-solo -l debug -c /opt/chef/cookbooks/nimbus_context_agent/extra/chefconf.rb -j $1 &> /opt/nimbus/chef.log
