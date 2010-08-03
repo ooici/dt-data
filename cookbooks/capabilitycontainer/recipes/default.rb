@@ -35,6 +35,11 @@ bash "install-lcaarch" do
   EOH
 end
 
+bash "remove-twisted-plugin-dropin.cache.new-error" do
+  code <<-EOH
+  twistd --help &>/dev/null
+  EOH
+end
 
 bash "give-container-user-ownership" do
   code <<-EOH
