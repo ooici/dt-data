@@ -50,6 +50,18 @@ bash "give-container-user-ownership" do
   EOH
 end
 
+bash "give-remote-user-log-access" do
+  code <<-EOH
+  if [ ! -d /home/#{node[:username]}/.ssh ]; then
+    mkdir /home/#{node[:username]}/.ssh
+  fi
+  if [ -f /home/ubuntu/.ssh/authorized_keys ]; then
+    cp /home/ubuntu/.ssh/authorized_keys /home/#{node[:username]}/.ssh/
+  fi
+  chown -R #{node[:username]} /home/#{node[:username]}/.ssh
+  EOH
+end
+
 
 template "/home/#{node[:username]}/lcaarch/res/logging/loglevels.cfg" do
   source "loglevels.cfg.erb"
