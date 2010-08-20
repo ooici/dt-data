@@ -1,3 +1,10 @@
+bash "set-hostname" do
+  code <<-EOH
+  /etc/hostname-set.sh
+  echo "127.0.0.1 `hostname`" >> /etc/hosts
+  EOH
+end
+
 bash "set-lcaarch" do
   code <<-EOH
   cd /home/#{node[:username]}/lcaarch
