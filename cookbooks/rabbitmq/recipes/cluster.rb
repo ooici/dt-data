@@ -25,7 +25,7 @@ template "/var/lib/rabbitmq/.erlang.cookie" do
   mode 0400
 end
 
-template "/etc/rabbitmq/rabbitmq_cluster.config" do
+template "/etc/rabbitmq/rabbitmq_cluster.conf" do
   source "rabbitmq_cluster.config.erb"
   owner "root"
   group "root"
