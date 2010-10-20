@@ -1,0 +1,132 @@
+#!/usr/bin/env python
+
+"""
+EPU boostrapping script. Switches on available IaaS metadata:
+    1. If no metadata, do nothing. Expect system to be configured from
+       outside using fabric or something.
+    2. If metadata begins with a shebang (#!), save to temporary file
+       and execute.
+    3. Otherwise, install and run Nimbus context agent
+"""
+
+import socket
+import fcntl
+import struct
+import time
+import sys
+import urllib
+import os
+import tempfile
+import subprocess
+
+DT_DATA_DIR = '/opt/dt-data'
+
+# from python mailing list:
+def _ifinfo(sock, addr, ifname):
+    iface = struct.pack('256s', ifname[:15])
+    info = fcntl.ioctl(sock.fileno(), addr, iface)
+    if addr == 0x8927:
+        hwaddr = []
+        for char in info[18:24]:
+            hwaddr.append(hex(ord(char))[2:])
+        return ':'.join(hwaddr)
+    else:
+        return socket.inet_ntoa(info[20:24])
+
+# from python mailing list:
+def ifconfig(ifname):
+    ifreq = {'ifname': ifname}
+    sock = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    try:
+        ifreq['addr'] = _ifinfo(sock, 0x8915, ifname) # SIOCGIFADDR
+        ifreq['brdaddr'] = _ifinfo(sock, 0x8919, ifname) # SIOCGIFBRDADDR
+        ifreq['netmask'] = _ifinfo(sock, 0x891b, ifname) # SIOCGIFNETMASK
+        ifreq['hwaddr'] = _ifinfo(sock, 0x8927, ifname) # SIOCSIFHWADDR
+    except:
+        pass
+        # exceptions are normal...
+    sock.close()
+    return ifreq
+
+def wait_for_net():
+    no_ip = True
+    while no_ip:
+        time.sleep(0.5)
+        ifreq = ifconfig("eth0")
+        if ifreq.has_key("addr"):
+            no_ip = False
+
+def get_nimbus_metadata_url(path='/var/nimbus-metadata-server-url'):
+    try:
+        f = None
+        try:
+            f = open(path)
+            return f.read().strip()
+        finally:
+            if f:
+                f.close()
+    except:
+        return None
+
+def get_userdata(baseurl='http://169.254.169.254'):
+    url = baseurl + "/2007-01-19/user-data"
+    res = urllib.urlopen(url)
+    code = res.getcode()
+    if not code or code == 404:
+        return None
+    return res.read()
+
+def run_script(script):
+    fd,path = tempfile.mkstemp()
+    f = None
+    try:
+        f = os.fdopen(fd, 'w')
+        f.write(script)
+        f.close()
+        f = None	
+        os.chmod(path, 0755)
+        
+        subprocess.check_call([path])
+    finally:
+        if f:
+            f.close()
+        os.unlink(path)
+
+def run_ctx_agent():
+    os.chdir(DT_DATA_DIR)
+    subprocess.check_call(['git', 'fetch'])
+    subprocess.check_call(['git', 'reset', '--hard', 'HEAD'])
+
+    conf = os.path.join(DT_DATA_DIR, 'cookbooks/nimbus_context_agent/extra/chefconf.rb')
+    roles = os.path.join(DT_DATA_DIR, 'cookbooks/nimbus_context_agent/extra/chefroles.json')
+    subprocess.check_call(['chef-solo', '-l', 'debug', '-c', conf, '-j', roles])
+    subprocess.check_call(['sh', '/opt/nimbus/ctx-scripts/clean.sh'])
+    subprocess.check_call(['sh', '/opt/nimbus/ctx/launch.sh'])
+
+def main(args=sys.argv):
+    wait_for_net()
+
+    nimbus_metadata_url = get_nimbus_metadata_url()
+
+    userdata = None
+    if nimbus_metadata_url:
+        try:
+            userdata = get_userdata(nimbus_metadata_url)
+        except:
+            userdata = get_userdata()
+
+    else:
+        userdata = get_userdata()
+
+    if userdata:
+        if userdata.startswith('#!'):
+            run_script(userdata)
+        else:
+            run_ctx_agent()
+    
+    # no userdata means do nothing, likely something from outside (fabric) 
+    # will set up this instance
+
+if __name__ == '__main__':
+    main()
+
