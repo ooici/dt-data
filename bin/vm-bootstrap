@@ -95,7 +95,7 @@ def run_script(script):
 def run_ctx_agent():
     os.chdir(DT_DATA_DIR)
     subprocess.check_call(['git', 'fetch'])
-    subprocess.check_call(['git', 'reset', '--hard', 'HEAD'])
+    subprocess.check_call(['git', 'reset', '--hard', 'origin/HEAD'])
 
     conf = os.path.join(DT_DATA_DIR, 'cookbooks/nimbus_context_agent/extra/chefconf.rb')
     roles = os.path.join(DT_DATA_DIR, 'cookbooks/nimbus_context_agent/extra/chefroles.json')
