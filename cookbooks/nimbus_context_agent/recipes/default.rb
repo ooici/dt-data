@@ -8,11 +8,16 @@ end
 
 bash "install-nimbus-context-agent" do
   code <<-EOH
-    wget http://workspace.globus.org/downloads/nimbus-ctx-agent-2.2.1.tar.gz
+    wget http://www.nimbusproject.org/downloads/nimbus-ctx-agent-2.2.1.tar.gz
     tar zxf nimbus-ctx-agent-2.2.1.tar.gz
     mv nimbus-ctx-agent-2.2.1/* /opt/nimbus/
     chmod -R +x /opt/nimbus/ctx-scripts/*
-    cp /opt/chef/cookbooks/nimbus_context_agent/extra/chef-install-work-consumer /opt/nimbus/ctx-scripts/3-data/
-    chmod +x /opt/nimbus/ctx-scripts/3-data/chef-install-work-consumer
   EOH
+end
+
+template "/opt/nimbus/ctx-scripts/3-data/chef-install-work-consumer" do
+    source "chef-install-work-consumer"
+    mode 755
+    owner "root"
+    group "root"
 end
