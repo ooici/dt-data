@@ -9,12 +9,18 @@ bash "get-lcaarch" do
   EOH
 end
 
+package "python-dev" do
+  action :install
+end
+
+package "python-pip" do
+  action :install
+end
+
 bash "install-lcaarch-deps" do
   code <<-EOH
-  apt-get -y install python-dev
-  easy_install msgpack-python
   cd /home/#{node[:username]}/lcaarch
-  pip install --find-links=http://ooici.net/packages --requirement=requirements.txt --use-mirrors
+  pip install --find-links=#{node[:capabilitycontainer][:pip_package_repo]} --requirement=requirements.txt --use-mirrors
   EOH
 end
 
