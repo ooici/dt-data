@@ -1,37 +1,20 @@
-bash "install-carrot" do
+bash "get-lcaarch" do
   code <<-EOH
   cd /home/#{node[:username]}
-  git clone git://amoeba.ucsd.edu/carrot.git
-  cd carrot
-  git checkout -b txamqp origin/txamqp
-  python setup.py install
+  git clone #{node[:capabilitycontainer][:git_lcaarch_repo]}
+  cd lcaarch
+  git checkout #{node[:capabilitycontainer][:git_lcaarch_branch]}
+  git fetch
+  git reset --hard #{node[:capabilitycontainer][:git_lcaarch_commit]}
   EOH
 end
 
-bash "install-magnet-deps" do
+bash "install-lcaarch-deps" do
   code <<-EOH
   apt-get -y install python-dev
   easy_install msgpack-python
-  EOH
-end
-
-bash "install-magnet" do
-  code <<-EOH
-  cd /home/#{node[:username]}
-  git clone git://amoeba.ucsd.edu/magnet.git
-  cd magnet
-  python setup.py install
-  EOH
-end
-
-bash "install-lcaarch" do
-  code <<-EOH
-  cd /home/#{node[:username]}
-  git clone http://github.com/clemesha-ooi/lcaarch.git
-  cd lcaarch
-  git checkout #{node[:capabilitycontainer][:lcaarch_branch]}
-  git fetch
-  git reset --hard #{node[:capabilitycontainer][:lcaarch_commit_hash]}
+  cd /home/#{node[:username]}/lcaarch
+  pip install --find-links=http://ooici.net/packages --requirement=requirements.txt --use-mirrors
   EOH
 end
 
