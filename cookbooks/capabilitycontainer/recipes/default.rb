@@ -20,7 +20,7 @@ end
 bash "install-lcaarch-deps" do
   code <<-EOH
   cd /home/#{node[:username]}/lcaarch
-  pip install --find-links=#{node[:capabilitycontainer][:pip_package_repo]} --requirement=requirements.txt --use-mirrors
+  pip install --find-links=#{node[:capabilitycontainer][:pip_package_repo]} --requirement=requirements.txt
   EOH
 end
 
