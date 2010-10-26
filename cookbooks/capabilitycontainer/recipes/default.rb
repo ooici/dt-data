@@ -9,16 +9,8 @@ bash "get-lcaarch" do
   EOH
 end
 
-package "python-dev" do
-  action :install
-end
-
-package "python-numpy" do
-  action :install
-end
-
-package "python-pip" do
-  action :install
+%w{ python-dev python-numpy python-pip }.each do |pkg|
+  package pkg
 end
 
 bash "get-txrabbitmq" do
@@ -90,11 +82,11 @@ node[:services].each do |service, service_spec|
     environment({
       "HOME" => "/home/#{node[:username]}"
     })
+    cwd "/home/#{node[:username]}/lcaarch"
     code <<-EOH
     if [ -f /opt/cei_environment ]; then
       source /opt/cei_environment
     fi
-    cd /home/#{node[:username]}/lcaarch
     twistd --pidfile=#{service}-service.pid --logfile=#{service}-service.log cc -n -h #{node[:capabilitycontainer][:broker]} --broker_heartbeat=#{node[:capabilitycontainer][:broker_heartbeat]} -a processes=#{service_config},sysname=#{node[:capabilitycontainer][:sysname]} #{node[:capabilitycontainer][:bootscript]}
     EOH
   end
