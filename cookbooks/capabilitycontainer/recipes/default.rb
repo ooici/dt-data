@@ -87,6 +87,9 @@ node[:services].each do |service, service_spec|
 
   bash "start-service" do
     user node[:username]
+    environment({
+      "HOME" => "/home/#{node[:username]}"
+    })
     code <<-EOH
     if [ -f /opt/cei_environment ]; then
       source /opt/cei_environment
