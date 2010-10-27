@@ -31,5 +31,5 @@ template "/etc/rabbitmq/rabbitmq.conf" do
   owner "root"
   group "root"
   mode 0644
-  notifies :restart, resources(:service => "rabbitmq-server")
+  notifies :restart, resources(:service => "rabbitmq-server"), :immediately
 end
