@@ -76,18 +76,36 @@ node[:services].each do |service, service_spec|
     owner "#{node[:username]}"
     variables(:service_spec => service_spec)
   end
+  
+  logging_dir = "/home/#{node[:username]}/lcaarch/logs/#{service}"
+  directory "#{logging_dir}" do
+    owner "#{node[:username]}"
+    group "#{node[:username]}"
+    mode "0755"
+  end
+  
+  logging_config = "#{logging_dir}/#{service}-logging.conf"
+      
+  template "#{logging_config}" do
+    source "ionlogging.conf.erb"
+    owner "#{node[:username]}"
+    variables(:service_name => service)
+  end
+  
 
   bash "start-service" do
     user node[:username]
     environment({
-      "HOME" => "/home/#{node[:username]}"
+      "HOME" => "/home/#{node[:username]}",
+      "ION_ALTERNATE_LOGGING_CONF" => "#{logging_config}"
     })
     cwd "/home/#{node[:username]}/lcaarch"
     code <<-EOH
     if [ -f /opt/cei_environment ]; then
       source /opt/cei_environment
     fi
-    twistd --pidfile=#{service}-service.pid --logfile=#{service}-service.log cc -n -h #{node[:capabilitycontainer][:broker]} --broker_heartbeat=#{node[:capabilitycontainer][:broker_heartbeat]} -a processes=#{service_config},sysname=#{node[:capabilitycontainer][:sysname]} #{node[:capabilitycontainer][:bootscript]}
+    cd /home/#{node[:username]}/lcaarch
+    twistd --pidfile=#{service}-service.pid -n -h #{node[:capabilitycontainer][:broker]} --broker_heartbeat=#{node[:capabilitycontainer][:broker_heartbeat]} -a processes=#{service_config},sysname=#{node[:capabilitycontainer][:sysname]} #{node[:capabilitycontainer][:bootscript]}
     EOH
   end
 
