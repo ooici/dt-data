@@ -104,7 +104,11 @@ node[:services].each do |service, service_spec|
     if [ -f /opt/cei_environment ]; then
       source /opt/cei_environment
     fi
-    twistd --pidfile=#{service}-service.pid cc -n -h #{node[:capabilitycontainer][:broker]} --broker_heartbeat=#{node[:capabilitycontainer][:broker_heartbeat]} -a processes=#{service_config},sysname=#{node[:capabilitycontainer][:sysname]} #{node[:capabilitycontainer][:bootscript]}
+    echo "#!/bin/bash" >> start-#{service}.sh
+    echo "export ION_ALTERNATE_LOGGING_CONF=#{logging_config}" >> start-#{service}.sh
+    echo "twistd --pidfile=#{service}-service.pid cc -n -h #{node[:capabilitycontainer][:broker]} --broker_heartbeat=#{node[:capabilitycontainer][:broker_heartbeat]} -a processes=#{service_config},sysname=#{node[:capabilitycontainer][:sysname]} #{node[:capabilitycontainer][:bootscript]}" >> start-#{service}.sh
+    chmod +x start-#{service}.sh
+    ./start-#{service}.sh
     EOH
   end
 
