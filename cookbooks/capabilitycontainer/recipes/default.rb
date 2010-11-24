@@ -28,7 +28,6 @@ end
 bash "install-lcaarch-deps" do
   code <<-EOH
   cd /home/#{node[:username]}/lcaarch
-  pip install http://srbbrick11.sdsc.edu:8080/pyrods-irods-242.tar.gz
   pip install --find-links=#{node[:capabilitycontainer][:pip_package_repo]} --requirement=requirements.txt
   EOH
 end
