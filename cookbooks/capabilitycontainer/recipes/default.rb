@@ -13,18 +13,6 @@ end
   package pkg
 end
 
-bash "get-txrabbitmq" do
-  code <<-EOH
-  cd /home/#{node[:username]}
-  git clone #{node[:capabilitycontainer][:git_txrabbitmq_repo]}
-  cd txrabbitmq
-  git checkout #{node[:capabilitycontainer][:git_txrabbitmq_branch]}
-  git fetch
-  git reset --hard #{node[:capabilitycontainer][:git_txrabbitmq_commit]}
-  python setup.py install
-  EOH
-end
-
 bash "install-lcaarch-deps" do
   code <<-EOH
   cd /home/#{node[:username]}/lcaarch
