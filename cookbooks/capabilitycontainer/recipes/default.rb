@@ -9,7 +9,7 @@ bash "get-lcaarch" do
   EOH
 end
 
-%w{ python-dev python-numpy python-pip }.each do |pkg|
+%w{ python-dev python-numpy python-pip swig swig-shlibs }.each do |pkg|
   package pkg
 end
 
