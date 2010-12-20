@@ -1,4 +1,6 @@
-user sqlstream do
+group "sqlstream"
+
+user "sqlstream" do
     comment "Dynamically created user sqlstream."
     home "/home/sqlstream"
     shell "/bin/bash"

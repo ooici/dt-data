@@ -2,7 +2,7 @@ bash "get-lcaarch" do
   code <<-EOH
   cd /home/#{node[:username]}
   git clone #{node[:capabilitycontainer][:git_lcaarch_repo]}
-  cd lcaarch
+  cd #{node[:capabilitycontainer][:git_repo_dirname]}
   git checkout #{node[:capabilitycontainer][:git_lcaarch_branch]}
   git fetch
   git reset --hard #{node[:capabilitycontainer][:git_lcaarch_commit]}
@@ -15,7 +15,7 @@ end
 
 bash "install-lcaarch-deps" do
   code <<-EOH
-  cd /home/#{node[:username]}/lcaarch
+  cd /home/#{node[:username]}/#{node[:capabilitycontainer][:git_repo_dirname]}
   pip install --find-links=#{node[:capabilitycontainer][:pip_package_repo]} --requirement=requirements.txt
   EOH
 end
@@ -48,7 +48,7 @@ bash "give-remote-user-log-access" do
 end
 
 
-template "/home/#{node[:username]}/lcaarch/res/logging/loglevels.cfg" do
+template "/home/#{node[:username]}/#{node[:capabilitycontainer][:git_repo_dirname]}/res/logging/loglevels.cfg" do
   source "loglevels.cfg.erb"
   owner "#{node[:username]}"
   variables(:log_level => node[:capabilitycontainer][:log_level])
@@ -57,7 +57,7 @@ end
 
 node[:services].each do |service, service_spec|
 
-  service_config = "/home/#{node[:username]}/lcaarch/res/config/#{service}-ionservices.cfg"
+  service_config = "/home/#{node[:username]}/#{node[:capabilitycontainer][:git_repo_dirname]}/res/config/#{service}-ionservices.cfg"
 
   template "#{service_config}" do
     source "ionservices.cfg.erb"
@@ -65,7 +65,7 @@ node[:services].each do |service, service_spec|
     variables(:service_spec => service_spec)
   end
   
-  logging_dir = "/home/#{node[:username]}/lcaarch/logs/#{service}"
+  logging_dir = "/home/#{node[:username]}/#{node[:capabilitycontainer][:git_repo_dirname]}/logs/#{service}"
   directory "#{logging_dir}" do
     owner "#{node[:username]}"
     group "#{node[:username]}"
@@ -87,7 +87,7 @@ node[:services].each do |service, service_spec|
       "HOME" => "/home/#{node[:username]}",
       "ION_ALTERNATE_LOGGING_CONF" => "#{logging_config}"
     })
-    cwd "/home/#{node[:username]}/lcaarch"
+    cwd "/home/#{node[:username]}/#{node[:capabilitycontainer][:git_repo_dirname]}"
     code <<-EOH
     echo "#!/bin/bash" >> start-#{service}.sh
     if [ -f /opt/cei_environment ]; then
