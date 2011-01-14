@@ -17,6 +17,12 @@ bash "install-lcaarch-deps" do
   EOH
 end
 
+bash "twisted-plugin-issue" do
+  code <<-EOH
+  cp /home/#{node[:username]}/#{node[:capabilitycontainer][:git_repo_dirname]}/twisted/plugins/cc.py /usr/local/lib/python2.6/dist-packages/twisted/plugins/
+  EOH
+end
+
 bash "give-container-user-ownership" do
   code <<-EOH
   chown -R #{node[:username]}:#{node[:username]} /home/#{node[:username]}
