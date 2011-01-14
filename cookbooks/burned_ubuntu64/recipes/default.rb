@@ -3,7 +3,7 @@ bash "get-lcaarch" do
   cd /home/#{node[:username]}
   cd #{node[:capabilitycontainer][:git_repo_dirname]}
   git checkout #{node[:capabilitycontainer][:git_lcaarch_branch]}
-  git fetch
+  git pull
   git reset --hard #{node[:capabilitycontainer][:git_lcaarch_commit]}
   EOH
 end
