@@ -34,4 +34,4 @@ set_unless[:cassandra][:dynamic_snitch] = true
 set_unless[:cassandra][:dynamic_snitch_update_interval_in_ms] = 100
 set_unless[:cassandra][:dynamic_snitch_reset_interval_in_ms] = 600000
 set_unless[:cassandra][:dynamic_snitch_badness_threshold] = 0.0
-set_unless[:cassandra][:request_scheduler] = org.apache.cassandra.scheduler.NoScheduler
+set_unless[:cassandra][:request_scheduler] = "org.apache.cassandra.scheduler.NoScheduler"
