@@ -22,7 +22,7 @@ bash "add-cassandra-repo" do
   code <<-EOH
   echo "deb http://www.apache.org/dist/cassandra/debian unstable main" >> /etc/apt/sources.list
   echo "deb-src http://www.apache.org/dist/cassandra/debian unstable main" >> /etc/apt/sources.list
-  gpg --keyserver wwwkeys.eu.pgp.net --recv-keys F758CE318D77295D
+  gpg --keyserver pgp.mit.edu --recv-keys F758CE318D77295D
   gpg --export --armor F758CE318D77295D | sudo apt-key add -
   apt-get update
   EOH
@@ -46,37 +46,8 @@ user "cassandra" do
   shell "/bin/false"
 end
 
-directory "/var/lib/cassandra" do
-  owner "cassandra"
-  group "root"
-  mode "0775"
-  action :create
-end
-
-directory "/var/lib/cassandra/saved_caches" do
-  owner "cassandra"
-  group "root"
-  mode "0775"
-  action :create
-end
-
-directory "/var/log/cassandra" do
-  owner "cassandra"
-  group "root"
-  mode "0775"
-  action :create
-end
-
-directory "/etc/cassandra" do
-  owner "root"
-  group "root"
-  mode "0755"
-  action :create
-  not_if "test -d /etc/cassandra"
-end
-
-template "/etc/cassandra/storage-conf.xml" do
-  source "storage-conf.xml.erb"
+template "/etc/cassandra/cassandra.yaml" do
+  source "cassandra.yaml.erb"
   owner "root"
   group "root"
   mode 0644
