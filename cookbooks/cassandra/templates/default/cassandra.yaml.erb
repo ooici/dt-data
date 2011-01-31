@@ -65,7 +65,7 @@ partitioner: <%= @node[:cassandra][:partitioner] %>
 # directories where Cassandra should store data on disk.
 data_file_directories:
     <% @node[:cassandra][:data_file_directories].each do |dir| %>
-    - <% dir %>
+    - <%= dir %>
     <% end %>
     
 # commit log
