@@ -1,6 +1,7 @@
 set_unless[:cassandra][:cluster_name]  = "Test Cluster"
 set_unless[:cassandra][:auto_bootstrap]  = false
 set_unless[:cassandra][:authenticator] = "org.apache.cassandra.auth.AllowAllAuthenticator"
+set_unless[:cassandra][:users] = []
 set_unless[:cassandra][:authority] = "org.apache.cassandra.auth.AllowAllAuthority"
 set_unless[:cassandra][:partitioner] = "org.apache.cassandra.dht.RandomPartitioner"
 set_unless[:cassandra][:initial_token] = ""

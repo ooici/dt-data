@@ -19,9 +19,10 @@
 #
 
 bash "add-cassandra-repo" do
+  not_if "test -f /etc/apt/sources.list.d/apache.list"
   code <<-EOH
-  echo "deb http://www.apache.org/dist/cassandra/debian unstable main" >> /etc/apt/sources.list
-  echo "deb-src http://www.apache.org/dist/cassandra/debian unstable main" >> /etc/apt/sources.list
+  echo "deb http://www.apache.org/dist/cassandra/debian unstable main" >> /etc/apt/sources.list.d/apache.list
+  echo "deb-src http://www.apache.org/dist/cassandra/debian unstable main" >> /etc/apt/sources.list.d/apache.list
   gpg --keyserver pgp.mit.edu --recv-keys F758CE318D77295D
   gpg --export --armor F758CE318D77295D | sudo apt-key add -
   apt-get update
@@ -52,4 +53,19 @@ template "/etc/cassandra/cassandra.yaml" do
   group "root"
   mode 0644
   notifies :restart, resources(:service => "cassandra")
+end
+
+template "/etc/cassandra/passwd.properties" do
+  source "passwd.properties.erb"
+  owner "cassandra"
+  group "cassandra"
+  mode 0600
+  notifies :restart, resources(:service => "cassandra")
+end
+
+bash "add-cassandra-system-property" do
+  not_if "grep passwd.properties /etc/cassandra-env.sh"
+  code <<-EOH
+  echo 'JVM_OPTS="$JVM_OPTS -Dpasswd.properties=/etc/cassandra/passwd.properties"' >> /etc/cassandra/cassandra-env.sh
+  EOH
 end
