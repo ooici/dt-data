@@ -15,14 +15,14 @@ end
 # caa5423d2c8293b077a8b381e6c6fd394a0987b3
 bash "install-lcaarch-deps" do
   code <<-EOH
-  cd /home/#{node[:username]}/#{node[:capabilitycontainer][:git_repo_dirname]}
+  cd /home/#{node[:username]}/ioncore-python
   pip install --quiet --find-links=#{node[:capabilitycontainer][:pip_package_repo]} --requirement=requirements.txt
   EOH
 end
 
 bash "twisted-plugin-issue" do
   code <<-EOH
-  cp /home/#{node[:username]}/#{node[:capabilitycontainer][:git_repo_dirname]}/twisted/plugins/cc.py /usr/local/lib/python2.6/dist-packages/twisted/plugins/
+  cp /home/#{node[:username]}/ioncore-python/twisted/plugins/cc.py /usr/local/lib/python2.6/dist-packages/twisted/plugins/
   EOH
 end
 
@@ -48,7 +48,7 @@ bash "give-remote-user-log-access" do
 end
 
 
-template "/home/#{node[:username]}/#{node[:capabilitycontainer][:git_repo_dirname]}/res/logging/loglevels.cfg" do
+template "/home/#{node[:username]}/ioncore-python/res/logging/loglevels.cfg" do
   source "loglevels.cfg.erb"
   owner "#{node[:username]}"
   variables(:log_level => node[:capabilitycontainer][:log_level])
@@ -57,7 +57,7 @@ end
 
 node[:services].each do |service, service_spec|
 
-  service_config = "/home/#{node[:username]}/#{node[:capabilitycontainer][:git_repo_dirname]}/res/config/#{service}-ionservices.cfg"
+  service_config = "/home/#{node[:username]}/ioncore-python/res/config/#{service}-ionservices.cfg"
 
   template "#{service_config}" do
     source "ionservices.cfg.erb"
@@ -65,7 +65,7 @@ node[:services].each do |service, service_spec|
     variables(:service_spec => service_spec)
   end
   
-  logging_dir = "/home/#{node[:username]}/#{node[:capabilitycontainer][:git_repo_dirname]}/logs/#{service}"
+  logging_dir = "/home/#{node[:username]}/ioncore-python/logs/#{service}"
   directory "#{logging_dir}" do
     owner "#{node[:username]}"
     group "#{node[:username]}"
@@ -87,7 +87,7 @@ node[:services].each do |service, service_spec|
       "HOME" => "/home/#{node[:username]}",
       "ION_ALTERNATE_LOGGING_CONF" => "#{logging_config}"
     })
-    cwd "/home/#{node[:username]}/#{node[:capabilitycontainer][:git_repo_dirname]}"
+    cwd "/home/#{node[:username]}/ioncore-python"
     code <<-EOH
     echo "#!/bin/bash" >> start-#{service}.sh
     if [ -f /opt/cei_environment ]; then
