@@ -1,8 +1,11 @@
+# There is already an 'ioncore-python' directory in place.
 bash "get-lcaarch" do
   code <<-EOH
   cd /home/#{node[:username]}
-  cd #{node[:capabilitycontainer][:git_repo_dirname]}
-  git checkout #{node[:capabilitycontainer][:git_lcaarch_branch]}
+  cd ioncore-python
+  git remote add thisone #{node[:capabilitycontainer][:git_lcaarch_repo]}
+  git fetch --all
+  git checkout -b activebranch thisone/#{node[:capabilitycontainer][:git_lcaarch_branch]}
   git pull
   git reset --hard #{node[:capabilitycontainer][:git_lcaarch_commit]}
   EOH
