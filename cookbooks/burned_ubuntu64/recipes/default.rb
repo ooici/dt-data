@@ -79,14 +79,9 @@ node[:services].each do |service, service_spec|
     owner "#{node[:username]}"
     variables(:service_name => service)
   end
-  
 
-  bash "start-service" do
+  bash "service-script" do
     user node[:username]
-    environment({
-      "HOME" => "/home/#{node[:username]}",
-      "ION_ALTERNATE_LOGGING_CONF" => "#{logging_config}"
-    })
     cwd "/home/#{node[:username]}/ioncore-python"
     code <<-EOH
     echo "#!/bin/bash" >> start-#{service}.sh
@@ -97,8 +92,19 @@ node[:services].each do |service, service_spec|
     echo "export ION_ALTERNATE_LOGGING_CONF=#{logging_config}" >> start-#{service}.sh
     echo "twistd --pidfile=#{service}-service.pid cc -n -h #{node[:capabilitycontainer][:broker]} --broker_heartbeat=#{node[:capabilitycontainer][:broker_heartbeat]} -a processes=#{service_config},sysname=#{node[:capabilitycontainer][:sysname]} #{node[:capabilitycontainer][:bootscript]}" >> start-#{service}.sh
     chmod +x start-#{service}.sh
-    ./start-#{service}.sh
     EOH
   end
 
+  bash "start-service" do
+    not_if { node.include? :do_not_start and node[:do_not_start].include? service }
+    user node[:username]
+    cwd "/home/#{node[:username]}/ioncore-python"
+    environment({
+      "HOME" => "/home/#{node[:username]}",
+      "ION_ALTERNATE_LOGGING_CONF" => "#{logging_config}"
+    })
+    code <<-EOH
+    ./start-#{service}.sh
+    EOH
+  end
 end
