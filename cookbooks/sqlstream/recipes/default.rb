@@ -40,13 +40,18 @@ template "/home/sqlstream/.s3cfg" do
   )
 end
 
-bash "retrieve-sqlstream-binary" do
-  code <<-EOH
-  mkdir /home/sqlstream/binary
-  cd /home/sqlstream/binary
-  #{node[:sqlstream][:binary_retrieve_command]}
-  chown -R sqlstream /home/sqlstream/binary
-  EOH
+directory "/home/sqlstream/ooici.supplemental.packages" do
+  owner "sqlstream"
+  group "sqlstream"
+  mode "0755"
+  action :create
+end
+
+execute "#{node[:sqlstream][:binary_retrieve_command]}" do
+  user "sqlstream"
+  cwd "/home/sqlstream/ooici.supplemental.packages"
+  action :run
+  environment ({'HOME' => '/home/sqlstream'})
 end
 
 
