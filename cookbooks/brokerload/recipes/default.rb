@@ -48,13 +48,6 @@ bash "give-remote-user-log-access" do
 end
 
 
-template "/home/#{node[:username]}/ioncore-python/res/logging/loglevels.cfg" do
-  source "loglevels.cfg.erb"
-  owner "#{node[:username]}"
-  variables(:log_level => node[:capabilitycontainer][:log_level])
-end
-
-
 bash "load-test" do
   user node[:username]
   cwd "/home/#{node[:username]}/ioncore-python"
