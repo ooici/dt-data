@@ -1,0 +1,16 @@
+{
+    "sites": {
+        "ec2-east": {
+            "work_consumer": {
+                "image": "${epuworker_image_id}", 
+                "sshkeyname": "ooi"
+            }
+        }, 
+        "magellan": {
+            "work_consumer": {
+                "image": "${epuworker_image_id}", 
+                "sshkeyname": "ooi"
+            }
+        }
+    }
+}

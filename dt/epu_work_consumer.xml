@@ -1,0 +1,35 @@
+
+<cluster>
+ <workspace>
+   <name>work_consumer</name>
+   <image>${epuworker_image_id}</image>
+   <quantity>1</quantity>
+   <nic wantlogin="true">public</nic>
+   <ctx>
+     <provides>
+       <identity/>
+     </provides>
+     <requires>
+       <identity/>
+       <data name="chef-install-work-consumer"><![CDATA[
+{
+  "burned_worker":{
+    "broker":"${broker_ip_address}",
+    "bootscript":"res/scripts/newcc.py",
+    "sysname":"${exchange_scope}",
+    "broker_heartbeat":"5",
+    "lcaarch_branch":"${git_lcaarch_branch}",
+    "lcaarch_commit_hash":"${git_lcaarch_commit}",
+    "log_level":"WARNING"
+  },
+  "username":"cc",
+  "services":{
+    "simple_work_consumer":"{'name':'epu_worker','module':'ion.services.cei.sleeper.epu_worker','class':'EPUWorkerService', 'spawnargs':{'queue_name_work':'cei_work_queue'}}"
+  },
+  "recipes":["burned_worker"]
+}
+]]></data>
+     </requires>
+   </ctx>
+ </workspace>
+</cluster>

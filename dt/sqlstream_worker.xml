@@ -1,0 +1,36 @@
+
+<cluster>
+ <workspace>
+   <name>work_consumer</name>
+   <image>${epuworker_image_id}</image>
+   <quantity>1</quantity>
+   <nic wantlogin="true">public</nic>
+   <ctx>
+     <provides>
+       <identity/>
+     </provides>
+     <requires>
+       <identity/>
+       <data name="chef-install-work-consumer"><![CDATA[
+{
+  "capabilitycontainer":{
+    "broker":"${broker_ip_address}",
+    "bootscript":"res/scripts/newcc.py",
+    "sysname":"${exchange_scope}",
+    "broker_heartbeat":"5",
+    "pip_package_repo":"http://ooici.net/packages",
+    'git_lcaarch_repo':'${git_lcaarch_repo}',
+    'git_lcaarch_branch':'${git_lcaarch_branch}', 
+    'git_lcaarch_commit':'${git_lcaarch_commit},
+    "log_level":"DEBUG"
+  },
+  "username":"cc",
+  "services":{ "sqlstream_app_agent":"{'name':'${some_unique_name}','module':'somewhere.sqlstream_app_agent','class':'AppAgent', 'spawnargs':{'A':'B'}}"
+  },
+  "recipes":["setuptools", "twisted", "user", "capabilitycontainer"]
+}
+]]></data>
+     </requires>
+   </ctx>
+ </workspace>
+</cluster>

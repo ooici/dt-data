@@ -1,0 +1,11 @@
+{
+    "sites": {
+        "ec2-west": {
+            "work_consumer": {
+                "allocation": "c1.medium", 
+                "image": "${epuworker_image_id}", 
+                "sshkeyname": "ooi"
+            }
+        }
+    }
+}
