@@ -57,7 +57,7 @@ bash "load-test" do
   code <<-EOH
   set -e
   CPUS=`cat /proc/cpuinfo | grep ^'processor' | wc -l`
-  nohup ion/test/loadtests/brokerload.sh --proc --count=$CPUS  -  --host "#{node[:capabilitycontainer][:broker]}" &
+  nohup nice -n 10 ion/test/loadtests/brokerload.sh --proc --count=$CPUS  -  --host "#{node[:capabilitycontainer][:broker]}" &
 EOH
 end
 
