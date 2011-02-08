@@ -56,14 +56,15 @@ end
 
 
 bash "load-test" do
-  not_if { node.include? :do_not_start and node[:do_not_start].include? service }
   user node[:username]
   cwd "/home/#{node[:username]}/ioncore-python"
   environment({
-    "HOME" => "/home/#{node[:username]}",
-    "ION_ALTERNATE_LOGGING_CONF" => "#{logging_config}"
+    "HOME" => "/home/#{node[:username]}"
   })
   code <<-EOH
-  ion/test/loadtests/brokerload.sh
-  EOH
+  set -e
+  CPUS=`cat /proc/cpuinfo | grep ^'processor' | wc -l`
+  nohup ion/test/loadtests/brokerload.sh --proc --count=$CPUS  -  --host "#{node[:capabilitycontainer][:broker]}" &
+EOH
 end
+
