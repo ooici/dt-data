@@ -1,57 +1,30 @@
-group "sqlstream"
-
-user "sqlstream" do
-    comment "Dynamically created user sqlstream."
-    home "/home/sqlstream"
-    shell "/bin/bash"
-    gid "sqlstream"
-    gid "admin"
-    supports :manage_home => true
-end
-
-directory "/usr/local/sqlstream" do
-  owner "sqlstream"
-  group "sqlstream"
-  mode "0755"
-  action :create
-end
-
-directory "/usr/local/lib/sqlstream" do
-  owner "sqlstream"
-  group "sqlstream"
-  mode "0755"
-  action :create
-end
-
 bash "adjust-sqlstream-bash-env" do
   code <<-EOH
-  echo "export JAVA_HOME=/usr/local/JDK1.6" >> /home/sqlstream/.bashrc
-  echo "export SQLSTREAM_HOME=/usr/local/sqlstream/SQLstream-2.5" >> /home/sqlstream/.bashrc
-  echo 'export PATH="$JAVA_HOME/bin:$PATH"' >> /home/sqlstream/.bashrc
+  echo "export JAVA_HOME=/usr/local/JDK1.6" >> /home/#{node[:username]}/.bashrc
+  echo 'export PATH="$JAVA_HOME/bin:$PATH"' >> /home/#{node[:username]}/.bashrc
   EOH
 end
 
-template "/home/sqlstream/.s3cfg" do
+template "/home/#{node[:username]}/.s3cfg" do
   source "dot.s3cfg.erb"
-  owner "sqlstream"
+  owner "#{node[:username]}"
   variables(
       :aws_access_key => node[:sqlstream][:binary_retrieve_id],
       :aws_access_secret => node[:sqlstream][:binary_retrieve_secret]
   )
 end
 
-directory "/home/sqlstream/ooici.supplemental.packages" do
-  owner "sqlstream"
-  group "sqlstream"
+directory "/home/#{node[:username]}/ooici.supplemental.packages" do
+  owner "#{node[:username]}"
   mode "0755"
   action :create
 end
 
 execute "#{node[:sqlstream][:binary_retrieve_command]}" do
-  user "sqlstream"
-  cwd "/home/sqlstream/ooici.supplemental.packages"
+  user "#{node[:username]}"
+  cwd "/home/#{node[:username]}/ooici.supplemental.packages"
   action :run
-  environment ({'HOME' => '/home/sqlstream'})
+  environment ({'HOME' => '/home/#{node[:username]}'})
 end
 
 
