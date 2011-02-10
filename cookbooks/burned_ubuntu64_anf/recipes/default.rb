@@ -1,6 +1,9 @@
+# The node was burned with ioncore-python but we are going to install something else
 bash "get-code" do
   code <<-EOH
   cd /home/#{node[:username]}
+  rm -rf ioncore-python
+  rm -rf #{node[:capabilitycontainer][:git_repo_dirname]}
   git clone #{node[:capabilitycontainer][:git_lcaarch_repo]}
   cd #{node[:capabilitycontainer][:git_repo_dirname]}
   git fetch --all
@@ -17,6 +20,23 @@ bash "install-code" do
   python setup.py install
   EOH
 end
+
+directory "/home/#{node[:username]}/#{node[:capabilitycontainer][:git_repo_dirname]}/logs" do
+  owner "#{node[:username]}"
+  group "#{node[:username]}"
+  mode "0755"
+end
+
+# Workaround
+  bash "container-script" do
+    cwd "/usr/lib/python2.6/dist-packages/twisted/plugins"
+    code <<-EOH
+
+    echo "#!/usr/bin/env python" > cc.py
+    echo "from twisted.application.service import ServiceMaker" >> cc.py
+    echo 'CC = ServiceMaker(name="ION CapabilityContainer", module="ion.core.cc.service", description="ION Capability Container", tapname="cc")' >> cc.py
+    EOH
+  end
 
 bash "give-container-user-ownership" do
   code <<-EOH
@@ -83,12 +103,13 @@ node[:services].each do |service, service_spec|
   bash "start-service" do
     not_if { node.include? :do_not_start and node[:do_not_start].include? service }
     user node[:username]
-    cwd "/home/#{node[:username]}/ioncore-python"
+    cwd "/home/#{node[:username]}/#{node[:capabilitycontainer][:git_repo_dirname]}"
     environment({
       "HOME" => "/home/#{node[:username]}",
       "ION_ALTERNATE_LOGGING_CONF" => "#{logging_config}"
     })
     code <<-EOH
+    set -e
     ./start-#{service}.sh
     EOH
   end
