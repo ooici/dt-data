@@ -40,7 +40,7 @@ end
     cwd "/home/#{node[:username]}/#{node[:capabilitycontainer][:git_repo_dirname]}"
     code <<-EOH
     mkdir /home/#{node[:username]}/ioncore-python
-    ln -s logs /home/#{node[:username]}/ioncore-python/logs
+    ln -s /home/#{node[:username]}/#{node[:capabilitycontainer][:git_repo_dirname]}/logs /home/#{node[:username]}/ioncore-python/logs
     EOH
   end
 
