@@ -77,6 +77,22 @@ bash "Install Nimbus #{node[:nimbus][:service][:src_version]}" do
   creates "#{node[:nimbus][:service][:location]}/bin/nimbusctl"
 end
 
+case node[:cloud][:provider]
+when "ec2"
+  fqdn = node[:ec2][:public_hostname]
+else
+  fqdn = node[:fqdn]
+end
+
+bash "Set Nimbus hostname to #{fqdn}" do
+  cwd node[:nimbus][:service][:location]
+  user node[:nimbus][:service][:user]
+  group node[:nimbus][:service][:group]
+  code <<-EOH
+  #{node[:nimbus][:service][:location]}/bin/nimbus-configure -H #{fqdn}
+  EOH
+end
+
 node[:nimbus][:users].each do |name, user|
   bash "Create #{name} user" do
     cwd node[:nimbus][:service][:location]
