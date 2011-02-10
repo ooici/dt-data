@@ -1,4 +1,7 @@
-#!/bin/sh
+#!/bin/bash
+
+set -e
 
 # The following assumes a 'work_consumer' cookbook exists in '/opt/dt-data/cookbooks':
 chef-solo -l debug -c /opt/dt-data/cookbooks/nimbus_context_agent/extra/chefconf.rb -j $1 &> /opt/nimbus/chef.log
+
