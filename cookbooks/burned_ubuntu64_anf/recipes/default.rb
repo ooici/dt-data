@@ -27,14 +27,20 @@ directory "/home/#{node[:username]}/#{node[:capabilitycontainer][:git_repo_dirna
   mode "0755"
 end
 
-# Workaround
-  bash "container-script" do
+# Temporary workarounds
+  bash "workaround1" do
     cwd "/usr/lib/python2.6/dist-packages/twisted/plugins"
     code <<-EOH
-
     echo "#!/usr/bin/env python" > cc.py
     echo "from twisted.application.service import ServiceMaker" >> cc.py
     echo 'CC = ServiceMaker(name="ION CapabilityContainer", module="ion.core.cc.service", description="ION Capability Container", tapname="cc")' >> cc.py
+    EOH
+  end
+  bash "workaround2" do
+    cwd "/home/#{node[:username]}/#{node[:capabilitycontainer][:git_repo_dirname]}"
+    code <<-EOH
+    mkdir /home/#{node[:username]}/ioncore-python
+    ln -s logs /home/#{node[:username]}/ioncore-python/logs
     EOH
   end
 
