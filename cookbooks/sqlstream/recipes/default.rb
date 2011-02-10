@@ -24,7 +24,7 @@ execute "#{node[:sqlstream][:binary_retrieve_command]}" do
   user "#{node[:username]}"
   cwd "/home/#{node[:username]}/ooici.supplemental.packages"
   action :run
-  environment ({'HOME' => '/home/#{node[:username]}'})
+  environment ({'HOME' => "/home/#{node[:username]}"})
 end
 
 
