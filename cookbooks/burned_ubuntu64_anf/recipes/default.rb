@@ -29,11 +29,12 @@ end
 
 # Temporary workarounds
   bash "workaround1" do
-    cwd "/usr/lib/python2.6/dist-packages/twisted/plugins"
+    cwd "/usr/local/lib/python2.6/dist-packages/twisted/plugins/"
     code <<-EOH
     echo "#!/usr/bin/env python" > cc.py
     echo "from twisted.application.service import ServiceMaker" >> cc.py
     echo 'CC = ServiceMaker(name="ION CapabilityContainer", module="ion.core.cc.service", description="ION Capability Container", tapname="cc")' >> cc.py
+    chown -R cc .
     EOH
   end
   bash "workaround2" do
