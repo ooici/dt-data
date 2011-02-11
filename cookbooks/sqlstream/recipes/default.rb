@@ -27,4 +27,11 @@ execute "#{node[:sqlstream][:binary_retrieve_command]}" do
   environment ({'HOME' => "/home/#{node[:username]}"})
 end
 
-
+# File block looks like it needs to know the exact filename, using bash
+bash "chmod-supplemental-packages" do
+  user "#{node[:username]}"
+  cwd "/home/#{node[:username]}/ooici.supplemental.packages"
+  code <<-EOH
+  chmod -R +x .
+  EOH
+end
