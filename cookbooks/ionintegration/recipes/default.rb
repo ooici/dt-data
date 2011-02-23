@@ -53,7 +53,7 @@ template "/home/#{node[:username]}/#{node[:ionintegration][:git_repo_dirname]}/o
   source "ooici-conn.properties.erb"
   owner "#{node[:username]}"
   variables(:exchange_scope => node[:ionintegration][:sysname],
-            :broker => nade[:ionintegration][:broker])
+            :broker => node[:ionintegration][:broker])
 end
 
 node[:services].each do |service, service_spec|
