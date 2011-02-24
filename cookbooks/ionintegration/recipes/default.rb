@@ -9,7 +9,7 @@ bash "get-ion-integration" do
   EOH
 end
 
-%w{ python-dev python-pip swig python-virtualenv ant}.each do |pkg|
+%w{ python-dev python-pip swig python-virtualenv ant ivy}.each do |pkg|
   package pkg
 end
 
