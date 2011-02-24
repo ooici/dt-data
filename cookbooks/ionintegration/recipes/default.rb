@@ -9,7 +9,7 @@ bash "get-ion-integration" do
   EOH
 end
 
-%w{ python-dev python-pip swig }.each do |pkg|
+%w{ python-dev python-pip swig python-virtualenv ant}.each do |pkg|
   package pkg
 end
 
@@ -38,6 +38,8 @@ bash "buildout-ion-integration" do
     user node[:username]
     cwd "/home/#{node[:username]}/#{node[:ionintegration][:git_repo_dirname]}"
   code <<-EOH
+  virtualenv --no-site-packages ionenv
+  . ionenv/bin/activate
   python ./bootstrap.py
   bin/buildout
   EOH
