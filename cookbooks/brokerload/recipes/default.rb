@@ -5,7 +5,7 @@ bash "get-lcaarch" do
   cd ioncore-python
   git remote add thisone #{node[:capabilitycontainer][:git_lcaarch_repo]}
   git fetch --all
-  git checkout -b activebranch thisone/#{node[:capabilitycontainer][:git_lcaarch_branch]}
+  git checkout -b develop thisone/#{node[:capabilitycontainer][:git_lcaarch_branch]}
   git pull
   git reset --hard #{node[:capabilitycontainer][:git_lcaarch_commit]}
   EOH
