@@ -35,7 +35,7 @@ bash "buildout-ion-integration" do
     user node[:username]
     cwd "/home/#{node[:username]}/#{node[:ionintegration][:git_repo_dirname]}"
   code <<-EOH
-  virtualenv --no-site-packages ionenv
+  /opt/python2.5/bin/virtualenv --no-site-packages ionenv
   . ionenv/bin/activate
   python ./bootstrap.py
   bin/buildout
