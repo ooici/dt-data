@@ -1,32 +1,49 @@
-# There is already an 'ioncore-python' directory in place.
-bash "get-lcaarch" do
+app_archive = "/tmp/app-archive.tar.gz"
+app_dir = "/home/#{node[:username]}/app"
+
+bash "Cleanup app_dir" do
   code <<-EOH
-  cd /home/#{node[:username]}
-  cd ioncore-python
-  git remote add thisone #{node[:capabilitycontainer][:git_lcaarch_repo]}
-  git fetch --all
-  git checkout -b activebranch thisone/#{node[:capabilitycontainer][:git_lcaarch_branch]}
-  git pull
-  git reset --hard #{node[:capabilitycontainer][:git_lcaarch_commit]}
+  rm -rf #{app_dir}
   EOH
 end
 
-# Catch any dependency changes.  The burned requirements.txt is from commit
-# caa5423d2c8293b077a8b381e6c6fd394a0987b3
-bash "install-lcaarch-deps" do
-  code <<-EOH
-  cd /home/#{node[:username]}/ioncore-python
-  pip install --quiet --find-links=#{node[:capabilitycontainer][:pip_package_repo]} --requirement=requirements.txt
-  EOH
+case node[:appretrieve][:retrieve_method]
+when "archive"
+  if node[:appretrieve][:archive_url] =~ /(.*)\.tar\.gz$/
+    print "url is tar.gz"
+  else
+    raise ArgumentError, 'archive_url is not tar.gz file'
+  end
+  remote_file app_archive do
+    source node[:appretrieve][:archive_url]
+    owner node[:username]
+    group node[:username]
+  end
+  bash "expand-archive" do
+    code <<-EOH
+    cd /tmp
+    tar xzf #{app_archive}
+    mv /tmp/app-archive #{app_dir}
+    mv #{app_archive} /tmp/previous__app-archive.tar.gz
+    EOH
+  end
 end
-
-bash "twisted-plugin-issue" do
-  code <<-EOH
-  cp /home/#{node[:username]}/ioncore-python/twisted/plugins/cc.py /usr/local/lib/python2.6/dist-packages/twisted/plugins/
-  EOH
+when "git"
+  bash "get-git" do
+    code <<-EOH
+    mkdir -p #{app_dir}
+    git clone #{node[:appretrieve][:git_repo]} #{app_dir}/
+    cd #{app_dir}
+    git fetch --all
+    git checkout -b activebranch origin/#{node[:appretrieve][:git_branch]}
+    git pull
+    git reset --hard #{node[:appretrieve][:git_commit]}
+    EOH
+  end
 end
+else raise ArgumentError, 'retrieve_method is not "archive" or "git"'
 
-bash "give-container-user-ownership" do
+bash "give-app-user-ownership" do
   code <<-EOH
   chown -R #{node[:username]}:#{node[:username]} /home/#{node[:username]}
   if [ -f /opt/cei_environment ]; then
@@ -46,24 +63,4 @@ bash "give-remote-user-log-access" do
   chown -R #{node[:username]} /home/#{node[:username]}/.ssh
   EOH
 end
-
-bash "install-sepcei" do
-  user "#{node[:username]}"
-  cwd "/home/#{node[:username]}"
-  code <<-EOH
-  git clone https://github.com/ooici/cei-services.git
-  cd cei-services
-  python setup.py develop
-  EOH
-end
-
-bash "create-ion-environment" do
-  user "#{node[:username]}"
-  cwd "/home/#{node[:username]}"
-  code <<-EOH
-  ion-admin init --name cei_ion_env
-  cd cei_ion_env
-  EOH
-end
-
 
