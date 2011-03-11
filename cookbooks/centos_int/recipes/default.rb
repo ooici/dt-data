@@ -1,5 +1,6 @@
 #  This recipe assumes the base image already has virtualenv.
 bash "get-ion-integration" do
+    user node[:username]
   code <<-EOH
   cd /home/#{node[:username]}
   git clone #{node[:ionintegration][:git_ion_integration_repo]}
