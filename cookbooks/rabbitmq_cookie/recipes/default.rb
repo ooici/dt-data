@@ -3,6 +3,6 @@
 bash "copy-rabbitmq-erlang-cookie" do
   code <<-EOH
   cp /var/lib/rabbitmq/.erlang.cookie /home/#{node[:username]}/
-  chown #{node[:username]}:#{node[:username]} /home/#{node[:username]}/.erlang.cookie
+  chown #{node[:username]} /home/#{node[:username]}/.erlang.cookie
   EOH
 end

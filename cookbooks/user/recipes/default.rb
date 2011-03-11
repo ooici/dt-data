@@ -3,7 +3,7 @@
 user node[:username] do
     comment "Dynamically created user."
     uid "1000"
-    gid "cc"
+    gid "users"
     home "/home/#{node[:username]}"
     shell "/bin/bash"
     supports :manage_home => true
