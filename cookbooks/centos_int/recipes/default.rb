@@ -11,22 +11,22 @@ bash "get-ion-integration" do
   EOH
 end
 
-bash "give-container-user-ownership" do
-  code <<-EOH
-  chown -R #{node[:username]}:#{node[:username]} /home/#{node[:username]}
-  if [ -f /opt/cei_environment ]; then
-    chown #{node[:username]}:#{node[:username]} /opt/cei_environment
-  fi
-  EOH
-end
+ bash "give-container-user-ownership" do
+   code <<-EOH
+   chown -R #{node[:username]} /home/#{node[:username]}
+   if [ -f /opt/cei_environment ]; then
+     chown #{node[:username]}} /opt/cei_environment
+   fi
+   EOH
+ end
 
 bash "give-remote-user-log-access" do
   code <<-EOH
   if [ ! -d /home/#{node[:username]}/.ssh ]; then
     mkdir /home/#{node[:username]}/.ssh
   fi
-  if [ -f /home/ubuntu/.ssh/authorized_keys ]; then
-    cp /home/ubuntu/.ssh/authorized_keys /home/#{node[:username]}/.ssh/
+  if [ -f /root/.ssh/authorized_keys ]; then
+    cp /root/.ssh/authorized_keys /home/#{node[:username]}/.ssh/
   fi
   chown -R #{node[:username]} /home/#{node[:username]}/.ssh
   EOH
