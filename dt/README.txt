@@ -13,15 +13,28 @@ For the "foo" DT, there will be a foo.json file. This file may look like this:
     },
     "sites" : {
         "ec2-east" : {
-            "image" : "ami-12345678",
-            "allocation" : "m1.large"
+            "node1" : {
+                "image" : "ami-12345678",
+                "allocation" : "m1.large"
+            },
+            "node2" : {
+                "image" : "ami-12345678",
+                "allocation" : "m1.large"
+            }
         },
         "ec2-west" : {
-            "image": "ami-87654321",
-            "allocation" : "m1.large"
+            "node1" : {
+                "image": "ami-87654321",
+                "allocation" : "m1.large"
+            },
+            "node2" : {
+                "image": "ami-87654321",
+                "allocation" : "m1.large"
+            }
         }
     }
 }
+
 
 There are three components to note:
 1. A contextualization document template. If this key/value pair was omitted,
@@ -32,7 +45,8 @@ There are three components to note:
    These values are overridden by ones passed into the DTRS at runtime.
 
 3. Per-"site" IaaS information. These must correspond to the sites known by 
-   the provisioner.
+   the provisioner. For each site, there must be a dictionary of key/value
+   pairs for each node in the cluster.
 
 The contextualization documents are Nimbus cluster documents with optional
 template variables of the form ${somename}.
