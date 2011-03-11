@@ -1,16 +1,4 @@
 #  This recipe assumes the base image already has virtualenv.
-bash "get-ion-integration" do
-    user node[:username]
-  code <<-EOH
-  cd /home/#{node[:username]}
-  git clone #{node[:ionintegration][:git_ion_integration_repo]}
-  cd #{node[:ionintegration][:git_repo_dirname]}
-  git checkout #{node[:ionintegration][:git_ion_integration_branch]}
-  git fetch
-  git reset --hard #{node[:ionintegration][:git_ion_integration_commit]}
-  EOH
-end
-
  bash "give-container-user-ownership" do
    code <<-EOH
    chown -R #{node[:username]} /home/#{node[:username]}
@@ -29,6 +17,18 @@ bash "give-remote-user-log-access" do
     cp /root/.ssh/authorized_keys /home/#{node[:username]}/.ssh/
   fi
   chown -R #{node[:username]} /home/#{node[:username]}/.ssh
+  EOH
+end
+
+bash "get-ion-integration" do
+    user node[:username]
+  code <<-EOH
+  cd /home/#{node[:username]}
+  git clone #{node[:ionintegration][:git_ion_integration_repo]}
+  cd #{node[:ionintegration][:git_repo_dirname]}
+  git checkout #{node[:ionintegration][:git_ion_integration_branch]}
+  git fetch
+  git reset --hard #{node[:ionintegration][:git_ion_integration_commit]}
   EOH
 end
 
@@ -69,7 +69,6 @@ node[:services].each do |service, service_spec|
   logging_dir = "/home/#{node[:username]}/#{node[:ionintegration][:git_repo_dirname]}/logs/#{service}"
   directory "#{logging_dir}" do
     owner "#{node[:username]}"
-    group "#{node[:username]}"
     mode "0755"
   end
   
