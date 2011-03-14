@@ -1,9 +1,9 @@
 #  This recipe assumes the base image already has virtualenv.
  bash "give-container-user-ownership" do
    code <<-EOH
-   chown -R #{node[:username]} /home/#{node[:username]}
+   chown -R #{node[:username]}:#{node[:groupname]} /home/#{node[:username]}
    if [ -f /opt/cei_environment ]; then
-     chown #{node[:username]}} /opt/cei_environment
+     chown #{node[:username]}}:#{node[:groupname]} /opt/cei_environment
    fi
    EOH
  end
@@ -16,7 +16,7 @@ bash "give-remote-user-log-access" do
   if [ -f /root/.ssh/authorized_keys ]; then
     cp /root/.ssh/authorized_keys /home/#{node[:username]}/.ssh/
   fi
-  chown -R #{node[:username]} /home/#{node[:username]}/.ssh
+  chown -R #{node[:username]}:#{node[:groupname]} /home/#{node[:username]}/.ssh
   EOH
 end
 
