@@ -137,12 +137,6 @@ when "sh"
     variables(:log_level => node[:pythoncc][:log_level])
   end
   
-  template "#{app_dir}/res/config/ionlocal.config" do
-    source "ionlocal.config.erb"
-    owner "#{node[:username]}"
-    variables(:epuuniversal => node[:universal_app_confs], :specifics => node[:local_app_confs])
-  end
-  
   # The following excruciating ionlocal.config work should be a Ruby block
   bash "create ionlocal.config" do
     cwd app_dir
