@@ -21,14 +21,17 @@ bash "rabbitmq-repo" do
   code <<-EOH
   echo "deb http://www.rabbitmq.com/debian/ testing main" >> /etc/apt/sources.list
   wget http://www.rabbitmq.com/rabbitmq-signing-key-public.asc
-  sudo apt-key add rabbitmq-signing-key-public.asc
+  apt-key add rabbitmq-signing-key-public.asc
   apt-get update
+
+  apt-get install -y rabbitmq-server
+
   EOH
 end
 
-package "rabbitmq-server" do
-  action :install
-end
+#package "rabbitmq-server" do
+#  action :install
+#end
 
 service "rabbitmq-server" do
   supports :status => true, :restart => true, :reload => true
