@@ -25,6 +25,7 @@ bash "rabbitmq-repo" do
   apt-get update
 
   apt-get install -y rabbitmq-server
+  /etc/init.d/rabbitmq-server start
 
   EOH
 end
