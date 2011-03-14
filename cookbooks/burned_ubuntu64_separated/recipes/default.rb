@@ -137,16 +137,79 @@ when "sh"
     variables(:log_level => node[:pythoncc][:log_level])
   end
   
-  node[:services].each do |service, service_spec|
+  template "#{app_dir}/res/config/ionlocal.config" do
+    source "ionlocal.config.erb"
+    owner "#{node[:username]}"
+    variables(:epuuniversal => node[:universal_app_confs], :specifics => node[:local_app_confs])
+  end
   
-    service_config = "#{app_dir}/res/config/#{service}-ionservices.cfg"
-  
-    template "#{service_config}" do
-      source "ionservices.cfg.erb"
-      owner "#{node[:username]}"
-      variables(:service_spec => service_spec)
+  # The following excruciating ionlocal.config work should be a Ruby block
+  bash "create ionlocal.config" do
+    cwd app_dir
+    user "#{node[:username]}" 
+    code <<-EOH
+    echo -e "{\n'epu.universal':{" > res/config/ionlocal.config
+    EOH
+  end
+  node[:universal_app_confs].each do |u_key, u_value|
+    bash "add universals to ionlocal.config" do
+      cwd app_dir
+      user "#{node[:username]}" 
+      code <<-EOH
+      echo "    '#{u_key}': '#{u_value}'," >> res/config/ionlocal.config
+      EOH
     end
+  end
+  bash "modify ionlocal.config" do
+    cwd app_dir
+    user "#{node[:username]}" 
+    code <<-EOH
+    echo "}," >> res/config/ionlocal.config
+    EOH
+  end
+  # Brutal:
+  node[:local_app_confs].each do |section_name, keyvalue_dict|
+    bash "add local section to ionlocal.config" do
+      cwd app_dir
+      user "#{node[:username]}" 
+      code <<-EOH
+      echo "'#{section_name}':{" >> res/config/ionlocal.config
+      EOH
+    end
+    keyvalue_dict.each do |l_key, l_value|
+      bash "add locals to ionlocal.config" do
+        cwd app_dir
+        user "#{node[:username]}" 
+        code <<-EOH
+        echo "    '#{l_key}': '#{l_value}'," >> res/config/ionlocal.config
+        EOH
+      end
+    end
+    bash "finish local section to ionlocal.config" do
+      cwd app_dir
+      user "#{node[:username]}" 
+      code <<-EOH
+      echo "}," >> res/config/ionlocal.config
+      EOH
+    end
+  end
+  bash "finish ionlocal.config" do
+    cwd app_dir
+    user "#{node[:username]}" 
+    code <<-EOH
+    echo "}" >> res/config/ionlocal.config
+    EOH
+  end
+  
+  node[:services].each do |service, service_config|
     
+    abs_service_config = app_dir + "/" + service_config
+    ruby_block "check-config" do
+      block do
+        raise ArgumentError, "Cannot locate service config #{abs_service_config}" unless File.exist?(abs_service_config)
+      end
+    end
+  
     logging_dir = "#{app_dir}/logs/#{service}"
     directory "#{logging_dir}" do
       owner "#{node[:username]}"
@@ -175,7 +238,7 @@ when "sh"
         echo "source #{venv_dir}/bin/activate" >> start-#{service}.sh
       fi
       echo "export ION_ALTERNATE_LOGGING_CONF=#{logging_config}" >> start-#{service}.sh
-      echo "twistd --pidfile=#{service}-service.pid cc -n -h #{node[:pythoncc][:broker]} --broker_heartbeat=#{node[:pythoncc][:broker_heartbeat]} -a processes=#{service_config},sysname=#{node[:pythoncc][:sysname]} res/scripts/newcc.py" >> start-#{service}.sh
+      echo "twistd --pidfile=#{service}-service.pid cc -n -h #{node[:pythoncc][:broker]} --broker_heartbeat=#{node[:pythoncc][:broker_heartbeat]} -a sysname=#{node[:pythoncc][:sysname]} #{service_config}" >> start-#{service}.sh
       chmod +x start-#{service}.sh
       EOH
     end
