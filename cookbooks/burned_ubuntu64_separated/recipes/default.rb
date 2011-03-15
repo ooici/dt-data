@@ -139,7 +139,7 @@ when "sh"
     cwd app_dir
     user "#{node[:username]}" 
     code <<-EOH
-    echo -e "{\n'epu.universal':{" > res/config/ionlocal.config
+    echo -e '{\n"epu.universal":{' > res/config/ionlocal.config
     EOH
   end
   node[:universal_app_confs].each do |u_key, u_value|
@@ -147,7 +147,7 @@ when "sh"
       cwd app_dir
       user "#{node[:username]}" 
       code <<-EOH
-      echo "    '#{u_key}': '#{u_value}'," >> res/config/ionlocal.config
+      echo '    "#{u_key}": "#{u_value}",' >> res/config/ionlocal.config
       EOH
     end
   end
@@ -164,7 +164,7 @@ when "sh"
       cwd app_dir
       user "#{node[:username]}" 
       code <<-EOH
-      echo "'#{section_name}':{" >> res/config/ionlocal.config
+      echo '"#{section_name}":{' >> res/config/ionlocal.config
       EOH
     end
     keyvalue_dict.each do |l_key, l_value|
@@ -172,7 +172,7 @@ when "sh"
         cwd app_dir
         user "#{node[:username]}" 
         code <<-EOH
-        echo "    '#{l_key}': '#{l_value}'," >> res/config/ionlocal.config
+        echo '    "#{l_key}": "#{l_value}",' >> res/config/ionlocal.config
         EOH
       end
     end
