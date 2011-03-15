@@ -13,20 +13,38 @@
        <identity/>
        <data name="chef-install-work-consumer"><![CDATA[
 {
-  "burned_worker":{
+  "services":{
+    "simple_worker":"res/apps/epu-worker.app"
+  },
+  "local_app_confs":{
+    "epu.ionproc.epu_worker":{ "queue_name_work":"cei_work_queue" }
+  },
+  "universal_app_confs":{
+    "broker_host_list":"${broker_ip_address}",
+    "sysname":"${exchange_scope}"
+  },
+  "pythoncc":{
     "broker":"${broker_ip_address}",
-    "bootscript":"res/scripts/newcc.py",
     "sysname":"${exchange_scope}",
     "broker_heartbeat":"5",
-    "lcaarch_branch":"${git_lcaarch_branch}",
-    "lcaarch_commit_hash":"${git_lcaarch_commit}",
-    "log_level":"WARNING"
+    "log_level":"${ion_log_level}"
+  },
+  "appretrieve":{
+    "retrieve_method":"${retrieve_method}",
+    "archive_url":"${archive_url}",
+    "git_repo":"${git_repo}",
+    "git_branch":"${git_branch}",
+    "git_commit":"${git_commit}"
+  },
+  "appinstall":{
+    "install_method":"py_venv_setup",
+    "package_repo":"${package_repo}"
+  },
+  "apprun":{
+    "run_method":"sh"
   },
   "username":"cc",
-  "services":{
-    "simple_work_consumer":"{'name':'epu_worker','module':'ion.services.cei.sleeper.epu_worker','class':'EPUWorkerService', 'spawnargs':{'queue_name_work':'cei_work_queue'}}"
-  },
-  "recipes":["burned_worker"]
+  "recipes":["burned_ubuntu64_separated"]
 }
 ]]></data>
      </requires>
