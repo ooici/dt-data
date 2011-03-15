@@ -98,9 +98,6 @@ end
 bash "give-app-user-ownership" do
   code <<-EOH
   chown -R #{node[:username]}:#{node[:username]} /home/#{node[:username]}
-  if [ -f /opt/cei_environment ]; then
-    chown #{node[:username]}:#{node[:username]} /opt/cei_environment
-  fi
   EOH
 end
 
@@ -224,10 +221,6 @@ when "sh"
       cwd app_dir
       code <<-EOH
       echo "#!/bin/bash" >> start-#{service}.sh
-      if [ -f /opt/cei_environment ]; then
-        source /opt/cei_environment
-        echo "source /opt/cei_environment" >> start-#{service}.sh
-      fi
       if [ -f #{venv_dir}/bin/activate ]; then
         echo "source #{venv_dir}/bin/activate" >> start-#{service}.sh
       fi
