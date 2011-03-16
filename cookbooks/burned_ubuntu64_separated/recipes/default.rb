@@ -118,14 +118,14 @@ bash "give-remote-user-log-access" do
 end
 
 ########################################################################
-# RUN
+# PREPARE SERVICES
 ########################################################################
    
 case node[:apprun][:run_method]
-when "sh"
+when "sh", "supervised"
   
   ######################################################################
-  # RUN SH
+  # PREPARE SH or SUPERVISED
   ######################################################################
     
   template "#{app_dir}/res/logging/loglevels.cfg" do
@@ -171,7 +171,8 @@ when "sh"
       ION_CONFIGURATION_SECTION = service_spec[:ION_CONFIGURATION_SECTION]
     end
     
-    template File.join(app_dir, "start-#{service}.sh") do
+    start_script = File.join(app_dir, "start-#{service}.sh")
+    template start_script do
       source "start-service.sh.erb"
       owner node[:username]
       group node[:username]
@@ -186,24 +187,73 @@ when "sh"
                 :broker_heartbeat => node[:pythoncc][:broker_heartbeat],
                 :ION_CONFIGURATION_SECTION => ION_CONFIGURATION_SECTION)
     end
-  
+
+    # add command to service definition
+    service_spec[:command] = start_script
+  end
+else raise ArgumentError, "unknown install_method #{node[:apprun][:run_method]}"
+end
+
+########################################################################
+# RUN SERVICES
+########################################################################
+
+case node[:apprun][:run_method]
+when "sh"
+  ######################################################################
+  # RUN SH
+  ######################################################################
+  node[:services].each do |service, service_spec|
     execute "start-service" do
-      not_if { node.include? :do_not_start and node[:do_not_start].include? service }
+      not_if { service_spec.include? :autostart and !service_spec[:autostart]}
       user node[:username]
-      cwd app_dir
+      group node[:username]
       environment({
         "HOME" => "/home/#{node[:username]}"
       })
-      command "./start-#{service}.sh"
+      command service_spec[:command]
     end
   end
 
 when "supervised"
-  
   ######################################################################
   # RUN SUPERVISED
   ######################################################################
-  raise ArgumentError, "not support 'supervised' run_method just yet"
+  
+  
+  bash "install-supervisor" do
+  code <<-EOH
+  ACTIVATE=#{venv_dir}/bin/activate
+  if [ -f $ACTIVATE ]; then
+    source $ACTIVATE
+  fi
+  easy_install supervisor
+  EOH
+  end
+
+  sup_conf = File.join(app_dir, "supervisor.conf")
+  template sup_conf do
+    source "supervisor.conf.erb"
+    mode 0400
+    owner node[:username]
+    group node[:username]
+    variables(:programs => node[:services])
+  end
+
+  bash "start-supervisor" do
+  user node[:username]
+  group node[:username]
+  environment({
+    "HOME" => "/home/#{node[:username]}"
+  })
+  code <<-EOH
+  ACTIVATE=#{venv_dir}/bin/activate
+  if [ -f $ACTIVATE ]; then
+    source $ACTIVATE
+  fi
+  supervisord -c #{sup_conf}
+  EOH
+end
 
 else raise ArgumentError, "unknown install_method #{node[:apprun][:run_method]}"
 end

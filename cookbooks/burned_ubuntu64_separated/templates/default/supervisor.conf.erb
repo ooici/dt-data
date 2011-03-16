@@ -1,0 +1,20 @@
+<% @programs.each do |name,spec| %>
+[program:<%= name %>]
+command=<%= spec[:command] %>
+autorestart=false
+environment = TWISTD_ARGS="-n"
+
+<% end %>
+
+[unix_http_server]
+file=%(here)s/supervisor.sock
+
+[supervisord]
+logfile=%(here)s/supervisord.log
+pidfile=%(here)s/supervisord.pid
+
+[rpcinterface:supervisor]
+supervisor.rpcinterface_factory = supervisor.rpcinterface:make_main_rpcinterface
+
+[supervisorctl]
+serverurl=unix://%(here)s/supervisor.sock
