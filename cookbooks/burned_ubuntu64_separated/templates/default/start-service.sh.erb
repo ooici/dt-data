@@ -1,0 +1,9 @@
+#!/bin/bash
+
+<% unless @venv.nil? or @venv.empty? %>
+source <%= File.join(@venv, "bin/activate") %>
+<% end %>
+
+export ION_ALTERNATE_LOGGING_CONF=<%= @logging_config %>
+
+exec twistd --pidfile=<%=@service%>-service.pid cc -n -h <%=@broker%> --broker_heartbeat=<%= @broker_heartbeat %> -a sysname=<%= @sysname %> <%=@service_config %>
