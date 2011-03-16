@@ -19,7 +19,7 @@
     }
   },
   "local_app_confs":{
-    "epu.ionproc.epu_worker":{ "queue_name_work":"cei_work_queue" }
+    "epu.ionproc.epu_worker":{ "queue_name_work":"${queue_name_work}" }
   },
   "universal_app_confs":{
     "broker_host_list":"${broker_ip_address}",
