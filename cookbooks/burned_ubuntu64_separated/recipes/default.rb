@@ -223,6 +223,8 @@ when "sh"
       if [ -f #{venv_dir}/bin/activate ]; then
         echo "source #{venv_dir}/bin/activate" >> start-#{service}.sh
       fi
+      echo "export LAUNCHED_VIA_RECIPE=yes" >> start-#{service}.sh
+      echo "export ION_CONFIGURATION_SECTION=#{service}" >> start-#{service}.sh
       echo "export ION_ALTERNATE_LOGGING_CONF=#{logging_config}" >> start-#{service}.sh
       echo "twistd --pidfile=#{service}-service.pid cc -n -h #{node[:pythoncc][:broker]} --broker_heartbeat=#{node[:pythoncc][:broker_heartbeat]} -a sysname=#{node[:pythoncc][:sysname]} #{service_config}" >> start-#{service}.sh
       chmod +x start-#{service}.sh
@@ -234,8 +236,7 @@ when "sh"
       user node[:username]
       cwd app_dir
       environment({
-        "HOME" => "/home/#{node[:username]}",
-        "ION_ALTERNATE_LOGGING_CONF" => "#{logging_config}"
+        "HOME" => "/home/#{node[:username]}"
       })
       command "./start-#{service}.sh"
     end
