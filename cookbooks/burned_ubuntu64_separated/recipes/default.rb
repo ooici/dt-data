@@ -134,7 +134,7 @@ when "sh"
     variables(:log_level => node[:pythoncc][:log_level])
   end
 
-  ionlocal_config File.join(app_dir, "res/conf/ionlocal.config") do
+  ionlocal_config File.join(app_dir, "res/config/ionlocal.config") do
     user node[:username]
     group node[:username] #TODO need group name in input
     universals node[:universal_app_confs]
@@ -165,7 +165,7 @@ when "sh"
       variables(:service_name => service)
     end
   
-    template File.join(app_dir, "start-#{service}.sh" do
+    template File.join(app_dir, "start-#{service}.sh") do
       source "start-service.sh.erb"
       owner node[:username]
       group node[:username]

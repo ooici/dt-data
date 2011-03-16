@@ -41,7 +41,7 @@ define :ionlocal_config, :user => nil, :group => nil, :universals => {},
       ruby_block "build-line" do
         block do
           config_line = "     '#{l_key}': '" + l_value.to_s + "',\n"
-          File.open({params[:name]}, 'a') {|f| f.write(config_line) }
+          File.open(params[:name], 'a') {|f| f.write(config_line) }
         end
       end
     end
