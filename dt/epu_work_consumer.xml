@@ -15,7 +15,7 @@
 {
   "services":{
     "simple_worker":{
-      "res/apps/epu-worker.app"
+      "service_config":"res/apps/epu-worker.app"
     }
   },
   "local_app_confs":{
