@@ -166,6 +166,11 @@ when "sh"
       variables(:service_name => service)
     end
     
+    ION_CONFIGURATION_SECTION = ""
+    if service_spec.include? :ION_CONFIGURATION_SECTION
+      ION_CONFIGURATION_SECTION = service_spec[:ION_CONFIGURATION_SECTION]
+    end
+    
     template File.join(app_dir, "start-#{service}.sh") do
       source "start-service.sh.erb"
       owner node[:username]
@@ -173,12 +178,13 @@ when "sh"
       mode 0755
       variables(:service => service, 
                 :service_config => service_config, 
-                :venv => venv_dir, 
+                :venv_dir => venv_dir,
+                :app_dir => app_dir,
                 :logging_config => logging_config, 
                 :sysname => node[:pythoncc][:sysname], 
                 :broker => node[:pythoncc][:broker],
                 :broker_heartbeat => node[:pythoncc][:broker_heartbeat],
-                :ION_CONFIGURATION_SECTION => service_spec.key(:ION_CONFIGURATION_SECTION))
+                :ION_CONFIGURATION_SECTION => ION_CONFIGURATION_SECTION)
     end
   
     execute "start-service" do
