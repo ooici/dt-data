@@ -141,8 +141,9 @@ when "sh"
     locals node[:local_app_confs]
   end
   
-  node[:services].each do |service, service_config|
+  node[:services].each do |service, service_spec|
     
+    service_config = service_spec[:service_config]
     abs_service_config = File.join(app_dir, service_config)
     ruby_block "check-config" do
       block do
@@ -164,17 +165,20 @@ when "sh"
       owner "#{node[:username]}"
       variables(:service_name => service)
     end
-  
+    
     template File.join(app_dir, "start-#{service}.sh") do
       source "start-service.sh.erb"
       owner node[:username]
       group node[:username]
       mode 0755
-      variables(:service => service, :service_config => service_config, 
-                :venv => venv_dir, :logging_config => logging_config, 
+      variables(:service => service, 
+                :service_config => service_config, 
+                :venv => venv_dir, 
+                :logging_config => logging_config, 
                 :sysname => node[:pythoncc][:sysname], 
                 :broker => node[:pythoncc][:broker],
-                :broker_heartbeat => node[:pythoncc][:broker_heartbeat])
+                :broker_heartbeat => node[:pythoncc][:broker_heartbeat],
+                :ION_CONFIGURATION_SECTION => service_spec.key(:ION_CONFIGURATION_SECTION))
     end
   
     execute "start-service" do
@@ -182,8 +186,7 @@ when "sh"
       user node[:username]
       cwd app_dir
       environment({
-        "HOME" => "/home/#{node[:username]}",
-        "ION_ALTERNATE_LOGGING_CONF" => "#{logging_config}"
+        "HOME" => "/home/#{node[:username]}"
       })
       command "./start-#{service}.sh"
     end

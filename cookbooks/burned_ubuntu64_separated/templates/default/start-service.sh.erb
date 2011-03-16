@@ -4,6 +4,12 @@
 source <%= File.join(@venv, "bin/activate") %>
 <% end %>
 
+<% unless @ION_CONFIGURATION_SECTION.nil? or @ION_CONFIGURATION_SECTION.empty? %>
+export ION_CONFIGURATION_SECTION=<%= @ION_CONFIGURATION_SECTION %>
+<% end %>
+
+export LAUNCHED_VIA_RECIPE=yes
+
 export ION_ALTERNATE_LOGGING_CONF=<%= @logging_config %>
 
 exec twistd --pidfile=<%=@service%>-service.pid cc -n -h <%=@broker%> --broker_heartbeat=<%= @broker_heartbeat %> -a sysname=<%= @sysname %> <%=@service_config %>
