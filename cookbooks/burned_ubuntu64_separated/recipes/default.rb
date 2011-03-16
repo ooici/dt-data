@@ -170,7 +170,7 @@ when "sh"
     keyvalue_dict.each do |l_key, l_value|
       ruby_block "build-line" do
         block do
-          config_line = "     '#{l_key}': '" + l_value + "',\n"
+          config_line = "     '#{l_key}': '" + l_value.to_s + "',\n"
           File.open(app_dir + "/res/config/ionlocal.config", 'a') {|f| f.write(config_line) }
         end
       end
