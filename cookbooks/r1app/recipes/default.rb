@@ -77,11 +77,8 @@ end
 
 case node[:appinstall][:install_method]
 when "py_venv_setup"
-  package "python-virtualenv" do
-    action :install
-  end
   execute "create virtualenv" do
-    command "virtualenv --no-site-packages #{venv_dir}"
+    command "/opt/python2.5/bin/virtualenv --python=python2.5 --no-site-packages #{venv_dir}"
   end
   bash "run install" do
     cwd app_dir
@@ -113,7 +110,7 @@ bash "give-remote-user-log-access" do
   if [ -f /home/root/.ssh/authorized_keys ]; then
     cp /home/root/.ssh/authorized_keys /home/#{node[:username]}/.ssh/
   fi
-  chown -R #{node[:username]} /home/#{node[:username]}/.ssh
+  chown -R #{node[:username]}:#{node[:groupname]} /home/#{node[:username]}/.ssh
   EOH
 end
 
