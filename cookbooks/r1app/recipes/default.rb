@@ -42,18 +42,12 @@ when "archive"
     command "mv #{app_archive} /tmp/previous__app-archive.tar.gz"
   end
 when "git"
-  directory app_dir do
-    owner node[:username]
-    group node[:groupname]
-    mode "0755"
-    action :create
-  end
   execute "clone the repository" do
     command "git clone #{node[:appretrieve][:git_repo]} #{app_dir}/"
   end
   execute "fetch all code" do
     cwd app_dir
-    command "git fetch --all"
+    command "git fetch"
   end
   execute "checkout the desired branch" do
     cwd app_dir
@@ -212,7 +206,7 @@ when "sh"
       environment({
         "HOME" => "/home/#{node[:username]}"
       })
-      command service_spec[:command]
+      command File.join(app_dir, "start-#{service}.sh")
     end
   end
 
