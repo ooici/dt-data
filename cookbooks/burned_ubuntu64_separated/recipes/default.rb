@@ -198,14 +198,18 @@ end
 # RUN SERVICES
 ########################################################################
 
+# make a new hash with just the services where :autostart is missing or true
+autostart_services = node[:services].reject do |k,v|
+  v.include?(:autostart) and not v[:autostart]
+end
+
 case node[:apprun][:run_method]
 when "sh"
   ######################################################################
   # RUN SH
   ######################################################################
-  node[:services].each do |service, service_spec|
+  autostart_services.each do |service, service_spec|
     execute "start-service" do
-      not_if { service_spec.include? :autostart and !service_spec[:autostart]}
       user node[:username]
       group node[:username]
       environment({
@@ -237,7 +241,7 @@ when "supervised"
     mode 0400
     owner node[:username]
     group node[:username]
-    variables(:programs => node[:services])
+    variables(:programs => autostart_services)
   end
 
   bash "start-supervisor" do
