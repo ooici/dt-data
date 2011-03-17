@@ -1,0 +1,17 @@
+{
+    "document" : "generic_deployable_type.xml",
+    "vars" : {
+        "service_spec": 
+        
+        "local_app_confs":
+    },
+    "sites" : {
+        "ec2-west": {
+            "node1": {
+                "image": "${epuworker_image_id}", 
+                "allocation": "m1.large",
+                "sshkeyname": "ooi"
+            }
+        }
+    }
+}
