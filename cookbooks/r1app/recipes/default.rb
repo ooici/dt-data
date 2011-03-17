@@ -82,7 +82,17 @@ when "py_venv_setup"
     EOH
   end
 when "py_venv_buildout"
-  raise ArgumentError, "not support 'py_venv_buildout' install_method just yet"
+  execute "create virtualenv" do
+    command "/opt/python2.5/bin/virtualenv --python=python2.5 --no-site-packages #{venv_dir}"
+  end
+  bash "run install" do
+    cwd app_dir
+    code <<-EOH
+    source #{venv_dir}/bin/activate
+    #{venv_dir}/bin/python ./bootstrap.py
+    #{venv_dir}/bin/buildout
+    EOH
+  end
 else raise ArgumentError, "unknown install_method #{node[:appinstall][:install_method]}"
 end
 
