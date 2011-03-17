@@ -10,6 +10,7 @@ define :ionlocal_config, :user => nil, :group => nil, :universals => {},
     group "#{params[:group]}"
     code <<-EOH
     echo -e "{\n'epu.universal':{" > #{params[:name]}
+    chmod 600 #{params[:name]}
     EOH
   end
   params[:universals].each do |u_key, u_value|
