@@ -23,7 +23,7 @@ when "archive"
   remote_file app_archive do
     source node[:appretrieve][:archive_url]
     owner node[:username]
-    group node[:username]
+    group node[:groupname]
   end
   directory "/tmp/expand_tmp" do
     owner "root"
@@ -44,7 +44,7 @@ when "archive"
 when "git"
   directory app_dir do
     owner node[:username]
-    group node[:username]
+    group node[:groupname]
     mode "0755"
     action :create
   end
@@ -97,7 +97,7 @@ end
 
 bash "give-app-user-ownership" do
   code <<-EOH
-  chown -R #{node[:username]}:#{node[:username]} /home/#{node[:username]}
+  chown -R #{node[:username]}:#{node[:groupname]} /home/#{node[:username]}
   EOH
 end
 
@@ -136,7 +136,7 @@ when "sh", "supervised"
 
   ionlocal_config File.join(app_dir, "res/config/ionlocal.config") do
     user node[:username]
-    group node[:username] #TODO need group name in input
+    group node[:groupname]
     universals node[:universal_app_confs]
     locals node[:local_app_confs]
   end
@@ -154,7 +154,7 @@ when "sh", "supervised"
     logging_dir = "#{app_dir}/logs/#{service}"
     directory "#{logging_dir}" do
       owner "#{node[:username]}"
-      group "#{node[:username]}"
+      group "#{node[:groupname]}"
       mode "0755"
     end
     
@@ -175,7 +175,7 @@ when "sh", "supervised"
     template start_script do
       source "start-service.sh.erb"
       owner node[:username]
-      group node[:username]
+      group node[:groupname]
       mode 0755
       variables(:service => service, 
                 :service_config => service_config, 
@@ -211,7 +211,7 @@ when "sh"
   autostart_services.each do |service, service_spec|
     execute "start-service" do
       user node[:username]
-      group node[:username]
+      group node[:groupname]
       environment({
         "HOME" => "/home/#{node[:username]}"
       })
@@ -240,13 +240,13 @@ when "supervised"
     source "supervisor.conf.erb"
     mode 0400
     owner node[:username]
-    group node[:username]
+    group node[:groupname]
     variables(:programs => autostart_services)
   end
 
   bash "start-supervisor" do
   user node[:username]
-  group node[:username]
+  group node[:groupname]
   environment({
     "HOME" => "/home/#{node[:username]}"
   })
