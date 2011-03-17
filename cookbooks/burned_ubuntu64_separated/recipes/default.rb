@@ -166,9 +166,9 @@ when "sh", "supervised"
       variables(:service_name => service)
     end
     
-    ION_CONFIGURATION_SECTION = ""
+    ion_conf_section = ""
     if service_spec.include? :ION_CONFIGURATION_SECTION
-      ION_CONFIGURATION_SECTION = service_spec[:ION_CONFIGURATION_SECTION]
+      ion_conf_section = service_spec[:ION_CONFIGURATION_SECTION]
     end
     
     start_script = File.join(app_dir, "start-#{service}.sh")
@@ -185,7 +185,7 @@ when "sh", "supervised"
                 :sysname => node[:pythoncc][:sysname], 
                 :broker => node[:pythoncc][:broker],
                 :broker_heartbeat => node[:pythoncc][:broker_heartbeat],
-                :ION_CONFIGURATION_SECTION => ION_CONFIGURATION_SECTION)
+                :ION_CONFIGURATION_SECTION => ion_conf_section)
     end
 
     # add command to service definition
