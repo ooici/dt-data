@@ -9,7 +9,7 @@
                 "service_config":"res/apps/eoi_ingester.app"
             }
         },
-        "local_app_confs": " "
+        "local_app_confs": { }
     },
     "sites" : {
         "ec2-west": {
