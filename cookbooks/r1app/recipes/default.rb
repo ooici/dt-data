@@ -90,7 +90,7 @@ when "py_venv_buildout"
     code <<-EOH
     source #{venv_dir}/bin/activate
     #{venv_dir}/bin/python ./bootstrap.py
-    #{venv_dir}/bin/buildout
+    bin/buildout
     EOH
   end
 else raise ArgumentError, "unknown install_method #{node[:appinstall][:install_method]}"
