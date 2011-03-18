@@ -1,9 +1,15 @@
 {
     "document" : "generic_deployable_type.xml",
     "vars" : {
-        "service_spec": 
-        
-        "local_app_confs":
+        "service_spec": {
+            "dm":{
+                "service_config":"res/apps/dm_bootstrap.app"
+            },
+            "eoiingest":{
+                "service_config":"res/apps/eoi_ingester.app"
+            }
+        },
+        "local_app_confs": " "
     },
     "sites" : {
         "ec2-west": {
