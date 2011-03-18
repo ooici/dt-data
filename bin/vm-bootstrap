@@ -14,7 +14,7 @@ import fcntl
 import struct
 import time
 import sys
-import urllib
+import urllib2
 import os
 import tempfile
 import subprocess
@@ -70,9 +70,9 @@ def get_nimbus_metadata_url(path='/var/nimbus-metadata-server-url'):
 
 def get_userdata(baseurl='http://169.254.169.254'):
     url = baseurl + "/2007-01-19/user-data"
-    res = urllib.urlopen(url)
-    code = res.getcode()
-    if not code or code == 404:
+    try:
+        res = urllib2.urlopen(url)
+    except urllib2.URLError:
         return None
     return res.read()
 
