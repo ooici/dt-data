@@ -132,9 +132,19 @@ when "sh", "supervised"
   template "#{app_dir}/res/logging/loglevels.cfg" do
     source "loglevels.cfg.erb"
     owner "#{node[:username]}"
+    group "#{node[:groupname]}"
     variables(:log_level => node[:pythoncc][:log_level])
   end
 
+  template "#{app_dir}/ooici-conn.properties" do
+    source "ooici-conn.properties.erb"
+    owner "#{node[:username]}"
+    group "#{node[:groupname]}"
+    variables(:exchange => node[:pythoncc][:sysname],
+              :server => node[:pythoncc][:broker])
+
+  end
+  
   ionlocal_config File.join(app_dir, "res/config/ionlocal.config") do
     user node[:username]
     group node[:groupname]
@@ -164,6 +174,7 @@ when "sh", "supervised"
     template "#{logging_config}" do
       source "ionlogging.conf.erb"
       owner "#{node[:username]}"
+      group "#{node[:groupname]}"
       variables(:service_name => service)
     end
     
