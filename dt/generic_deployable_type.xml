@@ -14,7 +14,7 @@
        <data name="chef-install-work-consumer"><![CDATA[
 {
   "services": ${service_spec},
-  "local_app_confs": {$local_app_confs},
+  "local_app_confs": ${local_app_confs},
   "universal_app_confs":{
     "broker_host_list":"${broker_ip_address}",
     "sysname":"${exchange_scope}"
