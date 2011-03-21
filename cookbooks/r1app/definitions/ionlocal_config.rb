@@ -1,8 +1,8 @@
 define :ionlocal_config, :user => nil, :group => nil, :universals => {}, 
     :locals => {} do
   
-  raise ArgumentError, 'user must be specified' if :user.nil?
-  raise ArgumentError, 'group must be specified' if :group.nil?
+  raise ArgumentError, 'user must be specified' if params[:user].nil?
+  raise ArgumentError, 'group must be specified' if params[:group].nil?
 
   # The following excruciating ionlocal.config work should be a Ruby block
   bash "create ionlocal.config" do

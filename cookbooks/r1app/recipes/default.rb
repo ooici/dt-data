@@ -13,93 +13,21 @@ end
 # RETRIEVAL
 ########################################################################
 
-case node[:appretrieve][:retrieve_method]
-when "archive"
-  if node[:appretrieve][:archive_url] =~ /(.*)\.tar\.gz$/
-    print "url is tar.gz"
-  else
-    raise ArgumentError, 'archive_url is not tar.gz file'
-  end
-  remote_file app_archive do
-    source node[:appretrieve][:archive_url]
-    owner node[:username]
-    group node[:groupname]
-  end
-  directory "/tmp/expand_tmp" do
-    owner "root"
-    group "root"
-    mode "0755"
-    action :create
-  end
-  execute "untar app" do
-    cwd "/tmp/expand_tmp"
-    command "tar xzf #{app_archive}"
-  end
-  execute "move app" do
-    command "mv /tmp/expand_tmp/* #{app_dir}"
-  end
-  execute "archive the tarball" do
-    command "mv #{app_archive} /tmp/previous__app-archive.tar.gz"
-  end
-when "git"
-  execute "clone the repository" do
-    command "git clone #{node[:appretrieve][:git_repo]} #{app_dir}/"
-  end
-  execute "fetch all code" do
-    cwd app_dir
-    command "git fetch"
-  end
-  execute "checkout the desired branch" do
-    cwd app_dir
-    command "git checkout -b activebranch origin/#{node[:appretrieve][:git_branch]}"
-  end
-  # This makes HEAD meaningful: 
-  execute "move branch to latest" do
-    cwd app_dir
-    command "git pull"
-  end
-  execute "move branch to commit or reference" do
-    cwd app_dir
-    command "git reset --hard #{node[:appretrieve][:git_commit]}"
-  end
-else raise ArgumentError, "unknown retrieve_method #{node[:appretrieve][:retrieve_method]}, should be 'archive' or 'git'"
+retrieve_app app_dir do
+  conf node[:appretrieve]
+  user node[:username]
+  group node[:groupname]
 end
 
 ########################################################################
 # INSTALLATION
 ########################################################################
 
-case node[:appinstall][:install_method]
-when "py_venv_setup"
-  execute "create virtualenv" do
-    command "/opt/python2.5/bin/virtualenv --python=python2.5 --no-site-packages #{venv_dir}"
-  end
-  bash "run install" do
-    cwd app_dir
-    code <<-EOH
-    source #{venv_dir}/bin/activate
-    #{venv_dir}/bin/python setup.py install
-    EOH
-  end
-when "py_venv_buildout"
-  execute "create virtualenv" do
-    command "/opt/python2.5/bin/virtualenv --python=python2.5 --no-site-packages #{venv_dir}"
-  end
-  bash "run install" do
-    cwd app_dir
-    code <<-EOH
-    source #{venv_dir}/bin/activate
-    #{venv_dir}/bin/python ./bootstrap.py
-    bin/buildout
-    EOH
-  end
-else raise ArgumentError, "unknown install_method #{node[:appinstall][:install_method]}"
-end
-
-bash "give-app-user-ownership" do
-  code <<-EOH
-  chown -R #{node[:username]}:#{node[:groupname]} /home/#{node[:username]}
-  EOH
+install_app app_dir do
+  conf node[:appinstall]
+  user node[:username]
+  group node[:groupname]
+  virtualenv venv_dir
 end
 
 ########################################################################
@@ -121,7 +49,12 @@ end
 ########################################################################
 # PREPARE SERVICES
 ########################################################################
-   
+
+# this hash is defined by the prepare process. it maps service names to 
+# hashes of start information. at a minimum :command is required
+autostart_services = {}
+
+
 case node[:apprun][:run_method]
 when "sh", "supervised"
   
@@ -142,7 +75,6 @@ when "sh", "supervised"
     group "#{node[:groupname]}"
     variables(:exchange => node[:pythoncc][:sysname],
               :server => node[:pythoncc][:broker])
-
   end
   
   ionlocal_config File.join(app_dir, "res/config/ionlocal.config") do
@@ -200,8 +132,11 @@ when "sh", "supervised"
                 :ION_CONFIGURATION_SECTION => ion_conf_section)
     end
 
-    # add command to service definition
-    service_spec[:command] = start_script
+    # add command to services list if it is autostart
+    if not service_spec.include?(:autostart) or service_spec[:autostart]
+      autostart_services[service] = {:command => start_script} 
+    end
+
   end
 else raise ArgumentError, "unknown install_method #{node[:apprun][:run_method]}"
 end
@@ -209,11 +144,6 @@ end
 ########################################################################
 # RUN SERVICES
 ########################################################################
-
-# make a new hash with just the services where :autostart is missing or true
-autostart_services = node[:services].reject do |k,v|
-  v.include?(:autostart) and not v[:autostart]
-end
 
 case node[:apprun][:run_method]
 when "sh"
@@ -227,7 +157,7 @@ when "sh"
       environment({
         "HOME" => "/home/#{node[:username]}"
       })
-      command File.join(app_dir, "start-#{service}.sh")
+      command service_spec[:command]
     end
   end
 
@@ -235,7 +165,6 @@ when "supervised"
   ######################################################################
   # RUN SUPERVISED
   ######################################################################
-  
   
   bash "install-supervisor" do
   code <<-EOH
