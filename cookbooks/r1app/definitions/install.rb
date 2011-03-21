@@ -29,9 +29,6 @@ define :install_app, :conf => nil, :user => nil, :group => nil,
   raise ArgumentError, 'user must be specified' if username.nil?
   raise ArgumentError, 'group must be specified' if groupname.nil?
 
-  raise ArgumentError, 'install method must be specified' if 
-    not conf.include?(:install_method)
-    
   case conf[:install_method]
   when "py_venv_setup"
     virtualenv venv_dir do 

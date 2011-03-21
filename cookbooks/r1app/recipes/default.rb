@@ -1,9 +1,13 @@
 app_archive = "/tmp/app-archive.tar.gz"
 app_dir = "/home/#{node[:username]}/app"
 venv_dir = "/home/#{node[:username]}/app-venv"
+monitor_dir = "/home/#{node[:username]}/appmonitor"
 
 execute "Cleanup app dir" do
   command "rm -rf #{app_dir}"
+end
+execute "Cleanup monitor dir" do
+  command "rm -rf #{monitor_dir}"
 end
 execute "Cleanup virtualenv dir" do
   command "rm -rf #{venv_dir}"
@@ -198,8 +202,20 @@ when "supervised"
   fi
   supervisord -c #{sup_conf}
   EOH
-end
+  end
 
+  # start up the monitor process, if configured
+  if node.include? :appmonitor 
+    app_monitor monitor_dir do
+      conf node[:appmonitor]
+      user node[:username]
+      group node[:groupname]
+      virtualenv venv_dir
+      pythoncc node[:pythoncc]
+      universals node[:universal_app_confs]
+      supervisor_socket File.join(app_dir, "supervisor.sock")
+    end
+  end
 else raise ArgumentError, "unknown install_method #{node[:apprun][:run_method]}"
 end
 

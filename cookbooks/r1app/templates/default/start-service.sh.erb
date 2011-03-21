@@ -9,7 +9,9 @@ export ION_CONFIGURATION_SECTION=<%= @ION_CONFIGURATION_SECTION %>
 
 export LAUNCHED_VIA_RECIPE=yes
 
+<% unless @logging_config.nil? or @logging_config.empty? %>
 export ION_ALTERNATE_LOGGING_CONF=<%= @logging_config %>
+<% end %>
 
 APP_BIN=<%= @app_dir %>/bin
 if [ -d $APP_BIN ]; then
