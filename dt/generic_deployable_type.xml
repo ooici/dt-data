@@ -37,7 +37,7 @@
     "package_repo":"${package_repo}"
   },
   "apprun":{
-    "run_method":"sh"
+    "run_method":"supervised"
   },
   "appmonitor":{
     "retrieve_method":"git",
