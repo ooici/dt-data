@@ -40,7 +40,7 @@ if node[:rabbitmq].include? :users and not node[:rabbitmq][:users].empty?
       spec[:permissions].each do |vhost, perms|
         execute "Set permissions for user=#{username} vhost=#{vhost}" do
           command "rabbitmqctl -q set_permissions -p #{vhost} #{username} "+
-            "'#{perms.conf}' '#{perms.write}' '#{perms.read}'"
+            "'#{perms[:conf]}' '#{perms[:write]}' '#{perms[:read]}'"
         end
       end
     end
