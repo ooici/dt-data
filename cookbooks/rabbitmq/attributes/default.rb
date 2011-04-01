@@ -10,3 +10,4 @@ default[:rabbitmq][:mnesiadir] = "/var/lib/rabbitmq/mnesia"
 default[:rabbitmq][:cluster] = "no"
 default[:rabbitmq][:cluster_config] = "/etc/rabbitmq/rabbitmq_cluster.config"
 default[:rabbitmq][:cluster_disk_nodes] = []
+default[:rabbitmq][:users] = {}
