@@ -18,7 +18,7 @@ end
 if node[:rabbitmq].include? :vhosts
   node[:rabbitmq][:vhosts].each do |vhost|
     execute "Add vhost #{vhost}" do
-      return [0,2] # ok if vhost already exists
+      returns [0,2] # ok if vhost already exists
       command "rabbitmqctl -q add_vhost #{vhost}"
     end
   end
