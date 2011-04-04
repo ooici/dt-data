@@ -84,6 +84,15 @@ when "sh", "supervised"
               :server => node[:pythoncc][:broker])
   end
   
+  bash "give-remote-user-ooici-properties-access" do
+    code <<-EOH
+    if [ -f /home/ubuntu/ ]; then
+      cp #{app_dir}/ooici-conn.properties /home/ubuntu/
+      chown ubuntu /home/ubuntu/ooici-conn.properties
+    fi
+    EOH
+  end
+    
   ionlocal_config File.join(app_dir, "res/config/ionlocal.config") do
     user node[:username]
     group node[:groupname]
