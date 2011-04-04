@@ -46,6 +46,9 @@ bash "give-remote-user-log-access" do
   if [ -f /root/.ssh/authorized_keys ]; then
     cp /root/.ssh/authorized_keys /home/#{node[:username]}/.ssh/
   fi
+  if [ -f /home/ubuntu/.ssh/authorized_keys ]; then
+    cp /home/ubuntu/.ssh/authorized_keys /home/#{node[:username]}/.ssh/
+  fi
   chown -R #{node[:username]}:#{node[:groupname]} /home/#{node[:username]}/.ssh
   EOH
 end
