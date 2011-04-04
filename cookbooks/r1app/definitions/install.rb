@@ -1,12 +1,12 @@
 # ran into this bug: http://tickets.opscode.com/browse/CHEF-422
 # so nested defintions like this one cannot be called in block form
 # without first dereferencing params. (w..t..f..)
-define :virtualenv, :user => nil, :group => nil, :virtualenv_exe => nil, :virtualenv_python => nil do
+define :virtualenv, :user => nil, :group => nil do
   venv_dir = params[:name]
   execute "create virtualenv" do
     user params[:user]
     group params[:group]
-    command "#{virtualenv_exe} --python=#{virtualenv_python} --no-site-packages #{venv_dir}"
+    command "#{params[:virtualenv_exe]} --python=#{params[:virtualenv_python]} --no-site-packages #{venv_dir}"
     creates File.join(venv_dir, "bin/activate")
   end
 end
@@ -24,11 +24,14 @@ define :install_app, :conf => nil, :user => nil, :group => nil,
   
   case node[:platform]
   when "debian","ubuntu"
-      virtualenv_exe = "virtualenv"
-      virtualenv_python = "python2.6"
+    package "python-virtualenv" do
+      action :install
+    end
+    virtualenv_exe = "virtualenv"
+    virtualenv_python = "python2.6"
   else
-      virtualenv_exe = "/opt/python2.5/bin/virtualenv"
-      virtualenv_python = "python2.5"
+    virtualenv_exe = "/opt/python2.5/bin/virtualenv"
+    virtualenv_python = "python2.5"
   end
   
   conf = params[:conf]
