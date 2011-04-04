@@ -86,7 +86,7 @@ when "sh", "supervised"
   
   bash "give-remote-user-ooici-properties-access" do
     code <<-EOH
-    if [ -f /home/ubuntu/ ]; then
+    if [ -d /home/ubuntu/ ]; then
       cp #{app_dir}/ooici-conn.properties /home/ubuntu/
       chown ubuntu /home/ubuntu/ooici-conn.properties
     fi
