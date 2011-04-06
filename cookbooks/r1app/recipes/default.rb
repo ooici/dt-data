@@ -46,6 +46,9 @@ bash "give-remote-user-log-access" do
   if [ -f /root/.ssh/authorized_keys ]; then
     cp /root/.ssh/authorized_keys /home/#{node[:username]}/.ssh/
   fi
+  if [ -f /home/ubuntu/.ssh/authorized_keys ]; then
+    cp /home/ubuntu/.ssh/authorized_keys /home/#{node[:username]}/.ssh/
+  fi
   chown -R #{node[:username]}:#{node[:groupname]} /home/#{node[:username]}/.ssh
   EOH
 end
@@ -81,6 +84,15 @@ when "sh", "supervised"
               :server => node[:pythoncc][:broker])
   end
   
+  bash "give-remote-user-ooici-properties-access" do
+    code <<-EOH
+    if [ -d /home/ubuntu/ ]; then
+      cp #{app_dir}/ooici-conn.properties /home/ubuntu/
+      chown ubuntu /home/ubuntu/ooici-conn.properties
+    fi
+    EOH
+  end
+    
   ionlocal_config File.join(app_dir, "res/config/ionlocal.config") do
     user node[:username]
     group node[:groupname]

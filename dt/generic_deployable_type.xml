@@ -37,7 +37,20 @@
     "package_repo":"${package_repo}"
   },
   "apprun":{
-    "run_method":"sh"
+    "run_method":"supervised"
+  },
+  "appmonitor":{
+    "retrieve_method":"git",
+    "git_repo":"git://github.com/ooici/epuagent.git",
+    "git_branch":"master",
+    "git_commit":"HEAD",
+    "install_method":"py_venv_setup",
+    "service_config":"res/apps/epuagent.app",
+    "package_repo":"http://ooici.net/packages",
+    "node_id":"${node_id}",
+    "heartbeat_dest":"${heartbeat_dest}",
+    "heartbeat_op":"heartbeat",
+    "heartbeat_period":10
   },
   "username":"cc",
   "groupname":"users",
