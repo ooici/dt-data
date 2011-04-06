@@ -57,7 +57,7 @@
   },
   "username":"cc",
   "groupname":"users",
-  "recipes":["user", "r1app"]
+  "recipes":["user", "torque::mom"]
 }
 ]]></data>
      </requires>
