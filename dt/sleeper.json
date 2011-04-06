@@ -1,5 +1,5 @@
 {
-    "document" : "generic_deployable_type.xml",
+    "document" : "setuppy_deployable_type.xml",
     "vars" : {
         "service_spec": {
             "sleeper":{

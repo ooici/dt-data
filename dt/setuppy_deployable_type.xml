@@ -1,0 +1,63 @@
+
+<cluster>
+ <workspace>
+   <name>work_consumer</name>
+   <image>${epuworker_image_id}</image>
+   <quantity>1</quantity>
+   <nic wantlogin="true">public</nic>
+   <ctx>
+     <provides>
+       <identity/>
+     </provides>
+     <requires>
+       <identity/>
+       <data name="chef-install-work-consumer"><![CDATA[
+{
+  "services": ${service_spec},
+  "local_app_confs": ${local_app_confs},
+  "universal_app_confs":{
+    "broker_host_list":"${broker_ip_address}",
+    "sysname":"${exchange_scope}"
+  },
+  "pythoncc":{
+    "broker":"${broker_ip_address}",
+    "sysname":"${exchange_scope}",
+    "broker_heartbeat":"5",
+    "log_level":"${ion_log_level}"
+  },
+  "appretrieve":{
+    "retrieve_method":"${retrieve_method}",
+    "archive_url":"${archive_url}",
+    "git_repo":"${git_repo}",
+    "git_branch":"${git_branch}",
+    "git_commit":"${git_commit}"
+  },
+  "appinstall":{
+    "install_method":"py_venv_setup",
+    "package_repo":"${package_repo}"
+  },
+  "apprun":{
+    "run_method":"supervised"
+  },
+  "appmonitor":{
+    "retrieve_method":"git",
+    "git_repo":"git://github.com/ooici/epuagent.git",
+    "git_branch":"master",
+    "git_commit":"HEAD",
+    "install_method":"py_venv_setup",
+    "service_config":"res/apps/epuagent.app",
+    "package_repo":"http://ooici.net/packages",
+    "node_id":"${node_id}",
+    "heartbeat_dest":"${heartbeat_dest}",
+    "heartbeat_op":"heartbeat",
+    "heartbeat_period":10
+  },
+  "username":"cc",
+  "groupname":"users",
+  "recipes":["user", "r1app"]
+}
+]]></data>
+     </requires>
+   </ctx>
+ </workspace>
+</cluster>
