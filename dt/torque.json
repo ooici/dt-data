@@ -1,0 +1,22 @@
+{
+    "document" : "torque.xml",
+    "vars" : {
+        "service_spec": {
+            "sleeper":{
+                "service_config":"res/apps/epu-worker.app"
+            }
+        },
+        "local_app_confs": { 
+            "epu.ionproc.epu_worker":{ "queue_name_work":"${queue_name_work}" }
+        }
+    },
+    "sites" : {
+        "ec2-west": {
+            "work_consumer": {
+                "image": "${epuworker_image_id}", 
+                "allocation": "m1.large",
+                "sshkeyname": "ooi"
+            }
+        }
+    }
+}
