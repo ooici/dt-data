@@ -3,6 +3,8 @@
 # Recipe:: server
 #
 
+include_recipe "torque::base"
+
 bash "Install and Configure Torque Server #{node[:torque][:service][:src_version]}" do
   cwd "/tmp/torque-#{node[:torque][:service][:src_version]}"
   code <<-EOH

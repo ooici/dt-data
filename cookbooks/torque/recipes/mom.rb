@@ -3,6 +3,8 @@
 # Recipe:: mom
 #
 
+include_recipe "torque::base"
+
 bash "Install Torque Mom #{node[:torque][:service][:src_version]}" do
   cwd "/tmp/torque-#{node[:torque][:service][:src_version]}"
   code <<-EOH
