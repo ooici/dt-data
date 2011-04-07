@@ -100,45 +100,44 @@ when "sh", "supervised"
     locals node[:local_app_confs]
   end
   
-  node[:services].each do |service, service_spec|
+  node[:ioncontainers].each do |ioncontainer_name, ioncontainer_spec|
     
-    service_config = service_spec[:service_config]
-    abs_service_config = File.join(app_dir, service_config)
-    ruby_block "check-config" do
-      block do
-        raise ArgumentError, "Cannot locate service config #{abs_service_config}" unless File.exist?(abs_service_config)
-      end
+    # File to create for this container:
+    abs_ioncontainer_config = File.join(app_dir, "res/deploy/#{ioncontainer_name}.rel")
+    
+    ioncontainer_config abs_ioncontainer_config do
+      user node[:username]
+      group node[:groupname]
+      ioncontainer_name ioncontainer_name
+      ioncontainer_spec ioncontainer_spec
     end
-  
-    logging_dir = "#{app_dir}/logs/#{service}"
+    
+    logging_dir = "#{app_dir}/logs/#{ioncontainer_name}"
     directory "#{logging_dir}" do
       owner "#{node[:username]}"
       group "#{node[:groupname]}"
       mode "0755"
     end
     
-    logging_config = "#{logging_dir}/#{service}-logging.conf"
+    logging_config = "#{logging_dir}/#{ioncontainer_name}-logging.conf"
         
     template "#{logging_config}" do
       source "ionlogging.conf.erb"
       owner "#{node[:username]}"
       group "#{node[:groupname]}"
-      variables(:service_name => service)
+      variables(:service_name => ioncontainer_name)
     end
     
     ion_conf_section = ""
-    if service_spec.include? :ION_CONFIGURATION_SECTION
-      ion_conf_section = service_spec[:ION_CONFIGURATION_SECTION]
-    end
     
-    start_script = File.join(app_dir, "start-#{service}.sh")
+    start_script = File.join(app_dir, "start-#{ioncontainer_name}.sh")
     template start_script do
       source "start-service.sh.erb"
       owner node[:username]
       group node[:groupname]
       mode 0755
-      variables(:service => service, 
-                :service_config => service_config, 
+      variables(:service => ioncontainer_name, 
+                :service_config => abs_ioncontainer_config, 
                 :venv_dir => venv_dir,
                 :app_dir => app_dir,
                 :logging_config => logging_config, 
@@ -149,8 +148,8 @@ when "sh", "supervised"
     end
 
     # add command to services list if it is autostart
-    if not service_spec.include?(:autostart) or service_spec[:autostart]
-      autostart_services[service] = {:command => start_script} 
+    if not ioncontainer_spec.include?(:autostart) or ioncontainer_spec[:autostart]
+      autostart_services[ioncontainer_name] = {:command => start_script} 
     end
 
   end
