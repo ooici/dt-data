@@ -9,6 +9,8 @@ export ION_CONFIGURATION_SECTION=<%= @ION_CONFIGURATION_SECTION %>
 
 export LAUNCHED_VIA_RECIPE=yes
 
+export PYTHON_EGG_CACHE=/home/cc/.<%=@service%>
+
 <% unless @logging_config.nil? or @logging_config.empty? %>
 export ION_ALTERNATE_LOGGING_CONF=<%= @logging_config %>
 <% end %>
