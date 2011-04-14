@@ -23,7 +23,7 @@
             "cassandra_hostname":"${cassandra_hostname}",
             "cassandra_username":"${cassandra_username}",
             "cassandra_password":"${cassandra_password}",
-            "do-init":"True"
+            "do-init":"${datastore_doinit}"
           }
         },
         "version": "0.1"
