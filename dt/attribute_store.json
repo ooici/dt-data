@@ -1,0 +1,24 @@
+{
+    "document" : "r1c3_generic_type.xml",
+    "vars" : { 
+        "container_specs": {
+          "attribute_store_container": {
+            "name": "attributestore", 
+            "args": { }, 
+            "config": {
+            },
+            "version": "0.1"
+          }
+        },
+        "local_app_confs": { }
+    },
+    "sites" : {
+        "ec2-west": {
+            "work_consumer": {
+                "image": "${epuworker_image_id}", 
+                "allocation": "m1.large",
+                "sshkeyname": "ooi"
+            }
+        }
+    }
+}
