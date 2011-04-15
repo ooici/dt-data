@@ -17,24 +17,35 @@
     "datastore-container": {
       "datastore": {
         "name": "datastore", 
-        "args": { }, 
+        "args": {"cassandra_username":"${cassandra_username}",
+                 "cassandra_password":"${cassandra_password}",
+                 "do-init":"${datastore_doinit} 
+        }, 
         "config": {
-          "ion.services.coi.datastore":{ 
-            "cassandra_hostname":"${cassandra_hostname}",
-            "cassandra_username":"${cassandra_username}",
-            "cassandra_password":"${cassandra_password}",
-            "do-init":"${datastore_doinit}"
+          "ion.core.data.storage_configuration_utility":{ 
+            "storage provider":{"host":"${cassandra_hostname}",
+                                "port":9160
+                               },
+            "persistent archive":{ }
           }
         },
         "version": "0.1"
-      }
     },
     "resourceregistry-container": {
       "resource_registry": {
         "name": "resource_registry", 
         "args": { }, 
-        "config": {
+        "config": { },
+        "version": "0.1"
+      }
+    },
+    "association-container": {
+      "association": {
+        "name": "association", 
+        "args": {"cassandra_username":"${cassandra_username}",
+                 "cassandra_password":"${cassandra_password}"
         },
+        "config": { },
         "version": "0.1"
       }
     }
