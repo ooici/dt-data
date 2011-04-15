@@ -15,6 +15,13 @@
             "config": {
             },
             "version": "0.1"
+          },
+          "scheduler_container": {
+            "name": "scheduler", 
+            "args": { }, 
+            "config": {
+            },
+            "version": "0.1"
           }
         },
         "local_app_confs": { }
