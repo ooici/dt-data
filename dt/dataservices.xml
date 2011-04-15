@@ -19,7 +19,7 @@
         "name": "datastore", 
         "args": {"cassandra_username":"${cassandra_username}",
                  "cassandra_password":"${cassandra_password}",
-                 "do-init":"${datastore_doinit} 
+                 "do-init":"${datastore_doinit}"
         }, 
         "config": {
           "ion.core.data.storage_configuration_utility":{ 
@@ -30,6 +30,7 @@
           }
         },
         "version": "0.1"
+      }
     },
     "resourceregistry-container": {
       "resource_registry": {
