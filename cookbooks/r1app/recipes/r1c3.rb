@@ -84,6 +84,13 @@ when "sh", "supervised"
     fi
     EOH
   end
+  
+  # Our ioncontainer_config callout needs this in the virtualenv itself
+  bash "ensure simplejson" do
+    code <<-EOH
+    easy_install simplejson
+    EOH
+  end
     
   ionlocal_config File.join(app_dir, "res/config/ionlocal.config") do
     user node[:username]
