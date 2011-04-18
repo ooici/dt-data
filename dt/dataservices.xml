@@ -14,8 +14,8 @@
        <data name="chef-install-work-consumer"><![CDATA[
 {
   "ioncontainers": {
-    "datastore-container": {
-      "datastore": {
+    "datastore-container": [
+      {
         "name": "datastore", 
         "args": {"cassandra_username":"${cassandra_username}",
                  "cassandra_password":"${cassandra_password}",
@@ -31,17 +31,17 @@
         },
         "version": "0.1"
       }
-    },
-    "resourceregistry-container": {
-      "resource_registry": {
+    ],
+    "resourceregistry-container": [
+      {
         "name": "resource_registry", 
         "args": { }, 
         "config": { },
         "version": "0.1"
       }
-    },
-    "association-container": {
-      "association": {
+    ],
+    "association-container": [
+      {
         "name": "association", 
         "args": {"cassandra_username":"${cassandra_username}",
                  "cassandra_password":"${cassandra_password}"
@@ -49,12 +49,17 @@
         "config": { },
         "version": "0.1"
       }
-    }
+    ]
   },
   "local_app_confs": {},
   "universal_app_confs":{
     "broker_host_list":"${broker_ip_address}",
     "sysname":"${exchange_scope}"
+  },
+  "virtualenv": {
+    "path" : "/home/cc/app-venv",
+    "virtualenv" : "/opt/python2.5/bin/virtualenv",
+    "python" : "python2.5"
   },
   "pythoncc":{
     "broker":"${broker_ip_address}",
