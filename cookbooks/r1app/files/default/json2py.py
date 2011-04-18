@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import sys
+import pprint
 
 try:
     import simplejson as json
@@ -13,18 +14,16 @@ def main(args):
     else:
         input = sys.stdin
 
-    
     data = json.load(input)
-    text = repr(data)
 
     if len(args) >= 2:
         output = open(args[1],'w')
         try:
-            output.write(text)
+            pprint.pprint(data, stream=output)
         finally:
             output.close()
     else:
-        print text
+        pprint.pprint(data)
 
 if __name__ == '__main__':
     main(sys.argv[1:])
