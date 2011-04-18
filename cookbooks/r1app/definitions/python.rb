@@ -10,7 +10,7 @@ define :python_datafile, :data => nil do
       t.close()
     end
   end
-  cookbook_file "/tmp/json2py.py" do
+  remote_file "/tmp/json2py.py" do
     source "json2py.py"
     mode "0755"
   end

@@ -1,17 +1,10 @@
 app_archive = "/tmp/app-archive.tar.gz"
 app_dir = "/home/#{node[:username]}/app"
-venv_dir = "/home/#{node[:username]}/app-venv"
+venv_dir = node[:virtualenv][:path]
 monitor_dir = "/home/#{node[:username]}/appmonitor"
 
-execute "Cleanup app dir" do
-  command "rm -rf #{app_dir}"
-end
-execute "Cleanup monitor dir" do
-  command "rm -rf #{monitor_dir}"
-end
-execute "Cleanup virtualenv dir" do
-  command "rm -rf #{venv_dir}"
-end
+# virtualenv creation might have happened earlier
+include_recipe "virtualenv"
 
 ########################################################################
 # RETRIEVAL
@@ -31,7 +24,6 @@ install_app app_dir do
   conf node[:appinstall]
   user node[:username]
   group node[:groupname]
-  virtualenv venv_dir
 end
 
 ########################################################################
@@ -111,16 +103,16 @@ when "sh", "supervised"
       ioncontainer_name ioncontainer_name
       ioncontainer_spec ioncontainer_spec
     end
-    
+
     logging_dir = "#{app_dir}/logs/#{ioncontainer_name}"
     directory "#{logging_dir}" do
       owner "#{node[:username]}"
       group "#{node[:groupname]}"
       mode "0755"
     end
-    
+
     logging_config = "#{logging_dir}/#{ioncontainer_name}-logging.conf"
-        
+
     template "#{logging_config}" do
       source "ionlogging.conf.erb"
       owner "#{node[:username]}"
@@ -181,14 +173,10 @@ when "supervised"
   # RUN SUPERVISED
   ######################################################################
   
-  bash "install-supervisor" do
-  code <<-EOH
-  ACTIVATE=#{venv_dir}/bin/activate
-  if [ -f $ACTIVATE ]; then
-    source $ACTIVATE
-  fi
-  easy_install supervisor
-  EOH
+  execute "install-supervisor" do
+    user node[:username]
+    group node[:groupname]
+    command "easy_install supervisor"
   end
 
   sup_conf = File.join(app_dir, "supervisor.conf")
@@ -207,10 +195,6 @@ when "supervised"
     "HOME" => "/home/#{node[:username]}"
   })
   code <<-EOH
-  ACTIVATE=#{venv_dir}/bin/activate
-  if [ -f $ACTIVATE ]; then
-    source $ACTIVATE
-  fi
   supervisord -c #{sup_conf}
   EOH
   end
