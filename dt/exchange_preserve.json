@@ -1,21 +1,25 @@
 {
-    "document" : "r1c3_generic_type.xml",
+    "document" : "generic_deployable_type.xml",
     "vars" : { 
         "container_specs": {
-          "exchange_mgmt_container": {
-            "name": "ems", 
-            "args": { }, 
-            "config": {
-            },
-            "version": "0.1"
-          },
-          "preservation_container": {
-            "name": "preservation_manager", 
-            "args": { }, 
-            "config": {
-            },
-            "version": "0.1"
-          }
+          "exchange_mgmt_container": [ 
+            {
+              "name": "ems", 
+              "args": { }, 
+              "config": {
+              },
+              "version": "0.1"
+            }
+          ],
+          "preservation_container": [ 
+            {
+              "name": "preservation_manager", 
+              "args": { }, 
+              "config": {
+              },
+              "version": "0.1"
+            }
+          ]
         },
         "local_app_confs": { }
     },

@@ -96,7 +96,7 @@
   },
   "username":"cc",
   "groupname":"users",
-  "recipes":["user", "r1app::r1c3"]
+  "recipes":["user", "r1app"]
 }
 ]]></data>
      </requires>

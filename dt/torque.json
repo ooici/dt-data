@@ -1,14 +1,19 @@
 {
     "document" : "torque.xml",
     "vars" : {
-        "service_spec": {
-            "sleeper":{
-                "service_config":"res/apps/epu-worker.app"
+        "container_specs": {
+          "epuworker_container": [
+            {
+              "name": "epu-worker", 
+              "args": { }, 
+              "config": { 
+                "epu.ionproc.epu_worker":{ "queue_name_work":"${queue_name_work}" }
+              },
+              "version": "0.1"
             }
+          ]
         },
-        "local_app_confs": { 
-            "epu.ionproc.epu_worker":{ "queue_name_work":"${queue_name_work}" }
-        }
+        "local_app_confs": { }
     },
     "sites" : {
         "ec2-west": {
