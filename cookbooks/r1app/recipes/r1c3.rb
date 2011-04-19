@@ -30,7 +30,7 @@ end
 # ACCESS
 ########################################################################
 
-bash "give-remote-user-log-access" do
+bash "give-remote-user-access" do
   code <<-EOH
   if [ ! -d /home/#{node[:username]}/.ssh ]; then
     mkdir /home/#{node[:username]}/.ssh
@@ -42,6 +42,9 @@ bash "give-remote-user-log-access" do
     cp /home/ubuntu/.ssh/authorized_keys /home/#{node[:username]}/.ssh/
   fi
   chown -R #{node[:username]}:#{node[:groupname]} /home/#{node[:username]}/.ssh
+  if [ -f /opt/nimbus/chef.log ]; then
+    ln -s /opt/nimbus/chef.log #{app_dir}/logs/ctxagent-chef.log
+  fi
   EOH
 end
 
@@ -88,7 +91,7 @@ when "sh", "supervised"
   # Our ioncontainer_config callout needs this in the virtualenv itself
   bash "ensure simplejson" do
     code <<-EOH
-    easy_install simplejson
+    easy_install simplejson==2.1.2
     EOH
   end
     
