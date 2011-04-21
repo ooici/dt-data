@@ -2,7 +2,31 @@
     "document" : "generic_deployable_type.xml",
     "vars" : { 
         "container_specs": {
-          "ingestion_container": [ 
+          "ingestion_container1": [ 
+            {
+              "name": "ingestion", 
+              "args": { }, 
+              "config": { },
+              "version": "0.1"
+            }
+          ],
+          "ingestion_container2": [ 
+            {
+              "name": "ingestion", 
+              "args": { }, 
+              "config": { },
+              "version": "0.1"
+            }
+          ],
+          "ingestion_container3": [ 
+            {
+              "name": "ingestion", 
+              "args": { }, 
+              "config": { },
+              "version": "0.1"
+            }
+          ],
+          "ingestion_container4": [ 
             {
               "name": "ingestion", 
               "args": { }, 
