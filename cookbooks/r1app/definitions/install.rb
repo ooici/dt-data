@@ -29,8 +29,29 @@ define :install_app, :conf => nil, :user => nil, :group => nil do
       user username
       group groupname
       code <<-EOH
+      set -e
       python ./bootstrap.py
-      bin/buildout
+      if [ -f autolaunch.cfg ]; then
+        bin/buildout -c autolaunch.cfg
+      else
+        bin/buildout
+      fi
+      EOH
+    end
+  when "javapy_venv_buildout_ant"
+    bash "run install" do
+      cwd app_dir
+      user username
+      group groupname
+      code <<-EOH
+      set -e
+      python ./bootstrap.py
+      if [ -f autolaunch.cfg ]; then
+        bin/buildout -c autolaunch.cfg
+      else
+        bin/buildout
+      fi
+      ant #{conf[:ant_target]}
       EOH
     end
   else raise ArgumentError, "unknown install_method #{conf[:install_method]}"
