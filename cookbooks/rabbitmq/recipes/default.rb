@@ -33,6 +33,7 @@ if node[:rabbitmq].include? :users and not node[:rabbitmq][:users].empty?
 
   node[:rabbitmq][:users].each do |username, spec|
     execute "Add user #{username}" do
+      returns [0,2] # if the user already exists, that's ok
       command "rabbitmqctl -q add_user #{username} #{spec[:password]}"
     end
     
