@@ -94,6 +94,20 @@ when "sh", "supervised"
     easy_install simplejson==2.1.2
     EOH
   end
+
+  broker_username = node[:pythoncc][:broker_username]
+  broker_password = node[:pythoncc][:broker_password]
+  if broker_username and broker_password
+    broker_credfile = File.join(app_dir, "broker_creds.txt")
+    file broker_credfile do
+      owner node[:username]
+      group node[:groupname]
+      mode "0600"
+      content "#{broker_username} #{broker_password}"
+    end
+  else
+    broker_credfile = nil
+  end
     
   ionlocal_config File.join(app_dir, "res/config/ionlocal.config") do
     user node[:username]
@@ -146,6 +160,7 @@ when "sh", "supervised"
                 :sysname => node[:pythoncc][:sysname], 
                 :broker => node[:pythoncc][:broker],
                 :broker_heartbeat => node[:pythoncc][:broker_heartbeat],
+                :broker_credfile => broker_credfile,
                 :ION_CONFIGURATION_SECTION => ion_conf_section)
     end
 
