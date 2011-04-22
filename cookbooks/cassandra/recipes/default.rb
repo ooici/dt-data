@@ -35,6 +35,7 @@ end
 
 package "cassandra" do
   action :install
+  version node[:cassandra][:version]
 end
 
 service "cassandra" do
