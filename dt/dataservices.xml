@@ -27,6 +27,9 @@
                                 "port":9160
                                },
             "persistent archive":{ }
+          },
+          "ion.services.coi.datastore":{
+            "preload": { "ion_datasets" : true }
           }
         },
         "version": "0.1"
