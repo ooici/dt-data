@@ -21,5 +21,5 @@ ruby_block "set virtualenv environment variables" do
     ENV["VIRTUAL_ENV"] = ve_dir
     ENV["PATH"] = File.join(ve_dir, "bin") + ":" + ENV["PATH"]
   end
-  not_if ENV["VIRTUAL_ENV"] == ve_dir
+  not_if {ENV["VIRTUAL_ENV"] == ve_dir}
 end
