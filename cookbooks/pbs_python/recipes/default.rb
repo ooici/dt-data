@@ -21,7 +21,6 @@ bash "Install PBS Python #{node[:pbs_python][:pbs_python][:src_version]}" do
   cd pbs_python-#{node[:pbs_python][:pbs_python][:src_version]}
   ./configure
   make
-  source /home/cc/app-venv/bin/activate
   python setup.py install
   echo "/opt/torque-2.5.5/lib/" | tee /etc/ld.so.conf.d/torque.conf && ldconfig
   EOH
