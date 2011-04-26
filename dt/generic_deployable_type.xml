@@ -47,7 +47,7 @@
   "appmonitor":{
     "retrieve_method":"git",
     "git_repo":"https://github.com/ooici/epuagent.git",
-    "git_branch":"containerconfig",
+    "git_branch":"master",
     "git_commit":"HEAD",
     "install_method":"py_venv_setup",
     "service_config":"res/apps/epuagent.app",
