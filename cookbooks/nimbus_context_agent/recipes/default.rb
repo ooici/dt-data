@@ -7,6 +7,11 @@ bash "install-nimbus-context-agent" do
       tar zxf nimbus-ctx-agent-2.3.0.tar.gz
       mv nimbus-ctx-agent-2.3.0/ /opt/nimbus/
     fi
+    
+    if [ -d /opt/nimbus/nimbus-ctx-agent-2.3.0 ]; then
+      mv /opt/nimbus/ /opt/oldnimbus
+      mv /opt/oldnimbus/nimbus-ctx-agent-2.3.0 /opt/nimbus
+    fi
   EOH
 end
 
