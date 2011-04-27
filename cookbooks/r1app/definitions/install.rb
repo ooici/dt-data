@@ -60,7 +60,7 @@ define :install_app, :conf => nil, :user => nil, :group => nil do
       set -e
       python ./bootstrap.py
       if [ -f autolaunch.cfg ]; then
-        bin/buildout -c autolaunch.cfg
+        bin/buildout -o -c autolaunch.cfg
       else
         bin/buildout
       fi
