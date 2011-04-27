@@ -39,6 +39,19 @@ define :install_app, :conf => nil, :user => nil, :group => nil do
       EOH
     end
   when "javapy_venv_buildout_ant"
+    bash "prepare cache" do
+      cwd "/tmp"
+      code <<-EOH
+      set -e
+      if [ -d /opt/cache/ ]; then
+        rm -rf /opt/cache
+      fi
+      mkdir /opt/cache
+      cd /opt/cache
+      wget #{conf[:super_cache]}
+      tar xvzf *
+      EOH
+    end
     bash "run install" do
       cwd app_dir
       user username
