@@ -52,7 +52,7 @@ define :install_app, :conf => nil, :user => nil, :group => nil do
       tar xvzf *
       EOH
     end
-    bash "run install" do
+    bash "run buildout" do
       cwd app_dir
       user username
       group groupname
@@ -64,8 +64,13 @@ define :install_app, :conf => nil, :user => nil, :group => nil do
       else
         bin/buildout
       fi
-      ant #{conf[:ant_target]}
       EOH
+    end
+    execute "ant #{conf[:ant_target]}" do
+      cwd app_dir
+      user username
+      group groupname
+      action :run
     end
   else raise ArgumentError, "unknown install_method #{conf[:install_method]}"
   end
