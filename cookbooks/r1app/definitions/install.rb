@@ -50,6 +50,7 @@ define :install_app, :conf => nil, :user => nil, :group => nil do
       cd /opt/cache
       wget #{conf[:super_cache]}
       tar xvzf *
+      chown -R #{username} /opt/cache
       EOH
     end
     bash "run buildout" do
