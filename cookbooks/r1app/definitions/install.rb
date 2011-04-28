@@ -23,22 +23,7 @@ define :install_app, :conf => nil, :user => nil, :group => nil do
       command "python setup.py install"
     end
   
-  when "py_venv_buildout"
-    bash "run install" do
-      cwd app_dir
-      user username
-      group groupname
-      code <<-EOH
-      set -e
-      python ./bootstrap.py
-      if [ -f autolaunch.cfg ]; then
-        bin/buildout -c autolaunch.cfg
-      else
-        bin/buildout
-      fi
-      EOH
-    end
-  when "javapy_venv_buildout_ant"
+  when "py_venv_buildout", "javapy_venv_buildout_ant"
     bash "prepare cache" do
       cwd "/tmp"
       code <<-EOH
@@ -67,12 +52,16 @@ define :install_app, :conf => nil, :user => nil, :group => nil do
       fi
       EOH
     end
+  else raise ArgumentError, "unknown install_method #{conf[:install_method]}"
+  end
+  
+  case conf[:install_method]
+  when "javapy_venv_buildout_ant"
     execute "ant #{conf[:ant_target]}" do
       cwd app_dir
       user username
       group groupname
       action :run
     end
-  else raise ArgumentError, "unknown install_method #{conf[:install_method]}"
   end
 end
