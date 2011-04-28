@@ -33,7 +33,7 @@ level=DEBUG
 formatter=fileFormatter
 args=('logs/<%= @service_name %>/ioncontainer.log', 'w')
 filename=logs/<%= @service_name %>/ioncontainer.log
-mode=w
+mode=a
 
 [handler_logfileHandler]
 class=FileHandler
