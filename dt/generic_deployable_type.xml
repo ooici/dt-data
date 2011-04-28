@@ -39,7 +39,8 @@
   },
   "appinstall":{
     "install_method":"py_venv_buildout",
-    "package_repo":"${package_repo}"
+    "package_repo":"${package_repo}",
+    "super_cache":"http://ooici.net/releases/supercache.tar.gz"
   },
   "apprun":{
     "run_method":"supervised"
