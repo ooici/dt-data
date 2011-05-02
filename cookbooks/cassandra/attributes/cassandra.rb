@@ -1,4 +1,4 @@
-set_unless[:cassandra][:version]  = "0.7.4"
+set_unless[:cassandra][:version]  = nil
 set_unless[:cassandra][:cluster_name]  = "Test Cluster"
 set_unless[:cassandra][:auto_bootstrap]  = false
 set_unless[:cassandra][:authenticator] = "org.apache.cassandra.auth.AllowAllAuthenticator"
