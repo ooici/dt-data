@@ -21,8 +21,8 @@
 bash "add-cassandra-repo" do
   not_if "test -f /etc/apt/sources.list.d/apache.list"
   code <<-EOH
-  echo "deb http://www.apache.org/dist/cassandra/debian unstable main" >> /etc/apt/sources.list.d/apache.list
-  echo "deb-src http://www.apache.org/dist/cassandra/debian unstable main" >> /etc/apt/sources.list.d/apache.list
+  echo "deb http://www.apache.org/dist/cassandra/debian 07x main" >> /etc/apt/sources.list.d/apache.list
+  echo "deb-src http://www.apache.org/dist/cassandra/debian 07x main" >> /etc/apt/sources.list.d/apache.list
   gpg --keyserver pgp.mit.edu --recv-keys F758CE318D77295D
   gpg --export --armor F758CE318D77295D | sudo apt-key add -
   apt-get update
