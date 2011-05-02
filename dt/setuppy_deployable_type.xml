@@ -20,9 +20,7 @@
     "sysname":"${exchange_scope}"
   },
   "virtualenv": {
-    "path" : "/home/cc/app-venv",
-    "virtualenv" : "/opt/python2.5/bin/virtualenv",
-    "python" : "python2.5"
+    "path" : "/home/cc/app-venv"
   },
   "pythoncc":{
     "broker":"${broker_ip_address}",
