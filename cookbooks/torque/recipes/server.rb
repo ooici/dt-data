@@ -21,6 +21,7 @@ bash "Install and Configure Torque Server #{node[:torque][:service][:src_version
   #{node[:torque][:service][:location]}/bin/qmgr -c "set queue default resources_default.nodes=1"
   #{node[:torque][:service][:location]}/bin/qmgr -c "set queue default resources_default.walltime=3600"
   #{node[:torque][:service][:location]}/bin/qmgr -c "set server default_queue=default"
+  #{node[:torque][:service][:location]}/bin/qmgr -c "set server scheduler_iteration=180"
   #{node[:torque][:service][:location]}/bin/qmgr -c "set server managers+=cc@*"
   EOH
 end
