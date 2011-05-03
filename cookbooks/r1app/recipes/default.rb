@@ -108,6 +108,35 @@ when "sh", "supervised"
   else
     broker_credfile = nil
   end
+  
+  template "#{app_dir}/messaging.conf" do
+    source "messaging.conf.erb"
+    owner "#{node[:username]}"
+    group "#{node[:groupname]}"
+    variables(:exchange => node[:pythoncc][:sysname],
+              :server => node[:pythoncc][:broker],
+              :broker_credfile => broker_credfile)
+  end
+  
+  bash "give-remote-user-messaging-conf-access" do
+    code <<-EOH
+    if [ -d /home/ubuntu/ ]; then
+      if [ -f #{app_dir}/broker_creds.txt ]; then
+        cp #{app_dir}/broker_creds.txt /home/ubuntu/
+        chown ubuntu /home/ubuntu/broker_creds.txt
+      fi
+    fi
+    EOH
+  end
+  
+  template "/home/ubuntu/messaging.conf" do
+    not_if do ! File.exists?("/home/ubuntu/ooici-conn.properties") end
+    source "messaging.conf.erb"
+    owner "ubuntu"
+    variables(:exchange => node[:pythoncc][:sysname],
+              :server => node[:pythoncc][:broker],
+              :broker_credfile => "/home/ubuntu/broker_creds.txt")
+  end
     
   ionlocal_config File.join(app_dir, "res/config/ionlocal.config") do
     user node[:username]
