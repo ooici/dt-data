@@ -21,3 +21,17 @@ template "/opt/nimbus/ctx-scripts/3-data/chef-install-work-consumer" do
     owner "root"
     group "root"
 end
+
+template "/opt/nimbus/ctx-scripts/3-data/dt-chef-solo" do
+    source "dt-chef-solo"
+    mode 755
+    owner "root"
+    group "root"
+end
+
+template "/opt/nimbus/ctx-scripts/3-data/dt-chef-solo.py" do
+    source "dt-chef-solo.py"
+    mode 755
+    owner "root"
+    group "root"
+end
