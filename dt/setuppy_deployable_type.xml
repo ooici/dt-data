@@ -11,7 +11,7 @@
      </provides>
      <requires>
        <identity/>
-       <data name="chef-install-work-consumer"><![CDATA[
+       <data name="dt-chef-solo"><![CDATA[
 {
   "ioncontainers": ${container_specs},
   "local_app_confs": ${local_app_confs},
