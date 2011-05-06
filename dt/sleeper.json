@@ -1,18 +1,6 @@
 {
-    "document" : "setuppy_deployable_type.xml",
+    "document" : "sleeper.xml",
     "vars" : {
-        "container_specs": {
-          "epuworker_container": [
-            {
-              "name": "epu-worker", 
-              "args": { }, 
-              "config": { 
-                "epu.ionproc.epu_worker":{ "queue_name_work":"${queue_name_work}" }
-              },
-              "version": "0.1"
-            }
-          ]
-        },
         "local_app_confs": { }
     },
     "sites" : {
