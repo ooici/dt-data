@@ -1,7 +1,7 @@
 
 <cluster>
  <workspace>
-   <name>work_consumer</name>
+   <name>micro_work_consumer</name>
    <image>${epuworker_image_id}</image>
    <quantity>1</quantity>
    <nic wantlogin="true">public</nic>

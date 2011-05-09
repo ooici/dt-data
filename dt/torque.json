@@ -21,6 +21,11 @@
                 "image": "${epuworker_image_id}", 
                 "allocation": "m1.large",
                 "sshkeyname": "ooi"
+            },
+            "micro_work_consumer": {
+                "image": "${epuworker_image_id}",
+                "allocation": "t1.micro",
+                "sshkeyname": "ooi"
             }
         },
         "nimbus-ucsd": {
