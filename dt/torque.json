@@ -16,7 +16,7 @@
         "local_app_confs": { }
     },
     "sites" : {
-        "ec2-west": {
+        "ec2-east": {
             "work_consumer": {
                 "image": "${epuworker_image_id}", 
                 "allocation": "t1.micro",
