@@ -11,7 +11,7 @@
      </provides>
      <requires>
        <identity/>
-       <data name="chef-install-work-consumer"><![CDATA[
+       <data name="dt-chef-solo"><![CDATA[
 {
   "ioncontainers": ${container_specs},
   "local_app_confs": ${local_app_confs},
@@ -56,6 +56,14 @@
     "heartbeat_dest":"${heartbeat_dest}",
     "heartbeat_op":"heartbeat",
     "heartbeat_period":10
+  },
+  "dtdata":{
+    "retrieve_method":"archive",
+    "archive_url":"http://ooici.net/releases/dt-data-0.1.tar.gz",
+    "git_repo":"https://github.com/ooici/dt-data.git",
+    "git_branch":"master",
+    "git_commit":"HEAD",
+    "chef_debug_level":"debug"
   },
   "username":"cc",
   "groupname":"users",
