@@ -35,7 +35,7 @@ define :install_app, :conf => nil, :user => nil, :group => nil do
       mkdir /opt/cache
       cd /opt/cache
       wget #{conf[:super_cache]}
-      tar xvzf *
+      tar xzf *
       chown -R #{username} /opt/cache
       EOH
     end
