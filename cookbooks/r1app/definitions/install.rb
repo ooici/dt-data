@@ -44,10 +44,11 @@ define :install_app, :conf => nil, :user => nil, :group => nil do
       group groupname
       code <<-EOH
       set -e
-      python ./bootstrap.py
       if [ -f autolaunch.cfg ]; then
+        python ./bootstrap.py -c autolaunch.cfg
         bin/buildout -O -c autolaunch.cfg
       else
+        python ./bootstrap.py
         bin/buildout
       fi
       EOH
