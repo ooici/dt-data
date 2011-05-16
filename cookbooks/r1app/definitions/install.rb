@@ -1,6 +1,7 @@
 define :install_app, :conf => nil, :user => nil, :group => nil do 
   
   app_dir = params[:name]
+  venv_dir = params[:venv_dir]
   
   # need to dereference params passed to nested definitions because of chef 
   # bug described above
@@ -51,6 +52,7 @@ define :install_app, :conf => nil, :user => nil, :group => nil do
         python ./bootstrap.py
         bin/buildout
       fi
+      echo 'export PATH="#{app_dir}/bin:$PATH"' >> #{venv_dir}/bin/activate
       EOH
     end
   else raise ArgumentError, "unknown install_method #{conf[:install_method]}"

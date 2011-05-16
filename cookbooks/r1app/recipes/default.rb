@@ -24,6 +24,7 @@ install_app app_dir do
   conf node[:appinstall]
   user node[:username]
   group node[:groupname]
+  venv_dir venv_dir
 end
 
 ########################################################################
