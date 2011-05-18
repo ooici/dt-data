@@ -41,6 +41,13 @@ end
 #end
 
 # Temporary fix to avoid broken 0.7.6 package
+cassandra_dependencies = "libcommons-daemon-java jsvc"
+cassandra_dependencies.each do |pkg|
+  package pkg do
+    action :install
+  end
+end
+
 bash "install_cassandra" do
   code <<-EOH
   cd /tmp
