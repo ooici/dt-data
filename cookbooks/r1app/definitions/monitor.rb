@@ -28,7 +28,7 @@ define :app_monitor, :conf => nil, :user => nil, :group => nil,
     conf config
     user username
     group groupname
-    virtualenv venv_dir
+    venv_dir venv_dir
   end
 
   template "#{monitor_dir}/res/logging/loglevels.cfg" do
