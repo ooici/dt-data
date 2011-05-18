@@ -35,10 +35,20 @@ package "openjdk-6-jdk" do
   action :install
 end
 
-package "cassandra" do
-  action :install
-  version node[:cassandra][:version]
+#package "cassandra" do
+  #action :install
+  #version node[:cassandra][:version]
+#end
+
+# Temporary fix to avoid broken 0.7.6 package
+bash "install_cassandra" do
+  code <<-EOH
+  cd /tmp
+  wget http://www.apache.org/dist/cassandra/debian/pool/main/c/cassandra/cassandra_0.7.5_all.deb
+  dpkg -i cassandra_0.7.5_all.deb
+  EOH
 end
+
 
 service "cassandra" do
   supports :status => true, :restart => true, :reload => true
