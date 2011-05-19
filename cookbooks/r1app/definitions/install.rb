@@ -29,14 +29,14 @@ define :install_app, :conf => nil, :user => nil, :group => nil do
       cwd "/tmp"
       code <<-EOH
       set -e
-      if [ -d /opt/cache/ ]; then
+      if [ ! -d /opt/cache/eggs ]; then
         rm -rf /opt/cache
+        mkdir /opt/cache
+        cd /opt/cache
+        wget #{conf[:super_cache]}
+        tar xzf *
+        chown -R #{username} /opt/cache
       fi
-      mkdir /opt/cache
-      cd /opt/cache
-      wget #{conf[:super_cache]}
-      tar xzf *
-      chown -R #{username} /opt/cache
       EOH
     end
     bash "run buildout" do
