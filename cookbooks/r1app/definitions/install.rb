@@ -45,6 +45,7 @@ define :install_app, :conf => nil, :user => nil, :group => nil do
       group groupname
       code <<-EOH
       set -e
+      source #{venv_dir}/bin/activate
       if [ -f autolaunch.cfg ]; then
         python ./bootstrap.py -c autolaunch.cfg
         bin/buildout -O -c autolaunch.cfg
