@@ -4,10 +4,10 @@
         "container_specs": {
           "attribute_store_container": [
             {
-              "name": "attributestore", 
-              "args": { }, 
-              "config": { },
-              "version": "0.1"
+                "name": "attribute_store", 
+                "version":"0.1",
+                "processapp" :
+                ["attribute_store","ion.services.coi.attributestore","AttributeStoreService"]
             }
           ]
         },
