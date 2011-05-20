@@ -33,7 +33,53 @@
               "config": { },
               "version": "0.1"
             }
-          ]
+          ],
+          "notification_container": [
+            {
+                "name":"ccagent",
+                "version":"0.1"
+            },
+            {
+                "name":"notification_alert", 
+                "version":"0.1",
+                "processapp":["notification_alert_service",
+                "ion.integration.ais.notification_alert_service",
+                "NotificationAlertService"]
+            }
+          ],
+          "store_service_container":[
+            {
+                "name":"ccagent",
+                "version":"0.1"
+            },
+            {
+                "name":"store_service",      
+                "version":"0.1",
+                "processapp":["store_service", "ion.core.data.store_service", "StoreService"]
+            }
+          ],
+          "cdm_validation_container":[
+            {
+                "name":"ccagent",
+                "version":"0.1"
+            },
+            {
+                "name":"cdm_validation_service", 
+                "version":"0.1",
+                "processapp":["cdm_validation_service", "ion.integration.eoi.validation.cdm_validation_service", "CdmValidationService"]
+            }
+         ],
+         "app_integration_container":[
+            {
+                "name":"ccagent",
+                "version":"0.1"
+            },
+            {
+                "name":"app_integration",    
+                "version":"0.1",
+                "processapp":["app_integration","ion.integration.ais.app_integration_service","AppIntegrationService"]
+            }
+         ]
         },
         "local_app_confs": { }
     },
