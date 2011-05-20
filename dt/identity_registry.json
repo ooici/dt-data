@@ -4,6 +4,10 @@
         "container_specs": {
           "identity_registrye_container": [
             {
+                "name":"ccagent",
+                "version":"0.1"
+            },
+            {
                 "name":"identity_registry",    
                 "version":"0.1",
                 "processapp":["identity_registry","ion.services.coi.identity_registry","IdentityRegistryService"]

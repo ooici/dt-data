@@ -4,6 +4,10 @@
         "container_specs": {
           "attribute_store_container": [
             {
+                "name":"ccagent",
+                "version":"0.1"
+            },
+            {
                 "name": "attribute_store", 
                 "version":"0.1",
                 "processapp" :

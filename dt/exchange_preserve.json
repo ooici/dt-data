@@ -4,12 +4,20 @@
         "container_specs": {
           "exchange_mgmt_container": [ 
             {
+                "name":"ccagent",
+                "version":"0.1"
+            },
+            {
                 "name":"exchange_management",  
                 "version":"0.1",
                 "processapp":["exchange_management","ion.services.coi.exchange.exchange_management","ExchangeManagementService"]
             }
           ],
           "preservation_container": [ 
+            {
+                "name":"ccagent",
+                "version":"0.1"
+            },
             {
                 "name":"preservation_manager",  
                 "version":"0.1",
