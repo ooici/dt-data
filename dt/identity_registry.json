@@ -1,0 +1,31 @@
+{
+    "document" : "generic_deployable_type.xml",
+    "vars" : { 
+        "container_specs": {
+          "identity_registrye_container": [
+            {
+                "name":"identity_registry",    
+                "version":"0.1",
+                "processapp":["identity_registry","ion.services.coi.identity_registry","IdentityRegistryService"]
+            }
+          ]
+        },
+        "local_app_confs": { }
+    },
+    "sites" : {
+        "ec2-west": {
+            "work_consumer": {
+                "image": "${epuworker_image_id}", 
+                "allocation": "m1.large",
+                "sshkeyname": "ooi"
+            }
+        },
+        "nimbus-ucsd": {
+            "work_consumer": {
+                "image": "${epuworker_image_id}", 
+                "allocation": "m1.large",
+                "sshkeyname": "ooi"
+            }
+        }
+    }
+}
