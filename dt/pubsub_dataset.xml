@@ -46,18 +46,18 @@
             "version":"0.1",
             "processapp":["dataset_controller","ion.services.dm.inventory.dataset_controller","DatasetController"],
             "config": {
-                "do-init": "${dataset-doinit}",
+                "do-init": "${dataset_doinit}",
                 "update_interval" : 5.0,
                 "ncml_path": "/tmp/ncml",
                 "thredds_ncml_url":"datactlr@thredds.oceanobservatories.org:/opt/tomcat/test_ncml",
-                "public_key":"${dataset-pubkey}",
-                "private_key":"${dataset-privkey}"
+                "public_key":"${dataset_pubkey}",
+                "private_key":"${dataset_privkey}"
             }
         }
       ]
   
   },
-  "local_app_confs": ${local_app_confs},
+  "local_app_confs": { },
   "universal_app_confs":{
     "broker_host_list":"${broker_ip_address}",
     "sysname":"${exchange_scope}"
