@@ -4,29 +4,43 @@
         "container_specs": {
           "pubsub_container": [ 
             {
-              "name": "pubsub", 
-              "args": { }, 
-              "config": {
-              },
-              "version": "0.1"
+                "name":"ccagent",              
+                "version":"0.1"
+            },
+            {
+                "name":"pubsub",               
+                "version":"0.1",
+                "processapp":["pubsub","ion.services.dm.distribution.pubsub_service","PubSubService"]
+            }
+          ],
+          "scheduler_container": [ 
+            {
+                "name":"ccagent",              
+                "version":"0.1"
+            },
+            {
+                "name":"scheduler", 
+                "version":"0.1",
+                "processapp":["scheduler","ion.services.dm.scheduler.scheduler_service", "SchedulerService"]
             }
           ],
           "dataset_controller_container": [ 
             {
-              "name": "dataset_controller", 
-              "args": { }, 
-              "config": {
-              },
-              "version": "0.1"
-            }
-          ],
-          "scheduler_container": [
+                "name":"ccagent",              
+                "version":"0.1"
+            },
             {
-              "name": "scheduler", 
-              "args": { }, 
-              "config": {
-              },
-              "version": "0.1"
+                "name":"dataset_controller",   
+                "version":"0.1",
+                "processapp":["dataset_controller","ion.services.dm.inventory.dataset_controller","DatasetController"],
+                "config": {
+                    "do-init": "${dataset-doinit}",
+                    "update_interval" : 5.0,
+                    "ncml_path": "/tmp/ncml",
+                    "thredds_ncml_url":"datactlr@thredds.oceanobservatories.org:/opt/tomcat/test_ncml",
+                    "public_key":"${public_key}",
+                    "private_key":"${private_key}"
+                }
             }
           ]
         },
