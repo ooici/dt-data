@@ -1,0 +1,36 @@
+{
+    "document" : "eoi_agent.xml",
+    "vars" : { 
+        "container_specs": {
+           "eoiagent-container": [
+              {
+                "name": "eoiagent",
+                "args": { },
+                "config": { },
+                "version": "0.1"
+              }
+          ]
+        },
+        "local_app_confs": { 
+            "ion.integration.eoi.agent.java_agent_wrapper":{
+              "dataset_agent_jar_path":"/home/ingestiontest/app/lib/eoi-agents-0.3.5.jar"
+            } 
+        }
+    },
+    "sites" : {
+        "ec2-west": {
+            "work_consumer": {
+                "image": "${epuworker_image_id}", 
+                "allocation": "m1.large",
+                "sshkeyname": "ooi"
+            }
+        },
+        "nimbus-ucsd": {
+            "work_consumer": {
+                "image": "${epuworker_image_id}", 
+                "allocation": "m1.large",
+                "sshkeyname": "ooi"
+            }
+        }
+    }
+}
