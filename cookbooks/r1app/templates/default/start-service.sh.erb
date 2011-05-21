@@ -15,6 +15,8 @@ export PYTHON_EGG_CACHE=~/.<%=@service%>
 export ION_ALTERNATE_LOGGING_CONF=<%= @logging_config %>
 <% end %>
 
+export LIBCLOUD_DEBUG=<%= @app_dir %>/logs/libcloud.log
+
 APP_BIN=<%= @app_dir %>/bin
 if [ -d $APP_BIN ]; then
   export PATH="$APP_BIN:$PATH"
