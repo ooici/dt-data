@@ -48,8 +48,8 @@
             "config": {
                 "do-init": "${dataset_doinit}",
                 "update_interval" : 5.0,
-                "ncml_path": "/tmp/ncml",
-                "thredds_ncml_url":"datactlr@thredds.oceanobservatories.org:/opt/tomcat/test_ncml",
+                "ncml_path": "/tmp",
+                "thredds_ncml_url":"datactlr@thredds.oceanobservatories.org:/opt/tomcat/ooici_tds_data",
                 "public_key":"${dataset_pubkey}",
                 "private_key":"${dataset_privkey}"
             }
