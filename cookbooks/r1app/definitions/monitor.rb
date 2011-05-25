@@ -52,6 +52,20 @@ define :app_monitor, :conf => nil, :user => nil, :group => nil,
     locals local_confs
   end
 
+  broker_username = pythoncc[:broker_username]
+  broker_password = pythoncc[:broker_password]
+  if broker_username and broker_password
+    broker_credfile = File.join(monitor_dir, "broker_creds.txt")
+    file broker_credfile do
+      owner node[:username]
+      group node[:groupname]
+      mode "0600"
+      content "#{broker_username} #{broker_password}"
+    end
+  else
+    broker_credfile = nil
+  end
+
   service = "monitor"
   start_script = File.join(monitor_dir, "start-#{service}.sh")
   template start_script do
@@ -65,13 +79,27 @@ define :app_monitor, :conf => nil, :user => nil, :group => nil,
               :app_dir => monitor_dir,
               :sysname => pythoncc[:sysname],
               :broker => pythoncc[:broker],
-              :broker_heartbeat => pythoncc[:broker_heartbeat])
+              :broker_heartbeat => pythoncc[:broker_heartbeat],
+              :broker_credfile => broker_credfile)
+  end
+
+  # app monitor is itself run via supervisord, configured to restart
+  # it on failure
+
+  sup_conf = File.join(monitor_dir, "supervisor.conf")
+  template sup_conf do
+    source "supervisor.conf.erb"
+    mode 0400
+    owner username
+    group groupname
+    variables(:programs => {"appmonitor" =>
+              {:command => start_script, :autorestart => true}})
   end
 
   execute "start-monitor" do
     user username
     group groupname
     environment({"HOME" => "/home/#{node[:username]}"})
-    command start_script
+    command "supervisord -c #{sup_conf}"
   end
 end

@@ -196,7 +196,8 @@ when "sh", "supervised"
 
     # add command to services list if it is autostart
     if not ioncontainer_spec.include?(:autostart) or ioncontainer_spec[:autostart]
-      autostart_services[ioncontainer_name] = {:command => start_script} 
+      autostart_services[ioncontainer_name] = {:command => start_script,
+        :autorestart => false}
     end
 
   end
