@@ -1,7 +1,7 @@
 <% @programs.each do |name,spec| %>
 [program:<%= name %>]
 command=<%= spec[:command] %>
-autorestart=<% spec[:autorestart] %>
+autorestart=<%= spec[:autorestart] %>
 environment = TWISTD_ARGS="-n"
 
 <% end %>
