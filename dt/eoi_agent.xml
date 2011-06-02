@@ -40,7 +40,7 @@
   "appinstall":{
     "install_method":"py_venv_buildout",
     "package_repo":"${package_repo}",
-    "ant_target":"-lib /home/ingestiontest/app get-eoi-agents",
+    "ant_target":"-lib /home/cc/app get-eoi-agents",
     "super_cache":"http://ooici.net/releases/supercache.tar.gz"
   },
   "apprun":{
