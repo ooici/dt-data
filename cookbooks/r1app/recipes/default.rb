@@ -60,11 +60,13 @@ autostart_services = {}
 
 case node[:apprun][:run_method]
 when "sh", "supervised"
-  
+
   ######################################################################
   # PREPARE SH or SUPERVISED
   ######################################################################
-    
+
+  apprun = node[:apprun]
+
   template "#{app_dir}/res/logging/loglevels.cfg" do
     source "loglevels.cfg.erb"
     owner "#{node[:username]}"
@@ -146,6 +148,10 @@ when "sh", "supervised"
     locals node[:local_app_confs]
   end
   
+  # autorestart is for all processes right now, could be made more
+  # # granular if needed. Also note that it only applies in "supervised" mode.
+  autorestart = apprun.include?(:autorestart) and apprun[:autorestart]
+
   node[:ioncontainers].each do |ioncontainer_name, ioncontainer_spec|
     
     # File to create for this container:
@@ -194,12 +200,9 @@ when "sh", "supervised"
                 :ION_CONFIGURATION_SECTION => ion_conf_section)
     end
 
-    # add command to services list if it is autostart
-    if not ioncontainer_spec.include?(:autostart) or ioncontainer_spec[:autostart]
-      autostart_services[ioncontainer_name] = {:command => start_script,
-        :autorestart => false}
-    end
-
+    # add command to services list
+    autostart_services[ioncontainer_name] = {:command => start_script,
+      :autorestart => autorestart}
   end
 else raise ArgumentError, "unknown install_method #{node[:apprun][:run_method]}"
 end
