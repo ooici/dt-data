@@ -94,7 +94,7 @@ when "sh", "supervised"
   # Our ioncontainer_config callout needs this in the virtualenv itself
   bash "ensure simplejson" do
     code <<-EOH
-    easy_install simplejson==2.1.2
+    easy_install --find-links=#{node[:appinstall][:package_repo]} simplejson==2.1.2
     EOH
   end
 
@@ -235,7 +235,7 @@ when "supervised"
   execute "install-supervisor" do
     user node[:username]
     group node[:groupname]
-    command "easy_install supervisor"
+    command "easy_install --find-links=#{node[:appinstall][:package_repo]} supervisor"
   end
 
   sup_conf = File.join(app_dir, "supervisor.conf")
