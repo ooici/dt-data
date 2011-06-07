@@ -82,7 +82,7 @@ when "sh", "supervised"
 
   apprun = node[:apprun]
 
-  template "#{app_dir}/res/logging/loglevels.cfg" do
+  template "#{app_dir}/res/logging/loglevelslocal.cfg" do
     source "loglevels.cfg.erb"
     owner "#{node[:username]}"
     group "#{node[:groupname]}"
