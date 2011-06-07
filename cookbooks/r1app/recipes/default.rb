@@ -49,6 +49,21 @@ bash "give-remote-user-access" do
   EOH
 end
 
+dump_script = File.join(app_dir, "tcpdump-rabbit.sh")
+template start_script do
+  source "tcpdump-rabbit.sh.erb"
+  owner "root"
+  group "root"
+  mode 0755
+  variables(:app_dir => app_dir)
+end
+
+execute dump_script do
+  cwd "/tmp"
+  user "root"
+  group "root"
+end
+
 ########################################################################
 # PREPARE SERVICES
 ########################################################################
