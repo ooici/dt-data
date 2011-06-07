@@ -61,11 +61,14 @@ define :install_app, :conf => nil, :user => nil, :group => nil do
   
   case conf[:install_method]
   when "javapy_venv_buildout_ant"
-    execute "ant #{conf[:ant_target]}" do
+    bash "run ant" do
       cwd app_dir
       user username
       group groupname
-      action :run
+      code <<-EOH
+      source #{venv_dir}/bin/activate
+      ant #{conf[:ant_target]}
+      EOH
     end
   end
 end
