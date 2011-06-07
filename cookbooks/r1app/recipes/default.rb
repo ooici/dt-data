@@ -50,7 +50,7 @@ bash "give-remote-user-access" do
 end
 
 dump_script = File.join(app_dir, "tcpdump-rabbit.sh")
-template start_script do
+template dump_script do
   source "tcpdump-rabbit.sh.erb"
   owner "root"
   group "root"
