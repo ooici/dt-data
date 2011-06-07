@@ -38,7 +38,7 @@
     "git_commit":"${git_commit}"
   },
   "appinstall":{
-    "install_method":"py_venv_buildout",
+    "install_method":"javapy_venv_buildout_ant",
     "package_repo":"${package_repo}",
     "ant_target":"-lib /home/cc/app get-eoi-agents",
     "super_cache":"http://ooici.net/releases/supercache.tar.gz"
