@@ -13,7 +13,7 @@
         },
         "local_app_confs": { 
             "ion.integration.eoi.agent.java_agent_wrapper":{
-              "dataset_agent_jar_path":"/home/cc/app/lib/eoi-agents-0.3.8.jar"
+              "dataset_agent_jar_path":"/home/cc/app/lib/eoi-agents-0.3.10.jar"
             } 
         }
     },
