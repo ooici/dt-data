@@ -66,7 +66,7 @@ define :install_app, :conf => nil, :user => nil, :group => nil do
       user username
       group groupname
       code <<-EOH
-      ant #{conf[:ant_target]}
+      /opt/ant-1.8.2/bin/ant #{conf[:ant_target]}
       EOH
     end
   end
