@@ -66,7 +66,6 @@ define :install_app, :conf => nil, :user => nil, :group => nil do
       user username
       group groupname
       code <<-EOH
-      source #{venv_dir}/bin/activate
       ant #{conf[:ant_target]}
       EOH
     end
