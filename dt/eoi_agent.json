@@ -10,11 +10,6 @@
                 "version": "0.1"
               }
           ]
-        },
-        "local_app_confs": { 
-            "ion.integration.eoi.agent.java_agent_wrapper":{
-              "dataset_agent_jar_path":"/home/cc/app/lib/eoi-agents.jar"
-            } 
         }
     },
     "sites" : {
