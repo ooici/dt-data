@@ -10,7 +10,8 @@
                 "version": "0.1"
               }
           ]
-        }
+        },
+        "local_app_confs": { }
     },
     "sites" : {
         "ec2-west": {
