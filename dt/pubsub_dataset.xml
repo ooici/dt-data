@@ -14,7 +14,7 @@
        <data name="chef-install-work-consumer"><![CDATA[
 {
   "ioncontainers": {
-    "pubsub_container": [ 
+    "pubsub_container1": [ 
         {
             "name":"ccagent",              
             "version":"0.1"
@@ -25,7 +25,18 @@
             "processapp":["pubsub","ion.services.dm.distribution.pubsub_service","PubSubService"]
         }
       ],
-      "scheduler_container": [ 
+    "pubsub_container2": [ 
+        {
+            "name":"ccagent",              
+            "version":"0.1"
+        },
+        {
+            "name":"pubsub",               
+            "version":"0.1",
+            "processapp":["pubsub","ion.services.dm.distribution.pubsub_service","PubSubService"]
+        }
+      ],
+      "scheduler_container1": [ 
         {
             "name":"ccagent",              
             "version":"0.1"
@@ -36,7 +47,18 @@
             "processapp":["scheduler","ion.services.dm.scheduler.scheduler_service", "SchedulerService"]
         }
       ],
-      "dataset_controller_container": [ 
+      "scheduler_container2": [ 
+        {
+            "name":"ccagent",              
+            "version":"0.1"
+        },
+        {
+            "name":"scheduler", 
+            "version":"0.1",
+            "processapp":["scheduler","ion.services.dm.scheduler.scheduler_service", "SchedulerService"]
+        }
+      ],
+      "dataset_controller_container1": [ 
         {
             "name":"ccagent",              
             "version":"0.1"
@@ -46,18 +68,46 @@
             "version":"0.1",
             "processapp":["dataset_controller","ion.services.dm.inventory.dataset_controller","DatasetController"],
             "config": {
-                "do-init": "${dataset_doinit}",
-                "update_interval" : 5.0,
-                "ncml_path": "/tmp",
-                "thredds_ncml_url":"datactlr@thredds.oceanobservatories.org:/opt/tomcat/ooici_tds_data",
-                "public_key":"${dataset_pubkey}",
-                "private_key":"${dataset_privkey}"
+              "ion.services.dm.inventory.dataset_controller" :{
+                  "do-init": "${dataset_doinit}",
+                  "update_interval" : 5.0,
+                  "ncml_path": "/tmp",
+                  "thredds_ncml_url":"datactlr@thredds.oceanobservatories.org:/opt/tomcat/ooici_tds_data",
+                  "public_key":"${dataset_pubkey}",
+                  "private_key":"${dataset_privkey}"
+              }
             }
         }
+      ],
+      "dataset_controller_container2": [ 
+        {
+            "name":"ccagent",              
+            "version":"0.1"
+        },
+        {
+            "name":"dataset_controller",   
+            "version":"0.1",
+            "processapp":["dataset_controller","ion.services.dm.inventory.dataset_controller","DatasetController"],
+            "config": {
+              "ion.services.dm.inventory.dataset_controller" :{
+                  "do-init": "False",
+                  "update_interval" : 5.0,
+                  "ncml_path": "/tmp",
+                  "thredds_ncml_url":"datactlr@thredds.oceanobservatories.org:/opt/tomcat/ooici_tds_data",
+                  "public_key":"${dataset_pubkey}",
+                  "private_key":"${dataset_privkey}"
+              }
+            }
+
+        }
       ]
-  
   },
-  "local_app_confs": { },
+  "local_app_confs": { 
+    "ion.services.dm.inventory.ncml_generator" : {
+         "rsync" : "rsync",
+         "ssh-add": "ssh-add",
+    }
+  },
   "universal_app_confs":{
     "broker_host_list":"${broker_ip_address}",
     "sysname":"${exchange_scope}"

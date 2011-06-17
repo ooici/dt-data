@@ -2,7 +2,15 @@
     "document" : "eoi_agent.xml",
     "vars" : { 
         "container_specs": {
-           "eoiagent-container": [
+           "eoiagent-container1": [
+              {
+                "name": "eoiagents",
+                "args": { },
+                "config": { },
+                "version": "0.1"
+              }
+          ],
+           "eoiagent-container2": [
               {
                 "name": "eoiagents",
                 "args": { },

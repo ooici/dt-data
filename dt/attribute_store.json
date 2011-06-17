@@ -2,7 +2,19 @@
     "document" : "generic_deployable_type.xml",
     "vars" : { 
         "container_specs": {
-          "attribute_store_container": [
+          "attribute_store_container1": [
+            {
+                "name":"ccagent",
+                "version":"0.1"
+            },
+            {
+                "name": "attribute_store", 
+                "version":"0.1",
+                "processapp" :
+                ["attribute_store","ion.services.coi.attributestore","AttributeStoreService"]
+            }
+          ],
+          "attribute_store_container2": [
             {
                 "name":"ccagent",
                 "version":"0.1"

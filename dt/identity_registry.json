@@ -2,7 +2,18 @@
     "document" : "generic_deployable_type.xml",
     "vars" : { 
         "container_specs": {
-          "identity_registrye_container": [
+          "identity_registry_container1": [
+            {
+                "name":"ccagent",
+                "version":"0.1"
+            },
+            {
+                "name":"identity_registry",    
+                "version":"0.1",
+                "processapp":["identity_registry","ion.services.coi.identity_registry","IdentityRegistryService"]
+            }
+          ],
+          "identity_registry_container2": [
             {
                 "name":"ccagent",
                 "version":"0.1"

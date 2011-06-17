@@ -14,22 +14,29 @@
        <data name="chef-install-work-consumer"><![CDATA[
 {
   "ioncontainers": {
-    "datastore-container": [
+    "datastore-container1": [
       {
         "name": "datastore", 
         "args": {"cassandra_username":"${cassandra_username}",
                  "cassandra_password":"${cassandra_password}",
                  "do-init":"${datastore_doinit}"
         }, 
-        "config": {
-          "ion.services.coi.datastore":{
-            "preload": { "ion_datasets" : true }
-          }
-        },
+        "config": { },
         "version": "0.1"
       }
     ],
-    "resourceregistry-container": [
+    "datastore-container2": [
+      {
+        "name": "datastore", 
+        "args": {"cassandra_username":"${cassandra_username}",
+                 "cassandra_password":"${cassandra_password}",
+                 "do-init":"False"
+        }, 
+        "config": { },
+        "version": "0.1"
+      }
+    ],
+    "resourceregistry-container1": [
       {
         "name": "resource_registry", 
         "args": { }, 
@@ -37,7 +44,25 @@
         "version": "0.1"
       }
     ],
-    "association-container": [
+    "resourceregistry-container2": [
+      {
+        "name": "resource_registry", 
+        "args": { }, 
+        "config": { },
+        "version": "0.1"
+      }
+    ],
+    "association-container1": [
+      {
+        "name": "association", 
+        "args": {"cassandra_username":"${cassandra_username}",
+                 "cassandra_password":"${cassandra_password}"
+        },
+        "config": { },
+        "version": "0.1"
+      }
+    ],
+    "association-container2": [
       {
         "name": "association", 
         "args": {"cassandra_username":"${cassandra_username}",

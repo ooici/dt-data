@@ -14,7 +14,7 @@
        <data name="chef-install-work-consumer"><![CDATA[
 {
   "ioncontainers": {
-      "exchange_mgmt_container": [ 
+      "exchange_mgmt_container1": [ 
         {
             "name":"ccagent",
             "version":"0.1"
@@ -38,7 +38,50 @@
            }
         }
       ],
-      "preservation_container": [ 
+      "exchange_mgmt_container2": [ 
+        {
+            "name":"ccagent",
+            "version":"0.1"
+        },
+        {
+            "name":"exchange_management",  
+            "version":"0.1",
+            "processapp":["exchange_management","ion.services.coi.exchange.exchange_management","ExchangeManagementService"],
+            "config": {
+              "ion.services.coi.exchange.broker_controller":{
+                "privileged_broker_connection": {
+                    "host": "${broker_ip_address}",
+                    "port": 5672,
+                    "username": "guest",
+                    "password": "guest",
+                    "vhost": "/",
+                    "heartbeat":0
+                },
+                "amqp_spec" : "res/amqp/specs/standard/amqp0-8.xml"
+              }
+           }
+        }
+      ],
+      "preservation_container1": [ 
+        {
+            "name":"ccagent",
+            "version":"0.1"
+        },
+        {
+            "name":"preservation_manager",  
+            "version":"0.1",
+            "processapp":["resource_registry","ion.services.dm.preservation.cassandra_manager_agent","CassandraManagerService"],
+            "config": {
+              "ion.services.dm.preservation.cassandra_manager_agent":{
+                 "host": "${cassandra_hostname}",
+                 "port": 9160,
+                 "username":"${cassandra_username}",
+                 "password":"${cassandra_password}"
+              }
+           }
+        }
+      ],
+      "preservation_container2": [ 
         {
             "name":"ccagent",
             "version":"0.1"
