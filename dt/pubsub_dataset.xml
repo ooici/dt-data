@@ -103,9 +103,9 @@
       ]
   },
   "local_app_confs": { 
-    "ion.services.dm.inventory.ncml_generator" : {
-         "rsync" : "rsync",
-         "ssh-add": "ssh-add"
+    "ion.services.dm.inventory.ncml_generator" :{
+      "rsync": "rsync",
+      "ssh-add": "ssh-add"
     }
   },
   "universal_app_confs":{
