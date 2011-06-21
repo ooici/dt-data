@@ -111,7 +111,15 @@
             }
          ]
         },
-        "local_app_confs": { }
+        "local_app_confs": { 
+         "ion.integration.eoi.validation.cdm_validation_service":{
+         "validation_timeout" : 60,
+         "cdmvalidator_base_url" : "http://thredds.oceanobservatories.org/cdmvalidator",
+         "cdmvalidator_command" : "validate",
+         "cfchecks_binary" : "/usr/local/bin/cfchecks",
+         "cfchecks_args" : ["-v", "1.4", "-u", "/usr/local/udunits-2.1.21/share/udunits/udunits2.xml"],
+         },    
+        }
     },
     "sites" : {
         "ec2-west": {
