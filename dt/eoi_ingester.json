@@ -117,8 +117,8 @@
          "cdmvalidator_base_url" : "http://thredds.oceanobservatories.org/cdmvalidator",
          "cdmvalidator_command" : "validate",
          "cfchecks_binary" : "/usr/local/bin/cfchecks",
-         "cfchecks_args" : ["-v", "1.4", "-u", "/usr/local/udunits-2.1.21/share/udunits/udunits2.xml"],
-         },    
+         "cfchecks_args" : ["-v", "1.4", "-u", "/usr/local/udunits-2.1.21/share/udunits/udunits2.xml"]
+         }    
         }
     },
     "sites" : {
