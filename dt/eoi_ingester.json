@@ -117,6 +117,7 @@
          "cdmvalidator_base_url" : "http://thredds.oceanobservatories.org/cdmvalidator",
          "cdmvalidator_command" : "validate",
          "cfchecks_binary" : "/usr/local/bin/cfchecks",
+         "LD_LIBRARY_PATH" : "/lib:/lib64:/usr/lib:/usr/lib64:/usr/local/udunits-2.1.21/lib:/usr/local/hdf5-1.8.4-patch1/lib:/usr/local/netcdf-4.1.1/lib:/usr/local/zlib-1.2.3/lib",
          "cfchecks_args" : ["-v", "1.4", "-u", "/usr/local/udunits-2.1.21/share/udunits/udunits2.xml"]
          }    
         }
