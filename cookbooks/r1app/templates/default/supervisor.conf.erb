@@ -3,6 +3,8 @@
 command=<%= spec[:command] %>
 autorestart=<%= spec[:autorestart] %>
 environment = TWISTD_ARGS="-n"
+stdout_logfile=%(here)s/%(program_name)s_stdout.log
+stderr_logfile=%(here)s/%(program_name)s_stderr.log
 
 <% end %>
 
