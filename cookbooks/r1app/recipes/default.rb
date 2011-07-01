@@ -49,6 +49,17 @@ bash "give-remote-user-access" do
   EOH
 end
 
+# note that this relies on ~/.ssh/ being created by the above block
+bash "copy-baked-ssh-key" do
+  code <<-EOH
+  if [ -f /opt/ncml.private.key ]; then
+    cp /opt/ncml.private.key /home/#{node[:username]}/.ssh/id_rsa
+    chown #{node[:username]}:#{node[:groupname]} /home/#{node[:username]}/.ssh/id_rsa
+    chmod 600 /home/#{node[:username]}/.ssh/id_rsa
+  fi
+  EOH
+end
+
 ########################################################################
 # PREPARE SERVICES
 ########################################################################
