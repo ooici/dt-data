@@ -60,7 +60,7 @@
               "ion.services.dm.inventory.dataset_controller" :{
                   "do-init": "${dataset_doinit}",
                   "update_interval" : 5.0,
-                  "ncml_path": "/tmp",
+                  "ncml_path": "/tmp/",
                   "thredds_ncml_url":"datactlr@thredds.oceanobservatories.org:/opt/tomcat/ooici_tds_data",
                   "public_key":"${dataset_pubkey}",
                   "private_key":"${dataset_privkey}"
@@ -81,7 +81,7 @@
               "ion.services.dm.inventory.dataset_controller" :{
                   "do-init": "False",
                   "update_interval" : 5.0,
-                  "ncml_path": "/tmp",
+                  "ncml_path": "/tmp/",
                   "thredds_ncml_url":"datactlr@thredds.oceanobservatories.org:/opt/tomcat/ooici_tds_data",
                   "public_key":"${dataset_pubkey}",
                   "private_key":"${dataset_privkey}"
@@ -93,8 +93,7 @@
   },
   "local_app_confs": { 
     "ion.services.dm.inventory.ncml_generator" :{
-      "rsync": "rsync",
-      "ssh-add": "ssh-add"
+      "rsync": "bash"
     }
   },
   "universal_app_confs":{
