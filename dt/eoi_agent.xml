@@ -44,7 +44,8 @@
     "super_cache":"http://ooici.net/releases/supercache.tar.gz"
   },
   "apprun":{
-    "run_method":"supervised"
+    "run_method":"supervised",
+    "autorestart":true
   },
   "appmonitor":{
     "retrieve_method":"git",
