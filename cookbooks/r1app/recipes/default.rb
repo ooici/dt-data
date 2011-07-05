@@ -281,6 +281,13 @@ when "supervised"
       supervisor_socket File.join(app_dir, "supervisor.sock")
     end
   end
+  
+  bash "include-supervisord-logs" do
+    code <<-EOH
+      ln -s #{app_dir}/supervisord.log #{app_dir}/logs/supervisord.log
+    EOH
+  end
+
 else raise ArgumentError, "unknown install_method #{node[:apprun][:run_method]}"
 end
 
