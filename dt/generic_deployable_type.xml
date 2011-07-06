@@ -58,7 +58,7 @@
     "node_id":"${node_id}",
     "heartbeat_dest":"${heartbeat_dest}",
     "heartbeat_op":"heartbeat",
-    "heartbeat_period":10
+    "heartbeat_period":20
   },
   "username":"cc",
   "groupname":"users",
