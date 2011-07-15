@@ -1,0 +1,208 @@
+<cluster>
+ <workspace>
+   <name>work_consumer</name>
+   <image>${epuworker_image_id}</image>
+   <quantity>1</quantity>
+   <nic wantlogin="true">public</nic>
+   <ctx>
+     <provides>
+       <identity/>
+     </provides>
+     <requires>
+       <identity/>
+       <data name="chef-install-work-consumer"><![CDATA[
+{
+  "ioncontainers": {
+          "ingestion_container1": [ 
+            {
+              "name": "ingestion", 
+              "args": { }, 
+              "config": { },
+              "version": "0.1"
+            }
+          ],
+          "ingestion_container2": [ 
+            {
+              "name": "ingestion", 
+              "args": { }, 
+              "config": { },
+              "version": "0.1"
+            }
+          ],
+          "notification_container1": [
+            {
+                "name":"ccagent",
+                "version":"0.1"
+            },
+            {
+                "name":"notification_alert", 
+                "version":"0.1",
+                "config": {
+                "ion.integration.ais.notification_alert_service":{
+                  "index_store_class": "ion.core.data.cassandra_bootstrap.CassandraIndexedStoreBootstrap",
+                  "column_family":  "notification_alert_service",
+                  "cassandra_username": "${cassandra_username}",
+                  "cassandra_password": "${cassandra_password}"
+                }
+                },
+                "processapp":["notification_alert_service",
+                "ion.integration.ais.notification_alert_service",
+                "NotificationAlertService"]
+            }
+          ],
+          "notification_container2": [
+            {
+                "name":"ccagent",
+                "version":"0.1"
+            },
+            {
+                "name":"notification_alert", 
+                "version":"0.1",
+                "config": {
+                "ion.integration.ais.notification_alert_service":{
+                  "index_store_class": "ion.core.data.cassandra_bootstrap.CassandraIndexedStoreBootstrap",
+                  "column_family":  "notification_alert_service",
+                  "cassandra_username": "${cassandra_username}",
+                  "cassandra_password": "${cassandra_password}"
+                }
+                },
+                "processapp":["notification_alert_service",
+                "ion.integration.ais.notification_alert_service",
+                "NotificationAlertService"]
+            }
+          ],
+          "store_service_container1":[
+            {
+                "name":"ccagent",
+                "version":"0.1"
+            },
+            {
+                "name":"store_service",      
+                "version":"0.1",
+                "processapp":["store_service", "ion.core.data.store_service", "StoreService"]
+            }
+          ],
+          "store_service_container2":[
+            {
+                "name":"ccagent",
+                "version":"0.1"
+            },
+            {
+                "name":"store_service",      
+                "version":"0.1",
+                "processapp":["store_service", "ion.core.data.store_service", "StoreService"]
+            }
+          ],
+          "cdm_validation_container1":[
+            {
+                "name":"ccagent",
+                "version":"0.1"
+            },
+            {
+                "name":"cdm_validation_service", 
+                "version":"0.1",
+                "processapp":["cdm_validation_service", "ion.integration.eoi.validation.cdm_validation_service", "CdmValidationService"]
+            }
+         ],
+          "cdm_validation_container2":[
+            {
+                "name":"ccagent",
+                "version":"0.1"
+            },
+            {
+                "name":"cdm_validation_service", 
+                "version":"0.1",
+                "processapp":["cdm_validation_service", "ion.integration.eoi.validation.cdm_validation_service", "CdmValidationService"]
+            }
+         ],
+         "app_integration_container1":[
+            {
+                "name":"ccagent",
+                "version":"0.1"
+            },
+            {
+                "name":"app_integration",    
+                "version":"0.1",
+                "processapp":["app_integration","ion.integration.ais.app_integration_service","AppIntegrationService"]
+            }
+         ],
+         "app_integration_container2":[
+            {
+                "name":"ccagent",
+                "version":"0.1"
+            },
+            {
+                "name":"app_integration",    
+                "version":"0.1",
+                "processapp":["app_integration","ion.integration.ais.app_integration_service","AppIntegrationService"]
+            }
+         ]
+        },
+        "local_app_confs": { 
+         "ion.integration.eoi.validation.cdm_validation_service":{
+         "validation_timeout" : 60,
+         "cdmvalidator_base_url" : "http://thredds.oceanobservatories.org/cdmvalidator",
+         "cdmvalidator_command" : "validate",
+         "cfchecks_binary" : "/usr/local/bin/cfchecks",
+         "LD_LIBRARY_PATH" : "/lib:/lib64:/usr/lib:/usr/lib64:/usr/local/udunits-2.1.21/lib:/usr/local/hdf5-1.8.4-patch1/lib:/usr/local/netcdf-4.1.1/lib:/usr/local/zlib-1.2.3/lib",
+         "cfchecks_args" : ["-v", "1.4", "-u", "/usr/local/udunits-2.1.21/share/udunits/udunits2.xml"]
+         },
+         "ion.core.data.storage_configuration_utility":{
+         "storage provider":{"host":"${cassandra_hostname}","port":9160},
+         "persistent archive":{}
+         }
+        },
+  "universal_app_confs":{
+    "broker_host_list":"${broker_ip_address}",
+    "sysname":"${exchange_scope}"
+  },
+  "virtualenv": {
+    "path" : "/home/cc/app-venv",
+    "virtualenv" : "/opt/python2.5/bin/virtualenv",
+    "python" : "python2.5"
+  },
+  "pythoncc":{
+    "broker":"${broker_ip_address}",
+    "sysname":"${exchange_scope}",
+    "broker_heartbeat":"30",
+    "log_level":"${ion_log_level}"
+  },
+  "appretrieve":{
+    "retrieve_method":"${retrieve_method}",
+    "archive_url":"${archive_url}",
+    "git_repo":"${git_repo}",
+    "git_branch":"${git_branch}",
+    "git_commit":"${git_commit}"
+  },
+  "appinstall":{
+    "install_method":"py_venv_buildout",
+    "package_repo":"${package_repo}",
+    "super_cache":"http://ooici.net/releases/supercache.tar.gz"
+  },
+  "apprun":{
+    "run_method":"supervised",
+    "autorestart":true
+  },
+  "appmonitor":{
+    "retrieve_method":"git",
+    "git_repo":"https://github.com/ooici/epuagent.git",
+    "git_branch":"master",
+    "git_commit":"HEAD",
+    "install_method":"py_venv_buildout",
+    "super_cache":"http://ooici.net/releases/supercache.tar.gz",
+    "service_config":"res/apps/epuagent.app",
+    "package_repo":"http://ooici.net/releases",
+    "node_id":"${node_id}",
+    "heartbeat_dest":"${heartbeat_dest}",
+    "heartbeat_op":"heartbeat",
+    "heartbeat_period":20
+  },
+  "username":"cc",
+  "groupname":"users",
+  "recipes":["user", "r1app"]
+}
+]]></data>
+     </requires>
+   </ctx>
+ </workspace>
+</cluster>
