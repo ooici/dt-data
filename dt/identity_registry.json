@@ -2,6 +2,17 @@
     "document" : "generic_deployable_type.xml",
     "vars" : { 
         "container_specs": {
+        "scheduler_container": [ 
+          {
+              "name":"ccagent",              
+              "version":"0.1"
+          },
+          {
+              "name":"scheduler", 
+              "version":"0.1",
+              "processapp":["scheduler","ion.services.dm.scheduler.scheduler_service", "SchedulerService"]
+          }
+          ],
           "identity_registry_container1": [
             {
                 "name":"ccagent",
