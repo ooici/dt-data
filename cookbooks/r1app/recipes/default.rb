@@ -31,15 +31,28 @@ end
 # ACCESS
 ########################################################################
 
+# In the future we can require a conf flag to activate this 
+# in chef 0.9+ this should be cookbook_file
+remote_file "/root/.debug-ssh-authz" do
+  source "full-debug-ssh-authorized_keys"
+  mode "0755"
+end
+
 bash "give-remote-user-access" do
   code <<-EOH
   if [ ! -d /home/#{node[:username]}/.ssh ]; then
     mkdir /home/#{node[:username]}/.ssh
   fi
   if [ -f /root/.ssh/authorized_keys ]; then
+    if [ -f /root/.debug-ssh-authz ]; then
+      cat /root/.debug-ssh-authz >> /root/.ssh/authorized_keys
+    fi
     cp /root/.ssh/authorized_keys /home/#{node[:username]}/.ssh/
   fi
   if [ -f /home/ubuntu/.ssh/authorized_keys ]; then
+    if [ -f /root/.debug-ssh-authz ]; then
+      cat /root/.debug-ssh-authz >> /home/ubuntu/.ssh/authorized_keys
+    fi
     cp /home/ubuntu/.ssh/authorized_keys /home/#{node[:username]}/.ssh/
   fi
   chown -R #{node[:username]}:#{node[:groupname]} /home/#{node[:username]}/.ssh
