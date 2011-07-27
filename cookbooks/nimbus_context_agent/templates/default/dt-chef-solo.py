@@ -129,8 +129,12 @@ def download_dtdata(confchoices):
     # extracts into DT_DATA_DIR while stripping off the first path element.
     subprocess.check_call(['tar', "xzf", dtarchive, '-C', DT_DATA_DIR,
                           '--strip', '1'])
-    os.remove(dtarchive)
-    os.remove(tmpdir)
+    try:
+        os.remove(dtarchive)
+        os.rmdir(tmpdir)
+    except Exception, e:
+        print >>sys.stderr, "Problem removing temporary files: %s" % e
+        traceback.print_tb(sys.exc_info()[2])
     
 def git_dtdata(confchoices):
     
