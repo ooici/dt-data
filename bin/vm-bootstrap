@@ -118,7 +118,7 @@ def main(args=sys.argv):
     else:
         userdata = get_userdata()
 
-    if userdata:
+    if userdata and userdata.strip():
         if userdata.startswith('#!'):
             run_script(userdata)
         else:
