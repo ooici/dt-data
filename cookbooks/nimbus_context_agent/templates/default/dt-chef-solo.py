@@ -93,7 +93,7 @@ def download_dtdata(confchoices):
     
     try:
         if os.path.exists(DT_DATA_DIR):
-            shutil.move(DT_DATA_DIR, "/opt/old_dt_data")
+            shutil.move(DT_DATA_DIR, "/opt/old_dt_data.%s" % int(time.time()))
     except:
         print >>sys.stderr, "Problem backing up old dt-data:\n"
         traceback.print_tb(sys.exc_info()[2])
