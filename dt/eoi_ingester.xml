@@ -141,7 +141,7 @@
         "local_app_confs": { 
          "ion.integration.eoi.validation.cdm_validation_service":{
          "validation_timeout" : 60,
-         "cdmvalidator_base_url" : "http://thredds.oceanobservatories.org/cdmvalidator",
+         "cdmvalidator_base_url" : "http://${thredds_hostname}/cdmvalidator",
          "cdmvalidator_command" : "validate",
          "cfchecks_binary" : "/usr/local/bin/cfchecks",
          "LD_LIBRARY_PATH" : "/lib:/lib64:/usr/lib:/usr/lib64:/usr/local/udunits-2.1.21/lib:/usr/local/hdf5-1.8.4-patch1/lib:/usr/local/netcdf-4.1.1/lib:/usr/local/zlib-1.2.3/lib",

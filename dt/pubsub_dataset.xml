@@ -50,7 +50,7 @@
                   "do-init": "${dataset_doinit}",
                   "update_interval" : 5.0,
                   "ncml_path": "/tmp/",
-                  "thredds_ncml_url":"datactlr@thredds.oceanobservatories.org:/opt/tomcat/ooici_tds_data",
+                  "thredds_ncml_url":"datactlr@${thredds_hostname}:/opt/tomcat/ooici_tds_data",
                   "public_key":"${dataset_pubkey}",
                   "private_key":"${dataset_privkey}"
               }
@@ -71,7 +71,7 @@
                   "do-init": "False",
                   "update_interval" : 5.0,
                   "ncml_path": "/tmp/",
-                  "thredds_ncml_url":"datactlr@thredds.oceanobservatories.org:/opt/tomcat/ooici_tds_data",
+                  "thredds_ncml_url":"datactlr@${thredds_hostname}:/opt/tomcat/ooici_tds_data",
                   "public_key":"${dataset_pubkey}",
                   "private_key":"${dataset_privkey}"
               }
