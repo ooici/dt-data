@@ -11,5 +11,6 @@ populating the deployable type registry service (DTRS).
 Tour
 ====
 
+bin/                Bootstrap script
 cookbooks/          Chef cookbooks
 ctx/                contextualization document templates used by the provisioner
