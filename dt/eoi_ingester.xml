@@ -10,7 +10,7 @@
      </provides>
      <requires>
        <identity/>
-       <data name="chef-install-work-consumer"><![CDATA[
+       <data name="dt-chef-solo"><![CDATA[
 {
   "ioncontainers": {
           "ingestion_container1": [ 
@@ -196,6 +196,11 @@
     "heartbeat_dest":"${heartbeat_dest}",
     "heartbeat_op":"heartbeat",
     "heartbeat_period":20
+  },
+  "dtdata":{
+    "retrieve_method":"archive",
+    "archive_url":"${dtdata_archive_url}",
+    "chef_debug_level":"debug"
   },
   "username":"cc",
   "groupname":"users",
