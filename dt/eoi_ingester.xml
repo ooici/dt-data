@@ -139,6 +139,11 @@
          ]
         },
         "local_app_confs": { 
+         "ion.integration.ais.findDataResources.findDataResources": {
+         "DNLD_BASE_THREDDS_URL" : "http://${thredds_hostname}/thredds",
+         "DNLD_DIR_PATH" : "/dodsC/ooiciData/",
+         "DNLD_FILE_TYPE" : ".ncml.html"
+         },
          "ion.integration.eoi.validation.cdm_validation_service":{
          "validation_timeout" : 60,
          "cdmvalidator_base_url" : "http://${thredds_hostname}/cdmvalidator",
