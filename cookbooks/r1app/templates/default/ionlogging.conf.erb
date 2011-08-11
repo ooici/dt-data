@@ -1,31 +1,27 @@
+# we have three logging considerations:
+# 1. Everything goes to ioncontainer.log which gets rotated
+# 2. >=ERROR goes to STDERR where supervisord will capture it
+# 3. cloudyvents go to a separate file to ease parsing and to ensure they are
+#    not rotated away.
+
+
 [loggers]
-keys=root,logServer,convRepos
+keys=root,ceiEvents
 
 [handlers]
-keys=consoleHandler,tracefileHandler,logfileHandler,msgfileHandler,errorHandler
+keys=tracefileHandler,errorHandler,eventHandler
 
 [formatters]
-keys=simpleFormatter,fileFormatter,msgfileFormatter
+keys=fileFormatter,simpleFormatter
 
 [logger_root]
 level=DEBUG
-handlers=consoleHandler,tracefileHandler,errorHandler
+handlers=tracefileHandler,errorHandler
 
-[logger_logServer]
-level=DEBUG
-handlers=logfileHandler
-qualname=logServer
-
-[logger_convRepos]
-level=DEBUG
-handlers=msgfileHandler
-qualname=convRepos
-
-[handler_consoleHandler]
-class=StreamHandler
-level=DEBUG
-formatter=simpleFormatter
-args=(sys.stdout,)
+[logger_ceiEvents]
+level=WARNING
+handlers=eventHandler
+qualname=epu.cei_events
 
 [handler_errorHandler]
 class=StreamHandler
@@ -33,28 +29,20 @@ level=ERROR
 formatter=simpleFormatter
 args=(sys.stderr,)
 
+[handler_eventHandler]
+class=FileHandler
+level=WARNING
+formatter=fileFormatter
+args=('logs/<%= @service_name %>/cei_events.log', 'a')
+filename=logs/<%= @service_name %>/cei_events.log
+mode=a
+
 [handler_tracefileHandler]
-class=FileHandler
+class=handlers.RotatingFileHandler
 level=DEBUG
 formatter=fileFormatter
-args=('logs/<%= @service_name %>/ioncontainer.log', 'a')
+args=('logs/<%= @service_name %>/ioncontainer.log', 'a', 10*1024*1024, 3)
 filename=logs/<%= @service_name %>/ioncontainer.log
-mode=a
-
-[handler_logfileHandler]
-class=FileHandler
-level=DEBUG
-formatter=fileFormatter
-args=('logs/<%= @service_name %>/ionsystem.log', 'a')
-filename=logs/<%= @service_name %>/ionsystem.log
-mode=a
-
-[handler_msgfileHandler]
-class=FileHandler
-level=DEBUG
-formatter=msgfileFormatter
-args=('logs/<%= @service_name %>/ionmessages.log', 'a')
-filename=logs/<%= @service_name %>/ionmessages.log
 mode=a
 
 [formatter_simpleFormatter]
@@ -63,8 +51,4 @@ datefmt=%Y-%m-%d %H:%M:%S
 
 [formatter_fileFormatter]
 format=%(asctime)s,%(msecs)03d [%(module)-15s:%(lineno)3d] %(levelname)-5s:%(message)s
-datefmt=%Y-%m-%d %H:%M:%S
-
-[formatter_msgfileFormatter]
-format=%(asctime)s:%(message)s
 datefmt=%Y-%m-%d %H:%M:%S

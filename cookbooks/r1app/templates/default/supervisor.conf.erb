@@ -3,8 +3,8 @@
 command=<%= spec[:command] %>
 autorestart=<%= spec[:autorestart] %>
 environment = TWISTD_ARGS="-n"
-stdout_logfile=%(here)s/%(program_name)s_stdout.log
-stderr_logfile=%(here)s/%(program_name)s_stderr.log
+stdout_logfile=%(here)s/logs/%(program_name)s_stdout.log
+stderr_logfile=%(here)s/logs/%(program_name)s_stderr.log
 
 <% end %>
 
@@ -12,7 +12,7 @@ stderr_logfile=%(here)s/%(program_name)s_stderr.log
 file=%(here)s/supervisor.sock
 
 [supervisord]
-logfile=%(here)s/supervisord.log
+logfile=%(here)s/logs/supervisord.log
 pidfile=%(here)s/supervisord.pid
 
 [rpcinterface:supervisor]
