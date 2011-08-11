@@ -6,7 +6,7 @@
 
 
 [loggers]
-keys=root,cloudyvents
+keys=root,ceiEvents
 
 [handlers]
 keys=tracefileHandler,errorHandler,eventHandler
@@ -18,7 +18,7 @@ keys=fileFormatter,simpleFormatter
 level=DEBUG
 handlers=tracefileHandler,errorHandler
 
-[logger_cloudyvents]
+[logger_ceiEvents]
 level=WARNING
 handlers=eventHandler
 qualname=epu.cei_events
@@ -33,8 +33,8 @@ args=(sys.stderr,)
 class=FileHandler
 level=WARNING
 formatter=fileFormatter
-args=('logs/<%= @service_name %>/cloudyvents.log', 'a')
-filename=logs/<%= @service_name %>/cloudyvents.log
+args=('logs/<%= @service_name %>/cei_events.log', 'a')
+filename=logs/<%= @service_name %>/cei_events.log
 mode=a
 
 [handler_tracefileHandler]
