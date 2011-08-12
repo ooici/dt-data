@@ -1,5 +1,5 @@
 {
-    "document" : "pubsub_dataset.xml",
+    "document" : "lv8.xml",
     "vars" : { },
     "sites" : {
         "ec2-west": {
