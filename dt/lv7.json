@@ -1,5 +1,5 @@
 {
-    "document" : "identity_registry.xml",
+    "document" : "lv7.xml",
     "vars" : { },
     "sites" : {
         "ec2-west": {
