@@ -36,33 +36,7 @@
         "version": "0.1"
       }
     ],
-    "resourceregistry-container1": [
-      {
-        "name": "resource_registry", 
-        "args": { }, 
-        "config": { },
-        "version": "0.1"
-      }
-    ],
-    "resourceregistry-container2": [
-      {
-        "name": "resource_registry", 
-        "args": { }, 
-        "config": { },
-        "version": "0.1"
-      }
-    ],
     "association-container1": [
-      {
-        "name": "association", 
-        "args": {"cassandra_username":"${cassandra_username}",
-                 "cassandra_password":"${cassandra_password}"
-        },
-        "config": { },
-        "version": "0.1"
-      }
-    ],
-    "association-container2": [
       {
         "name": "association", 
         "args": {"cassandra_username":"${cassandra_username}",
