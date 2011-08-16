@@ -48,7 +48,7 @@
               "ion.services.dm.inventory.dataset_controller" :{
                   "do-init": "${dataset_doinit}",
                   "task_id": "dc_ncml_update",
-                  "update_interval" : 5.0,
+                  "update_interval" : 300.0,
                   "ncml_path": "/tmp/",
                   "thredds_ncml_url":"datactlr@${thredds_hostname}:/opt/tomcat/ooici_tds_data",
                   "public_key":"${dataset_pubkey}",
@@ -69,7 +69,7 @@
             "config": {
               "ion.services.dm.inventory.dataset_controller" :{
                   "do-init": "False",
-                  "update_interval" : 5.0,
+                  "update_interval" : 300.0,
                   "ncml_path": "/tmp/",
                   "thredds_ncml_url":"datactlr@${thredds_hostname}:/opt/tomcat/ooici_tds_data",
                   "public_key":"${dataset_pubkey}",
