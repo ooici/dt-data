@@ -13,74 +13,41 @@
        <identity/>
        <data name="dt-chef-solo"><![CDATA[
 {
-  "ioncontainers": {
-    "datastore-container1": [
-      {
-        "name": "datastore", 
-        "args": {"cassandra_username":"${cassandra_username}",
-                 "cassandra_password":"${cassandra_password}",
-                 "do-init":"${datastore_doinit}"
-        }, 
-        "config": { },
-        "version": "0.1"
-      }
-    ],
-    "datastore-container2": [
-      {
-        "name": "datastore", 
-        "args": {"cassandra_username":"${cassandra_username}",
-                 "cassandra_password":"${cassandra_password}",
-                 "do-init":"False"
-        }, 
-        "config": { },
-        "version": "0.1"
-      }
-    ],
-    "resourceregistry-container1": [
-      {
-        "name": "resource_registry", 
-        "args": { }, 
-        "config": { },
-        "version": "0.1"
-      }
-    ],
-    "resourceregistry-container2": [
-      {
-        "name": "resource_registry", 
-        "args": { }, 
-        "config": { },
-        "version": "0.1"
-      }
-    ],
-    "association-container1": [
-      {
-        "name": "association", 
-        "args": {"cassandra_username":"${cassandra_username}",
-                 "cassandra_password":"${cassandra_password}"
+"ioncontainers": { 
+           "eoiagent-container1": [
+              {
+                "name": "eoiagents",
+                "args": { },
+                "config": { },
+                "version": "0.1"
+              }
+          ],
+           "eoiagent-container2": [
+              {
+                "name": "eoiagents",
+                "args": { },
+                "config": { },
+                "version": "0.1"
+              }
+          ],
+          "ingestion_container1": [ 
+            {
+              "name": "ingestion", 
+              "args": { }, 
+              "config": { },
+              "version": "0.1"
+            }
+          ],
+          "ingestion_container2": [ 
+            {
+              "name": "ingestion", 
+              "args": { }, 
+              "config": { },
+              "version": "0.1"
+            }
+          ]
         },
-        "config": { },
-        "version": "0.1"
-      }
-    ],
-    "association-container2": [
-      {
-        "name": "association", 
-        "args": {"cassandra_username":"${cassandra_username}",
-                 "cassandra_password":"${cassandra_password}"
-        },
-        "config": { },
-        "version": "0.1"
-      }
-    ]
-  },
-  "local_app_confs": {
-    "ion.core.data.storage_configuration_utility":{ 
-        "storage provider":{"host":"${cassandra_hostname}",
-                            "port":9160
-                           },
-        "persistent archive":{ }
-      }
-  },
+  "local_app_confs": { },
   "universal_app_confs":{
     "broker_host_list":"${broker_ip_address}",
     "sysname":"${exchange_scope}"
@@ -104,8 +71,9 @@
     "git_commit":"${git_commit}"
   },
   "appinstall":{
-    "install_method":"py_venv_buildout",
+    "install_method":"javapy_venv_buildout_ant",
     "package_repo":"${package_repo}",
+    "ant_target":"-lib /home/cc/app get-eoi-agents",
     "super_cache":"http://ooici.net/releases/supercache.tar.gz"
   },
   "apprun":{

@@ -1,5 +1,5 @@
 {
-    "document" : "exchange_preserve.xml",
+    "document" : "lv5.xml",
     "vars" : { },
     "sites" : {
         "ec2-west": {

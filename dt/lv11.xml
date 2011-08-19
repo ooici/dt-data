@@ -12,55 +12,31 @@
        <identity/>
        <data name="dt-chef-solo"><![CDATA[
 {
-"ioncontainers": { 
-        "scheduler_container": [ 
-          {
-              "name":"ccagent",              
-              "version":"0.1"
-          },
-          {
-              "name":"scheduler", 
-              "version":"0.1",
-                "config": {
-                "ion.services.dm.scheduler.scheduler_service":{
-                  "index_store_class": "ion.core.data.cassandra_bootstrap.CassandraIndexedStoreBootstrap",
-                  "column_family":  "scheduler",
-                  "cassandra_username": "${cassandra_username}",
-                  "cassandra_password": "${cassandra_password}"
-                }
-              },
-              "processapp":["scheduler","ion.services.dm.scheduler.scheduler_service", "SchedulerService"]
-          }
-          ],
-          "identity_registry_container1": [
+  "ioncontainers": {
+          "instrument_integration_container1":[
             {
                 "name":"ccagent",
                 "version":"0.1"
             },
             {
-                "name":"identity_registry",    
+                "name": "instrument_integration_service",
                 "version":"0.1",
-                "processapp":["identity_registry","ion.services.coi.identity_registry","IdentityRegistryService"]
+                "processapp":["instrument_integration_service", "ion.integration.sa.instrument_integration_service", "InstrumentIntegrationService"]
             }
-          ],
-          "identity_registry_container2": [
+         ],
+         "eventmonitor_container1":[
             {
                 "name":"ccagent",
                 "version":"0.1"
             },
             {
-                "name":"identity_registry",    
+                "name":"eventmonitor",    
                 "version":"0.1",
-                "processapp":["identity_registry","ion.services.coi.identity_registry","IdentityRegistryService"]
+                "processapp":["eventmonitor","ion.services.dm.distribution.eventmonitor","EventMonitorService"]
             }
-          ]
+         ]
         },
-  "local_app_confs": { 
-         "ion.core.data.storage_configuration_utility":{
-         "storage provider":{"host":"${cassandra_hostname}","port":9160},
-         "persistent archive":{}
-         }
-  },
+        "local_app_confs": { },
   "universal_app_confs":{
     "broker_host_list":"${broker_ip_address}",
     "sysname":"${exchange_scope}"

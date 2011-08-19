@@ -1,0 +1,20 @@
+{
+    "document" : "lv6.xml",
+    "vars" : { },
+    "sites" : {
+        "ec2-west": {
+            "work_consumer": {
+                "image": "${epuworker_image_id}", 
+                "allocation": "m1.large",
+                "sshkeyname": "ooi"
+            }
+        },
+        "nimbus-ucsd": {
+            "work_consumer": {
+                "image": "${epuworker_image_id}", 
+                "allocation": "m1.large",
+                "sshkeyname": "ooi"
+            }
+        }
+    }
+}

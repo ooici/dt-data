@@ -1,6 +1,6 @@
 {
-    "document" : "identity_registry.xml",
-    "vars" : { },
+    "document" : "lv11.xml",
+    "vars" : { }, 
     "sites" : {
         "ec2-west": {
             "work_consumer": {

@@ -13,22 +13,6 @@
        <data name="dt-chef-solo"><![CDATA[
 {
   "ioncontainers": {
-          "ingestion_container1": [ 
-            {
-              "name": "ingestion", 
-              "args": { }, 
-              "config": { },
-              "version": "0.1"
-            }
-          ],
-          "ingestion_container2": [ 
-            {
-              "name": "ingestion", 
-              "args": { }, 
-              "config": { },
-              "version": "0.1"
-            }
-          ],
           "notification_container1": [
             {
                 "name":"ccagent",
@@ -50,61 +34,7 @@
                 "NotificationAlertService"]
             }
           ],
-          "notification_container2": [
-            {
-                "name":"ccagent",
-                "version":"0.1"
-            },
-            {
-                "name":"notification_alert", 
-                "version":"0.1",
-                "config": {
-                "ion.integration.ais.notification_alert_service":{
-                  "index_store_class": "ion.core.data.cassandra_bootstrap.CassandraIndexedStoreBootstrap",
-                  "column_family":  "notification_alert_service",
-                  "cassandra_username": "${cassandra_username}",
-                  "cassandra_password": "${cassandra_password}"
-                }
-                },
-                "processapp":["notification_alert_service",
-                "ion.integration.ais.notification_alert_service",
-                "NotificationAlertService"]
-            }
-          ],
-          "store_service_container1":[
-            {
-                "name":"ccagent",
-                "version":"0.1"
-            },
-            {
-                "name":"store_service",      
-                "version":"0.1",
-                "processapp":["store_service", "ion.core.data.store_service", "StoreService"]
-            }
-          ],
-          "store_service_container2":[
-            {
-                "name":"ccagent",
-                "version":"0.1"
-            },
-            {
-                "name":"store_service",      
-                "version":"0.1",
-                "processapp":["store_service", "ion.core.data.store_service", "StoreService"]
-            }
-          ],
           "cdm_validation_container1":[
-            {
-                "name":"ccagent",
-                "version":"0.1"
-            },
-            {
-                "name":"cdm_validation_service", 
-                "version":"0.1",
-                "processapp":["cdm_validation_service", "ion.integration.eoi.validation.cdm_validation_service", "CdmValidationService"]
-            }
-         ],
-          "cdm_validation_container2":[
             {
                 "name":"ccagent",
                 "version":"0.1"
@@ -127,6 +57,28 @@
             }
          ],
          "app_integration_container2":[
+            {
+                "name":"ccagent",
+                "version":"0.1"
+            },
+            {
+                "name":"app_integration",    
+                "version":"0.1",
+                "processapp":["app_integration","ion.integration.ais.app_integration_service","AppIntegrationService"]
+            }
+         ],
+         "app_integration_container3":[
+            {
+                "name":"ccagent",
+                "version":"0.1"
+            },
+            {
+                "name":"app_integration",    
+                "version":"0.1",
+                "processapp":["app_integration","ion.integration.ais.app_integration_service","AppIntegrationService"]
+            }
+         ],
+         "app_integration_container4":[
             {
                 "name":"ccagent",
                 "version":"0.1"

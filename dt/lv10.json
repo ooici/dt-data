@@ -1,6 +1,6 @@
 {
-    "document" : "eoi_ingester.xml",
-    "vars" : { }, 
+    "document" : "lv10.xml",
+    "vars" : { },
     "sites" : {
         "ec2-west": {
             "work_consumer": {
