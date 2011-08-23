@@ -19,8 +19,6 @@ if [ -f /opt/loggly.txt ]; then
   export LOGGLY_KEY=`cat /opt/loggly.txt`
 fi
 
-export LIBCLOUD_DEBUG=<%= @app_dir %>/logs/libcloud.log
-
 APP_BIN=<%= @app_dir %>/bin
 if [ -d $APP_BIN ]; then
   export PATH="$APP_BIN:$PATH"
