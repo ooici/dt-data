@@ -11,6 +11,13 @@
                 "sshkeyname": "ooi"
             }
         },
+        "ec2-east": {
+            "work_consumer": {
+                "image": "${epuworker_image_id}", 
+                "allocation": "t1.micro",
+                "sshkeyname": "ooi"
+            }
+        },
         "nimbus-ucsd": {
             "work_consumer": {
                 "image": "${epuworker_image_id}", 
