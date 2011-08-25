@@ -47,8 +47,9 @@
     "git_commit":"${git_commit}"
   },
   "appinstall":{
-    "install_method":"py_venv_setup",
-    "package_repo":"${package_repo}"
+    "install_method":"py_venv_buildout",
+    "package_repo":"${package_repo}",
+    "super_cache":"http://ooi.s3.amazonaws.com/micro1ksupercache.tar.gz"
   },
   "apprun":{
     "run_method":"supervised"
@@ -58,9 +59,10 @@
     "git_repo":"https://github.com/ooici/epuagent.git",
     "git_branch":"master",
     "git_commit":"HEAD",
-    "install_method":"py_venv_setup",
+    "install_method":"py_venv_buildout",
+    "super_cache":"http://ooi.s3.amazonaws.com/micro1ksupercache.tar.gz",
     "service_config":"res/apps/epuagent.app",
-    "package_repo":"http://ooici.net/packages",
+    "package_repo":"${package_repo}",
     "node_id":"${node_id}",
     "heartbeat_dest":"${heartbeat_dest}",
     "heartbeat_op":"heartbeat",
