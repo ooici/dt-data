@@ -66,28 +66,6 @@
                 "version":"0.1",
                 "processapp":["app_integration","ion.integration.ais.app_integration_service","AppIntegrationService"]
             }
-         ],
-         "app_integration_container3":[
-            {
-                "name":"ccagent",
-                "version":"0.1"
-            },
-            {
-                "name":"app_integration",    
-                "version":"0.1",
-                "processapp":["app_integration","ion.integration.ais.app_integration_service","AppIntegrationService"]
-            }
-         ],
-         "app_integration_container4":[
-            {
-                "name":"ccagent",
-                "version":"0.1"
-            },
-            {
-                "name":"app_integration",    
-                "version":"0.1",
-                "processapp":["app_integration","ion.integration.ais.app_integration_service","AppIntegrationService"]
-            }
          ]
         },
         "local_app_confs": { 
