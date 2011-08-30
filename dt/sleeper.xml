@@ -34,7 +34,7 @@
   "pythoncc":{
     "broker":"${broker_ip_address}",
     "sysname":"${exchange_scope}",
-    "broker_heartbeat":"30",
+    "broker_heartbeat":"60",
     "broker_username":"${broker_username}",
     "broker_password":"${broker_password}",
     "log_level":"${ion_log_level}"
@@ -66,7 +66,7 @@
     "node_id":"${node_id}",
     "heartbeat_dest":"${heartbeat_dest}",
     "heartbeat_op":"heartbeat",
-    "heartbeat_period":20
+    "heartbeat_period":60
   },
   "username":"cc",
   "groupname":"users",
