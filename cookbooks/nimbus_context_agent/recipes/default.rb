@@ -2,15 +2,20 @@
 
 bash "install-nimbus-context-agent" do
   code <<-EOH
-    if [ ! -d /opt/nimbus ]; then
-      wget http://www.nimbusproject.org/downloads/nimbus-ctx-agent-2.3.0.tar.gz
-      tar zxf nimbus-ctx-agent-2.3.0.tar.gz
-      mv nimbus-ctx-agent-2.3.0/ /opt/nimbus/
-    fi
-    
-    if [ -d /opt/nimbus/nimbus-ctx-agent-2.3.0 ]; then
-      mv /opt/nimbus/ /opt/oldnimbus
-      mv /opt/oldnimbus/nimbus-ctx-agent-2.3.0 /opt/nimbus
+    if [ -d /etc/apt ]; then
+      wget http://ooi.s3.amazonaws.com/nimbus-ctx-agent-2.3.0-ALT.tar.gz
+      tar zxf nimbus-ctx-agent-2.3.0-ALT.tar.gz
+      mv nimbus-ctx-agent-2.3.0-ALT/ /opt/nimbus/
+    else
+      if [ ! -d /opt/nimbus ]; then
+        wget http://www.nimbusproject.org/downloads/nimbus-ctx-agent-2.3.0.tar.gz
+        tar zxf nimbus-ctx-agent-2.3.0.tar.gz
+        mv nimbus-ctx-agent-2.3.0/ /opt/nimbus/
+      fi
+      if [ -d /opt/nimbus/nimbus-ctx-agent-2.3.0 ]; then
+        mv /opt/nimbus/ /opt/oldnimbus
+        mv /opt/oldnimbus/nimbus-ctx-agent-2.3.0 /opt/nimbus
+      fi
     fi
   EOH
 end
