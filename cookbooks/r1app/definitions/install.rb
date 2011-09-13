@@ -14,6 +14,12 @@ define :install_app, :conf => nil, :user => nil, :group => nil do
   raise ArgumentError, 'conf must be specified' if conf.nil?
   raise ArgumentError, 'user must be specified' if username.nil?
   raise ArgumentError, 'group must be specified' if groupname.nil?
+  
+  # in chef 0.9+ this should be cookbook_file
+  remote_file "/tmp/versionreport.py" do
+    source "versionreport.py"
+    mode "0755"
+  end
 
   case conf[:install_method]
   when "py_venv_setup"
@@ -23,7 +29,6 @@ define :install_app, :conf => nil, :user => nil, :group => nil do
       group groupname
       command "python setup.py install"
     end
-  
   when "py_venv_buildout", "javapy_venv_buildout_ant"
     bash "prepare cache" do
       cwd "/tmp"
@@ -68,6 +73,24 @@ define :install_app, :conf => nil, :user => nil, :group => nil do
       code <<-EOH
       sed -i 's/ivy.cache.dir=.*/ivy.cache.dir=\/opt\/cache\/ivy/' .settings/ivysettings.properties
       /opt/ant-1.8.2/bin/ant #{conf[:ant_target]}
+      EOH
+    end
+    bash "run java-version-print" do
+      cwd app_dir
+      user username
+      group groupname
+      code <<-EOH
+      ./bin/python /tmp/versionreport.py lib >> logs/versions.log
+      EOH
+    end
+  end
+  when "py_venv_buildout"
+    bash "run python-version-print" do
+      cwd app_dir
+      user username
+      group groupname
+      code <<-EOH
+      ./bin/python /tmp/versionreport.py >> logs/versions.log
       EOH
     end
   end
