@@ -83,7 +83,6 @@ define :install_app, :conf => nil, :user => nil, :group => nil do
       ./bin/python /tmp/versionreport.py lib >> logs/versions.log
       EOH
     end
-  end
   when "py_venv_buildout"
     bash "run python-version-print" do
       cwd app_dir
