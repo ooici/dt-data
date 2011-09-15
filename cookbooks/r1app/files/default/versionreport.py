@@ -180,7 +180,23 @@ else:
     for dep in deps:
         versions.append(os.path.basename(dep))
 
+# CWD
+gitcommit = None
+if os.path.exists(".gitcommit"):
+    f = open(".gitcommit")
+    lines = f.readlines()
+    if lines:
+        gitcommit = lines[0]
+        gitcommit = gitcommit.strip()
 
-txt = event_logtxt("r1app", "deplist", extra={"versions":versions, "depsource":source_str})
+extra = {"depsource":source_str}
+if gitcommit:
+    extra["gitcommit"] = gitcommit
+idx = 0
+for version in versions:
+    extra["dep%s" % idx] = version
+    idx += 1
+
+txt = event_logtxt("r1app", "deplist", extra=extra)
 
 print txt
