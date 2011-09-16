@@ -73,10 +73,11 @@
     "autorestart":true
   },
   "appmonitor":{
-    "retrieve_method":"git",
-    "git_repo":"https://github.com/ooici/epuagent.git",
-    "git_branch":"master",
-    "git_commit":"HEAD",
+    "retrieve_method":"${epuagent_retrieve_method}",
+    "archive_url":"${epuagent_archive_url}",
+    "git_repo":"${epuagent_git_repo}",
+    "git_branch":"${epuagent_git_branch}",
+    "git_commit":"${epuagent_git_commit}",
     "install_method":"py_venv_buildout",
     "super_cache":"http://ooici.net/releases/supercache.tar.gz",
     "service_config":"res/apps/epuagent.app",
