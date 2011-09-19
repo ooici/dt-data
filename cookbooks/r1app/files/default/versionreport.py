@@ -189,9 +189,20 @@ if os.path.exists(".gitcommit"):
         gitcommit = lines[0]
         gitcommit = gitcommit.strip()
 
+# CWD
+projectversion = None
+if os.path.exists(".projectversion"):
+    f = open(".projectversion")
+    lines = f.readlines()
+    if lines:
+        projectversion = lines[0]
+        projectversion = projectversion.strip()
+
 extra = {"depsource":source_str}
 if gitcommit:
     extra["gitcommit"] = gitcommit
+if projectversion:
+    extra["projectversion"] = projectversion
 idx = 0
 for version in versions:
     extra["dep%s" % idx] = version
