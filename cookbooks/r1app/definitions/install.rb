@@ -71,7 +71,7 @@ define :install_app, :conf => nil, :user => nil, :group => nil do
       user username
       group groupname
       code <<-EOH
-      sed -i 's/ivy.cache.dir=.*/ivy.cache.dir=\/opt\/cache\/ivy/' .settings/ivysettings.properties
+      sed -i 's/ivy.cache.dir=.*/ivy.cache.dir=\\/opt\\/cache\\/ivy/' .settings/ivysettings.properties
       /opt/ant-1.8.2/bin/ant #{conf[:ant_target]}
       EOH
     end
