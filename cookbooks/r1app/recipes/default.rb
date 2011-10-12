@@ -218,6 +218,7 @@ when "sh", "supervised"
                 :app_dir => app_dir,
                 :logging_config => logging_config, 
                 :sysname => node[:pythoncc][:sysname], 
+                :logging_token => node[:pythoncc][:logging_token], 
                 :broker => node[:pythoncc][:broker],
                 :broker_heartbeat => node[:pythoncc][:broker_heartbeat],
                 :broker_credfile => broker_credfile,
