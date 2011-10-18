@@ -1,0 +1,166 @@
+<cluster>
+ <workspace>
+   <name>work_consumer</name>
+   <image>${epuworker_image_id}</image>
+   <quantity>1</quantity>
+   <nic wantlogin="true">public</nic>
+   <ctx>
+     <provides>
+       <identity/>
+     </provides>
+     <requires>
+       <identity/>
+       <data name="dt-chef-solo"><![CDATA[
+{
+  "ioncontainers": {
+          "instrument_integration_container1":[
+            {
+                "name":"ccagent",
+                "version":"0.1"
+            },
+            {
+                "name": "instrument_integration_service",
+                "version":"0.1",
+                "processapp":["instrument_integration_service", "ion.integration.sa.instrument_integration_service", "InstrumentIntegrationService"]
+            }
+         ],
+         "eventmonitor_container1":[
+            {
+                "name":"ccagent",
+                "version":"0.1"
+            },
+            {
+                "name":"eventmonitor",    
+                "version":"0.1",
+                "processapp":["eventmonitor","ion.services.dm.distribution.eventmonitor","EventMonitorService"]
+            }
+          ],
+         "instrument_webmonitor_container1":[
+            {
+                "name":"ccagent",
+                "version":"0.1"
+            },
+            {
+                "name":"instrument_web_monitor",    
+                "version":"0.1",
+                "processapp":["instrument_web_monitor","ion.services.dm.distribution.instrument_web_monitor","InstrumentWebMonitorService"]
+            }
+          ],
+         "data_acquisition_mgmt_container1":[
+            {
+                "name":"ccagent",
+                "version":"0.1"
+            },
+            {
+                "name":"data_acquisition_management",    
+                "version":"0.1",
+                "processapp":["data_acquisition_management","ion.services.sa.data_acquisition_management.data_acquisition_management","DataAcquisitionManagementService"]
+            }
+          ],
+         "data_process_mgmt_container1":[
+            {
+                "name":"ccagent",
+                "version":"0.1"
+            },
+            {
+                "name":"data_process_management",    
+                "version":"0.1",
+                "processapp":["data_process_management","ion.services.sa.data_process_management.data_process_management","DataProcessManagementService"]
+            }
+          ],
+         "data_product_mgmt_container1":[
+            {
+                "name":"ccagent",
+                "version":"0.1"
+            },
+            {
+                "name":"data_product_management",    
+                "version":"0.1",
+                "processapp":["data_product_management","ion.services.sa.data_product_management.data_product_management","DataProductManagementService"]
+            }
+          ],
+         "instrument_mgmt_container1":[
+            {
+                "name":"ccagent",
+                "version":"0.1"
+            },
+            {
+                "name":"instrument_management",    
+                "version":"0.1",
+                "processapp":["instrument_management","ion.services.sa.instrument_management.instrument_management","InstrumentManagementService"]
+            }
+          ],
+         "instrument_direct_access_container1":[
+            {
+                "name":"ccagent",
+                "version":"0.1"
+            },
+            {
+                "name":"instrument_direct_access",    
+                "version":"0.1",
+                "processapp":["instrument_direct_access","ion.services.sa.instrument_management.instrument_direct_access","InstrumentDirectAccessService"]
+            }
+          ]
+         },
+        "local_app_confs": { },
+  "universal_app_confs":{
+    "broker_host_list":"${broker_ip_address}",
+    "sysname":"${exchange_scope}"
+  },
+  "virtualenv": {
+    "path" : "/home/cc/app-venv",
+    "virtualenv" : "/opt/python2.5/bin/virtualenv",
+    "python" : "python2.5"
+  },
+  "pythoncc":{
+    "broker":"${broker_ip_address}",
+    "sysname":"${exchange_scope}",
+    "broker_heartbeat":"30",
+    "logging_token":"${logging_token}",
+    "log_level":"${ion_log_level}"
+  },
+  "appretrieve":{
+    "retrieve_method":"${retrieve_method}",
+    "archive_url":"${archive_url}",
+    "git_repo":"${git_repo}",
+    "git_branch":"${git_branch}",
+    "git_commit":"${git_commit}"
+  },
+  "appinstall":{
+    "install_method":"py_venv_buildout",
+    "package_repo":"${package_repo}",
+    "super_cache":"http://ooici.net/releases/supercache.tar.gz"
+  },
+  "apprun":{
+    "run_method":"supervised",
+    "autorestart":true
+  },
+  "appmonitor":{
+    "retrieve_method":"${epuagent_retrieve_method}",
+    "archive_url":"${epuagent_archive_url}",
+    "git_repo":"${epuagent_git_repo}",
+    "git_branch":"${epuagent_git_branch}",
+    "git_commit":"${epuagent_git_commit}",
+    "install_method":"py_venv_buildout",
+    "super_cache":"http://ooici.net/releases/supercache.tar.gz",
+    "service_config":"res/apps/epuagent.app",
+    "package_repo":"http://ooici.net/releases",
+    "node_id":"${node_id}",
+    "heartbeat_dest":"${heartbeat_dest}",
+    "heartbeat_op":"heartbeat",
+    "heartbeat_period":20
+  },
+  "dtdata":{
+    "retrieve_method":"archive",
+    "archive_url":"${dtdata_archive_url}",
+    "chef_debug_level":"debug"
+  },
+  "username":"cc",
+  "groupname":"users",
+  "recipes":["user", "r1app"]
+}
+]]></data>
+     </requires>
+   </ctx>
+ </workspace>
+</cluster>
