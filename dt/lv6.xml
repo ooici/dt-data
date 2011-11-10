@@ -52,6 +52,8 @@
     "broker":"${broker_ip_address}",
     "sysname":"${exchange_scope}",
     "broker_heartbeat":"30",
+    "broker_username":"${broker_username}",
+    "broker_password":"${broker_password}",
     "logging_token":"${logging_token}",
     "log_level":"${ion_log_level}"
   },
