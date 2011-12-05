@@ -102,8 +102,8 @@ when "sh", "supervised"
     source "ooici-conn.properties.erb"
     owner "#{node[:username]}"
     group "#{node[:groupname]}"
-    variables(:exchange => node[:pythoncc][:sysname],
-              :server => node[:pythoncc][:broker])
+    variables(:broker_username => node[:pythoncc][:broker_username],
+              :broker_password => node[:pythoncc][:broker_password])
   end
   
   bash "give-remote-user-ooici-properties-access" do
