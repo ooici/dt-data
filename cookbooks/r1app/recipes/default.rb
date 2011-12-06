@@ -1,4 +1,5 @@
 app_archive = "/tmp/app-archive.tar.gz"
+home_dir = "/home/#{node[:username]}"
 app_dir = "/home/#{node[:username]}/app"
 venv_dir = node[:virtualenv][:path]
 monitor_dir = "/home/#{node[:username]}/appmonitor"
@@ -98,7 +99,7 @@ when "sh", "supervised"
     variables(:log_level => node[:pythoncc][:log_level])
   end
 
-  template "#{app_dir}/ooici-conn.properties" do
+  template "#{home_dir}/ooici-conn.properties" do
     source "ooici-conn.properties.erb"
     owner "#{node[:username]}"
     group "#{node[:groupname]}"
@@ -109,7 +110,7 @@ when "sh", "supervised"
   bash "give-remote-user-ooici-properties-access" do
     code <<-EOH
     if [ -d /home/ubuntu/ ]; then
-      cp #{app_dir}/ooici-conn.properties /home/ubuntu/
+      cp #{home_dir}/ooici-conn.properties /home/ubuntu/
       chown ubuntu /home/ubuntu/ooici-conn.properties
     fi
     EOH
