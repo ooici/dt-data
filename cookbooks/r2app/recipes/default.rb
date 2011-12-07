@@ -132,7 +132,8 @@ when "sh", "supervised"
       variables(:service => epuservice_name, 
                 :service_config => abs_epuservice_config, 
                 :venv_dir => venv_dir,
-                :app_dir => app_dir
+                :app_dir => app_dir,
+                :background_process => node[:apprun][:run_method] == "sh"
                )
     end
 

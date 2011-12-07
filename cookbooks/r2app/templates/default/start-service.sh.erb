@@ -25,4 +25,4 @@ if [ -d $APP_BIN ]; then
 fi
 cd <%= @app_dir %>
 
-exec <%=@service %> <%=@service_config %> &
+exec <%=@service %> <%=@service_config %> <% if @background_process %>&<% end %>
