@@ -1,0 +1,32 @@
+{
+  "pyonservices":{
+    "hello-service": [
+      {
+        "name": "hello-service-1",
+        "args": {
+            "proc": "examples.service.hello_service.HelloService"
+        },
+        "version": "0.1"
+      }
+    ]
+  },
+  "appinstall":{
+    "install_method":"py_venv_setup"
+  },
+  "apprun":{
+    "run_method":"sh"
+  },
+  "appretrieve":{
+    "retrieve_method":"git",
+    "archive_url":"${archive_url}",
+    "git_repo":"https://github.com/oldpatricka/pyon.git",
+    "git_branch":"anon-submodules",
+    "git_commit":"HEAD"
+  },
+  "virtualenv": {
+          "path" : "/home/cc/app-venv"
+  },
+  "username":"cc",
+  "groupname":"users",
+  "recipes":["user", "pyon_deps", "r2app"]
+}
