@@ -13,31 +13,30 @@
        <identity/>
        <data name="chef-install-work-consumer"><![CDATA[
 {
-  "ioncontainers": {
-    "epuworker_container": [{
-      "name": "epu-worker",
-      "args": { },
-      "config": {
-        "epu.ionproc.epu_worker":{ "queue_name_work":"${queue_name_work}" }
-      },
-      "version": "0.1"
-    }]
+  "epuservices":{
+    "epu-worker": [
+      {
+        "name": "epu-worker-1",
+        "args": { },
+        "version": "0.1",
+        "config": {
+          "server": {
+            "amqp": {
+              "host": "${broker_ip_address}",
+              "username": "${broker_username}",
+              "password": "${broker_password}"
+            }
+          }
+        }
+      }
+    ]
   },
-  "local_app_confs": ${local_app_confs},
-  "universal_app_confs":{
-    "broker_host_list":"${broker_ip_address}",
-    "sysname":"${exchange_scope}"
+  "appinstall":{
+    "install_method":"py_venv_setup",
+    "package_repo":"${package_repo}"
   },
-  "virtualenv": {
-    "path" : "/home/cc/app-venv"
-  },
-  "pythoncc":{
-    "broker":"${broker_ip_address}",
-    "sysname":"${exchange_scope}",
-    "broker_heartbeat":"60",
-    "broker_username":"${broker_username}",
-    "broker_password":"${broker_password}",
-    "log_level":"${ion_log_level}"
+  "apprun":{
+    "run_method":"supervised"
   },
   "appretrieve":{
     "retrieve_method":"${retrieve_method}",
@@ -46,31 +45,12 @@
     "git_branch":"${git_branch}",
     "git_commit":"${git_commit}"
   },
-  "appinstall":{
-    "install_method":"py_venv_buildout",
-    "package_repo":"${package_repo}",
-    "super_cache":"http://ooi.s3.amazonaws.com/micro1ksupercache.tar.gz"
-  },
-  "apprun":{
-    "run_method":"supervised"
-  },
-  "appmonitor":{
-    "retrieve_method":"git",
-    "git_repo":"https://github.com/ooici/epuagent.git",
-    "git_branch":"master",
-    "git_commit":"HEAD",
-    "install_method":"py_venv_buildout",
-    "super_cache":"http://ooi.s3.amazonaws.com/micro1ksupercache.tar.gz",
-    "service_config":"res/apps/epuagent.app",
-    "package_repo":"${package_repo}",
-    "node_id":"${node_id}",
-    "heartbeat_dest":"${heartbeat_dest}",
-    "heartbeat_op":"heartbeat",
-    "heartbeat_period":60
+  "virtualenv": {
+          "path" : "/home/cc/app-venv"
   },
   "username":"cc",
   "groupname":"users",
-  "recipes":["user", "r1app"]
+  "recipes":["user", "r2app"]
 }
 ]]></data>
      </requires>
