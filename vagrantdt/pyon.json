@@ -6,12 +6,22 @@
         "args": {
             "proc": "examples.service.hello_service.HelloService"
         },
+        "config": {
+          "server": {
+            "amqp": {
+              "host": "localhost"
+            }
+          }
+        },
         "version": "0.1"
       }
     ]
   },
   "appinstall":{
-    "install_method":"py_venv_setup"
+    "install_method":"py_venv_setup",
+    "build_env":{
+        "CFLAGS":"-O0"
+    }
   },
   "apprun":{
     "run_method":"sh"

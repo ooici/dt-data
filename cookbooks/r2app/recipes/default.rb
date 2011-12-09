@@ -141,6 +141,47 @@ when "sh", "supervised"
     autostart_services[epuservice_name] = {:command => start_script,
       :autorestart => autorestart}
   end
+
+
+  node[:pyonservices].each do |pyonservice_name, pyonservice_spec|
+
+    pycc_path = "pycc"
+    pycc_proc = pyonservice_spec.fetch(:proc, nil)
+    pycc_args = ""
+
+    # File to create for this container:
+    abs_pyonservice_config = File.join(app_dir, "res", "config", "pyon.local.yml")
+
+    epuservice_config abs_pyonservice_config do
+      user node[:username]
+      group node[:groupname]
+      epuservice_name pyonservice_name
+      epuservice_spec pyonservice_spec
+    end
+
+    if pycc_proc
+      pycc_args << "--proc #{pycc_proc} "
+    end
+
+    start_script = File.join(app_dir, "start-#{pyonservice_name}.sh")
+    template start_script do
+      source "start-service.sh.erb"
+      owner node[:username]
+      group node[:groupname]
+      mode 0755
+      variables(:service => pycc_path, 
+                :service_config => pycc_args, 
+                :venv_dir => venv_dir,
+                :app_dir => app_dir,
+                :background_process => node[:apprun][:run_method] == "sh"
+               )
+    end
+
+    # add command to services list
+    autostart_services[pyonservice_name] = {:command => start_script,
+      :autorestart => autorestart}
+  end
+
 else raise ArgumentError, "unknown install_method #{node[:apprun][:run_method]}"
 end
 
