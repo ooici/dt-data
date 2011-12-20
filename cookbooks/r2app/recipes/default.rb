@@ -99,6 +99,20 @@ when "sh", "supervised"
     EOH
   end
 
+  template "#{app_dir}/messaging.yml" do
+    source "messaging.yml.erb"
+    owner "#{node[:username]}"
+    group "#{node[:groupname]}"
+    variables(:server => node[:messaging][:broker],
+              :port => node[:messaging][:port],
+              :username => node[:messaging][:username],
+              :password => node[:messaging][:password],
+              :vhost => node[:messaging][:vhost],
+              :heartbeat => node[:messaging][:heartbeat]
+             )
+  end
+  
+
   
   # autorestart is for all processes right now, could be made more
   # # granular if needed. Also note that it only applies in "supervised" mode.
