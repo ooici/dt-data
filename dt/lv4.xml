@@ -53,7 +53,10 @@
                             "port":9160
                            },
         "persistent archive":{ }
-      }
+      },
+    "ion.core.data.cassandra":{
+        "CassandraVerify":true
+    }
   },
   "universal_app_confs":{
     "broker_host_list":"${broker_ip_address}",
