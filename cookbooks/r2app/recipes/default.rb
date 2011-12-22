@@ -135,6 +135,7 @@ when "sh", "supervised"
       owner "#{node[:username]}"
       group "#{node[:groupname]}"
       mode "0755"
+      recursive true
     end
 
     start_script = File.join(app_dir, "start-#{epuservice_name}.sh")
