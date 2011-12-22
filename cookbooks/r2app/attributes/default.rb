@@ -1,3 +1,4 @@
+default[:appname] = "app"
 default[:epuservices] = {}
 default[:pyonservices] = {}
 default[:messaging] = {}

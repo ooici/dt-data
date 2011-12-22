@@ -1,5 +1,5 @@
 app_archive = "/tmp/app-archive.tar.gz"
-app_dir = "/home/#{node[:username]}/app"
+app_dir = "/home/#{node[:username]}/#{node[:appname]}"
 venv_dir = node[:virtualenv][:path]
 monitor_dir = "/home/#{node[:username]}/appmonitor"
 
