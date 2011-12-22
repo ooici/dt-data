@@ -130,12 +130,17 @@ when "sh", "supervised"
       epuservice_spec epuservice_spec
     end
 
-    logging_dir = "#{app_dir}/logs/#{epuservice_name}"
+    base_logging_dir = "#{app_dir}/logs"
+    directory "#{base_logging_dir}" do
+      owner "#{node[:username]}"
+      group "#{node[:groupname]}"
+      mode "0755"
+    end
+    logging_dir = "#{base_logging_dir}/#{epuservice_name}"
     directory "#{logging_dir}" do
       owner "#{node[:username]}"
       group "#{node[:groupname]}"
       mode "0755"
-      recursive true
     end
 
     start_script = File.join(app_dir, "start-#{epuservice_name}.sh")
