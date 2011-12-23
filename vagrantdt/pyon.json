@@ -29,8 +29,8 @@
   "appretrieve":{
     "retrieve_method":"git",
     "archive_url":"${archive_url}",
-    "git_repo":"https://github.com/oldpatricka/pyon.git",
-    "git_branch":"anon-submodules",
+    "git_repo":"https://github.com/ooici/pyon.git",
+    "git_branch":"master",
     "git_commit":"HEAD"
   },
   "virtualenv": {
