@@ -31,7 +31,7 @@ define :install_app, :conf => nil, :user => nil, :group => nil do
       user username
       group groupname
       environment env
-      command "env >/tmp/env ; python setup.py install"
+      command "env >/tmp/env ; easy_install -i #{conf[:package_repo]} ."
     end
   when "py_venv_buildout", "javapy_venv_buildout_ant"
     bash "prepare cache" do
