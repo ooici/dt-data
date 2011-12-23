@@ -233,7 +233,7 @@ when "supervised"
   execute "install-supervisor" do
     user node[:username]
     group node[:groupname]
-    command "easy_install --find-links=#{node[:appinstall][:package_repo]} supervisor"
+    command "easy_install -i #{node[:appinstall][:package_repo]} supervisor"
   end
 
   sup_conf = File.join(app_dir, "supervisor.conf")
