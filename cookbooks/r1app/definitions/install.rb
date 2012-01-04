@@ -85,7 +85,7 @@ define :install_app, :conf => nil, :user => nil, :group => nil do
       user username
       group groupname
       code <<-EOH
-      ./bin/python /tmp/versionreport.py lib >> logs/versions.log
+      ./bin/python /tmp/versionreport.py lib >> versions.log
       EOH
     end
   when "py_venv_buildout"
@@ -94,7 +94,7 @@ define :install_app, :conf => nil, :user => nil, :group => nil do
       user username
       group groupname
       code <<-EOH
-      ./bin/python /tmp/versionreport.py >> logs/versions.log
+      ./bin/python /tmp/versionreport.py >> versions.log
       EOH
     end
   end

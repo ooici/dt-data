@@ -18,6 +18,11 @@
     ]
   },
   "appinstall":{
+    "install_method":"py_venv_buildout",
+    "package_repo":"http://ooici.net/packages",
+    "super_cache":"http://ooici.net/releases/supercache.tar.gz",
+  },
+  "setupappinstall":{
     "install_method":"py_venv_setup",
     "build_env":{
         "CFLAGS":"-O0"
