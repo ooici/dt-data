@@ -38,5 +38,5 @@
   },
   "username":"cc",
   "groupname":"users",
-  "recipes":["user", "pyon_deps", "r2app"]
+  "recipes":["user", "rabbitmq", "pyon_deps", "r2app"]
 }

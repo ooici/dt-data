@@ -162,11 +162,24 @@ when "sh", "supervised"
       :autorestart => autorestart}
   end
 
+  bash "run generate interface script for pyon" do
+    user node[:username]
+    group node[:groupname]
+    cwd app_dir
+    environment({
+      "PYTHONPATH" => "."
+    })
+    code <<-EOH
+    source #{venv_dir}/bin/activate
+    generate_interfaces > /tmp/generate.log 2>&1
+    EOH
+    only_if { node[:pyonservices] }
+  end
 
   node[:pyonservices].each do |pyonservice_name, pyonservice_spec|
 
     pycc_path = "pycc"
-    pycc_proc = pyonservice_spec.fetch(:proc, nil)
+    pycc_proc = pyonservice_spec.first.fetch(:args, {}).fetch(:proc, nil)
     pycc_args = ""
 
     # File to create for this container:
@@ -246,14 +259,14 @@ when "supervised"
   end
 
   bash "start-supervisor" do
-  user node[:username]
-  group node[:groupname]
-  environment({
-    "HOME" => "/home/#{node[:username]}"
-  })
-  code <<-EOH
-  supervisord -c #{sup_conf}
-  EOH
+    user node[:username]
+    group node[:groupname]
+    environment({
+      "HOME" => "/home/#{node[:username]}"
+    })
+    code <<-EOH
+    supervisord -c #{sup_conf}
+    EOH
   end
 
   # start up the monitor process, if configured
