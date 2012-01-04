@@ -173,7 +173,7 @@ when "sh", "supervised"
     source #{venv_dir}/bin/activate
     generate_interfaces > /tmp/generate.log 2>&1
     EOH
-    only_if { node[:pyonservices] }
+    only_if "which generate_interfaces"
   end
 
   node[:pyonservices].each do |pyonservice_name, pyonservice_spec|
