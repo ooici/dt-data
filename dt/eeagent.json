@@ -20,7 +20,12 @@
               },
               "eeagent": {
                 "name": "eeagent_${node_id}",
-                "heartbeat": 10
+                "heartbeat": 10,
+                "slots" : 8,
+                "launch_type": {
+                  "name": "supd",
+                  "supd_directory": "/tmp/SupD"
+                }
               },
               "pd": {
                 "name": "processdispatcher"
