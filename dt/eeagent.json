@@ -12,11 +12,9 @@
                 "amqp": {
                   "host": "${broker_ip_address}",
                   "username": "${broker_username}",
-                  "password": "${broker_password}"
+                  "password": "${broker_password}",
+                  "exchange": "default_dashi_exchange"
                 }
-              },
-              "dashi": {
-                "exchange": "default_dashi_exchange"
               },
               "eeagent": {
                 "name": "eeagent_${node_id}",
