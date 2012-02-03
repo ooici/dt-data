@@ -55,7 +55,8 @@
         "persistent archive":{ }
       },
     "ion.core.data.cassandra":{
-        "CassandraVerify":true
+      "CassandraVerify":true,
+      "CassandraConsistency":"ALL"
     }
   },
   "universal_app_confs":{
