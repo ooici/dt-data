@@ -50,25 +50,19 @@
     },
     "sites" : {
         "ec2-west": {
-            "work_consumer": {
-                "image": "${epuworker_image_id}", 
-                "allocation": "m1.large",
-                "sshkeyname": "ooi"
-            }
+            "image": "${epuworker_image_id}",
+            "allocation": "m1.large",
+            "sshkeyname": "ooi"
         },
         "ec2-east": {
-            "work_consumer": {
-                "image": "${epuworker_image_id}", 
-                "allocation": "t1.micro",
-                "sshkeyname": "ooi"
-            }
+            "image": "${epuworker_image_id}",
+            "allocation": "t1.micro",
+            "sshkeyname": "ooi"
         },
         "nimbus-ucsd": {
-            "work_consumer": {
-                "image": "${epuworker_image_id}", 
-                "allocation": "m1.large",
-                "sshkeyname": "ooi"
-            }
+            "image": "${epuworker_image_id}",
+            "allocation": "m1.large",
+            "sshkeyname": "ooi"
         }
     }
 }
