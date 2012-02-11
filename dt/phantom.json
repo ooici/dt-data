@@ -1,0 +1,68 @@
+{
+    "image": "${epuworker_image_id}",
+    "chef_config" : {
+      "epuservices":{
+        "epu-worker": [
+          {
+            "name": "epu-worker-1",
+            "args": { },
+            "version": "0.1",
+            "config": {
+              "server": {
+                "amqp": {
+                  "host": "${broker_ip_address}",
+                  "username": "${broker_username}",
+                  "password": "${broker_password}"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "appinstall":{
+        "install_method":"py_venv_setup",
+        "package_repo":"${package_repo}"
+      },
+      "apprun":{
+        "run_method":"supervised"
+      },
+      "appretrieve":{
+        "retrieve_method":"${retrieve_method}",
+        "archive_url":"${archive_url}",
+        "git_repo":"${git_repo}",
+        "git_branch":"${git_branch}",
+        "git_commit":"${git_commit}"
+      },
+      "virtualenv": {
+              "path" : "/home/cc/app-venv"
+      },
+      "dtdata":{
+        "retrieve_method":"archive",
+        "archive_url":"${dtdata_archive_url}",
+        "chef_debug_level":"debug"
+      },
+      "username":"cc",
+      "groupname":"users",
+      "recipes":["user", "r2app"]
+    },
+    "vars" : {
+        "local_app_confs": { }
+    },
+    "sites" : {
+        "ec2-west": {
+            "image": "${epuworker_image_id}",
+            "allocation": "m1.large",
+            "sshkeyname": "ooi"
+        },
+        "ec2-east": {
+            "image": "${epuworker_image_id}",
+            "allocation": "t1.micro",
+            "sshkeyname": "ooi"
+        },
+        "nimbus-ucsd": {
+            "image": "${epuworker_image_id}",
+            "allocation": "m1.large",
+            "sshkeyname": "ooi"
+        }
+    }
+}
