@@ -1,4 +1,5 @@
 {
+    "image": "${epuworker_image_id}",
     "chef_config" : {
       "epuservices":{
         "epu-worker": [
