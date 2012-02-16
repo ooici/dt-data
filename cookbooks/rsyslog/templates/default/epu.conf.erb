@@ -1,9 +1,9 @@
-# EPU rsyslog configuration
+# rsyslog configuration
 
 # provides <%= node[:rsyslog][:protocol] %> syslog reception
 $ModLoad im<%= node[:rsyslog][:protocol].downcase %>
 $UDPServerRun <%= node[:rsyslog][:port] %>
 
-$template epulog,"<%= node[:rsyslog][:directory] %>/%fromhost%/epu.log"
-<%= node[:rsyslog][:facility] %>.* ?epulog
+$template <%= node[:rsyslog][:name] %>,"<%= node[:rsyslog][:directory] %>/%fromhost%/<%= node[:rsyslog][:name] %>.log"
+<%= node[:rsyslog][:facility] %>.* ?<%= node[:rsyslog][:name] %>
 & ~

@@ -1,3 +1,4 @@
+default[:rsyslog][:name] = "ooi"
 default[:rsyslog][:port] = 514
 default[:rsyslog][:protocol] = "udp"
 default[:rsyslog][:directory] = "/var/log/external"
