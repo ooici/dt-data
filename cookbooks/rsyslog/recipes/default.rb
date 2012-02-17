@@ -19,9 +19,9 @@ bash "register with loggly" do
     code <<-EOH
     curl -X POST -u #{node[:rsyslog][:loggly][:username]} http://#{node[:rsyslog][:loggly][:subdomain]}.loggly.com/api/inputs/#{node[:rsyslog][:loggly][:port]}/adddevice
     EOH
-    only_if {   node[:rsyslog][:loggly][:port] 
-             && node[:rsyslog][:loggly][:subdomain]
-             && node[:rsyslog][:loggly][:username]}
+    only_if {node[:rsyslog][:loggly][:port] &&
+             node[:rsyslog][:loggly][:subdomain] &&
+             node[:rsyslog][:loggly][:username]}
 end
 
 service "rsyslog" do
