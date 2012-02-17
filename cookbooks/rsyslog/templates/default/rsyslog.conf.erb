@@ -7,3 +7,7 @@ $UDPServerRun <%= node[:rsyslog][:port] %>
 $template <%= node[:rsyslog][:name] %>,"<%= node[:rsyslog][:directory] %>/%fromhost%/<%= node[:rsyslog][:name] %>.log"
 <%= node[:rsyslog][:facility] %>.* ?<%= node[:rsyslog][:name] %>
 & ~
+
+<% if node[:rsyslog][:loggly][:port] %>
+*.* @@logs.loggly.com:<%= node[:rsyslog][:loggly][:port] %>
+<% end %>
