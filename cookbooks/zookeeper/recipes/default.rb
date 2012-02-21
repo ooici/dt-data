@@ -5,12 +5,12 @@ case node[:platform]
 #      command "apt-get update"
 #      action :run
 #    end
-    package "hadoop-zookeeper-server" do
+    package "zookeeperd" do
       action :install
     end
 end
 
-service "hadoop-zookeeper-server" do                                                          
+service "zookeeper" do                                                          
   supports :status => true, :restart => true, :reload => true                   
   action [ :enable, :start ]                                                    
 end    
