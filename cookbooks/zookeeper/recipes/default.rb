@@ -9,6 +9,10 @@ case node[:platform]
     end
 end
 
+template "/etc/zookeeper/conf/zoo.cfg" do
+    source "zoo.cfg.erb"
+end
+
 service "zookeeper" do                                                          
   supports :status => true, :restart => true, :reload => true                   
   action [ :enable, :start ]                                                    
