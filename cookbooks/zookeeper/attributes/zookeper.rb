@@ -6,3 +6,4 @@ default[:zookeeper][:clientPort] = 2181
 default[:zookeeper][:servers] = ["localhost"]
 default[:zookeeper][:leaderPort] = 2888
 default[:zookeeper][:electionPort] = 3888
+default[:zookeeper][:name] = "zookeeper"

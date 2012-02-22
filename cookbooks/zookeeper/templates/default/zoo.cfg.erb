@@ -1,4 +1,5 @@
 # http://hadoop.apache.org/zookeeper/docs/current/zookeeperAdmin.html
+# Configuration for <%= node[:zookeeper][:name] %>
 
 # The number of milliseconds of each tick
 tickTime=<%= node[:zookeeper][:tickTime] %>
@@ -23,9 +24,8 @@ clientPort=<%= node[:zookeeper][:clientPort] %>
 #server.2=zookeeper2:2888:3888
 #server.3=zookeeper3:2888:3888
 <% node[:zookeeper][:servers].each_with_index do |server, index| %>
-server.<%= index+1 %>=<%= server %>:<%= node[:zookeeper][:leaderPort] %>:<%= node[:zookeeper][:electionPort] %>
+server.<%= index %>=<%= server %>:<%= node[:zookeeper][:leaderPort] %>:<%= node[:zookeeper][:electionPort] %>
 <% end %>
-
 
 # To avoid seeks ZooKeeper allocates space in the transaction log file in
 # blocks of preAllocSize kilobytes. The default block size is 64M. One reason
