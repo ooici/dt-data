@@ -63,6 +63,11 @@
             "image": "${epuworker_image_id}",
             "allocation": "m1.large",
             "sshkeyname": "ooi"
+        },
+        "fg-alamo": {
+            "image": "${epuworker_image_id}",
+            "allocation": "m1.small",
+            "sshkeyname": "nimbusphantom"
         }
     }
 }
