@@ -51,7 +51,7 @@
     "sites" : {
         "ec2-west": {
             "image": "${epuworker_image_id}",
-            "allocation": "m1.large",
+            "allocation": "t1.micro",
             "sshkeyname": "ooi"
         },
         "ec2-east": {
