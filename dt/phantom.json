@@ -69,5 +69,10 @@
             "allocation": "m1.small",
             "sshkeyname": "nimbusphantom"
         }
+        "fg-hotel": {
+            "image": "${epuworker_image_id}",
+            "allocation": "m1.small",
+            "sshkeyname": "nimbusphantom"
+        }
     }
 }
