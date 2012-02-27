@@ -19,19 +19,8 @@
           }
         ]
       },
-      "appinstall":{
-        "install_method":"py_venv_setup",
-        "package_repo":"${package_repo}"
-      },
       "apprun":{
         "run_method":"supervised"
-      },
-      "appretrieve":{
-        "retrieve_method":"${retrieve_method}",
-        "archive_url":"${archive_url}",
-        "git_repo":"${git_repo}",
-        "git_branch":"${git_branch}",
-        "git_commit":"${git_commit}"
       },
       "appmonitor":{
         "retrieve_method":"${epuagent_retrieve_method}",
@@ -58,11 +47,6 @@
       },
       "virtualenv": {
               "path" : "/home/cc/app-venv"
-      },
-      "dtdata":{
-        "retrieve_method":"archive",
-        "archive_url":"${dtdata_archive_url}",
-        "chef_debug_level":"debug"
       },
       "username":"cc",
       "groupname":"users",
