@@ -11,21 +11,25 @@ include_recipe "virtualenv"
 # RETRIEVAL
 ########################################################################
 
-retrieve_app app_dir do
-  conf node[:appretrieve]
-  user node[:username]
-  group node[:groupname]
+if node[:appretrieve]
+  retrieve_app app_dir do
+    conf node[:appretrieve]
+    user node[:username]
+    group node[:groupname]
+  end
 end
 
 ########################################################################
 # INSTALLATION
 ########################################################################
 
-install_app app_dir do
-  conf node[:appinstall]
-  user node[:username]
-  group node[:groupname]
-  venv_dir venv_dir
+if node[:appinstall]
+  install_app app_dir do
+    conf node[:appinstall]
+    user node[:username]
+    group node[:groupname]
+    venv_dir venv_dir
+  end
 end
 
 ########################################################################
@@ -93,10 +97,12 @@ when "sh", "supervised"
   apprun = node[:apprun]
 
   # Our ioncontainer_config callout needs this in the virtualenv itself
-  bash "ensure simplejson" do
-    code <<-EOH
-    easy_install --find-links=#{node[:appinstall][:package_repo]} simplejson==2.1.2
-    EOH
+  if node[:appinstall]
+    bash "ensure simplejson" do
+      code <<-EOH
+      easy_install --find-links=#{node[:appinstall][:package_repo]} simplejson==2.1.2
+      EOH
+    end
   end
 
   template "#{app_dir}/messaging.yml" do
@@ -243,10 +249,12 @@ when "supervised"
   # RUN SUPERVISED
   ######################################################################
   
-  execute "install-supervisor" do
-    user node[:username]
-    group node[:groupname]
-    command "easy_install -i #{node[:appinstall][:package_repo]} supervisor"
+  if node[:appinstall]
+    execute "install-supervisor" do
+      user node[:username]
+      group node[:groupname]
+      command "easy_install -i #{node[:appinstall][:package_repo]} supervisor"
+    end
   end
 
   sup_conf = File.join(app_dir, "supervisor.conf")
