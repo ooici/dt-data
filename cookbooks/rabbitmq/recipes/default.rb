@@ -7,6 +7,15 @@ service "rabbitmq-server" do
   action [ :enable, :start ]
 end
 
+template "/etc/rabbitmq/rabbitmq-env.conf" do
+  source "rabbitmq-env.conf.erb"
+  owner "root"
+  group "root"
+  mode 0644
+  notifies :restart, resources(:service => "rabbitmq-server"), :immediately
+end
+
+
 template "/etc/rabbitmq/rabbitmq.config" do
   source "rabbitmq.config.erb"
   owner "root"
