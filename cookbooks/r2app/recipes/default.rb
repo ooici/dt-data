@@ -226,6 +226,15 @@ if node[:apprun]
   end
 end
 
+if node[:appinstall]
+  execute "install-supervisor" do
+    user node[:username]
+    group node[:groupname]
+    command "easy_install -i #{node[:appinstall][:package_repo]} supervisor"
+  end
+end
+
+
 ########################################################################
 # RUN SERVICES
 ########################################################################
@@ -251,14 +260,6 @@ if node[:apprun]
     ######################################################################
     # RUN SUPERVISED
     ######################################################################
-
-    if node[:appinstall]
-      execute "install-supervisor" do
-        user node[:username]
-        group node[:groupname]
-        command "easy_install -i #{node[:appinstall][:package_repo]} supervisor"
-      end
-    end
 
     sup_conf = File.join(app_dir, "supervisor.conf")
     template sup_conf do
