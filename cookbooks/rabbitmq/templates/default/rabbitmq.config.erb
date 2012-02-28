@@ -4,8 +4,9 @@
 
 [
   {rabbit, [
+    {tcp_listeners, [{"0.0.0.0", 5672}]},
 <% if node[:rabbitmq][:ssl] -%>
-    {ssl_listeners, [<%= node[:rabbitmq][:ssl_port] %>]},
+    {ssl_listeners, [{"0.0.0.0", <%= node[:rabbitmq][:ssl_port] %>}]},
     {ssl_options, [{cacertfile,"<%= node[:rabbitmq][:ssl_cacert] %>"},
                     {certfile,"<%= node[:rabbitmq][:ssl_cert] %>"},
                     {keyfile,"<%= node[:rabbitmq][:ssl_key] %>"},
