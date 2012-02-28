@@ -87,209 +87,212 @@ end
 autostart_services = {}
 
 
-case node[:apprun][:run_method]
-when "sh", "supervised"
+if node[:apprun]
+  case node[:apprun][:run_method]
+  when "sh", "supervised"
 
-  ######################################################################
-  # PREPARE SH or SUPERVISED
-  ######################################################################
+    ######################################################################
+    # PREPARE SH or SUPERVISED
+    ######################################################################
 
-  apprun = node[:apprun]
+    apprun = node[:apprun]
 
-  # Our ioncontainer_config callout needs this in the virtualenv itself
-  if node[:appinstall]
-    bash "ensure simplejson" do
+    # Our ioncontainer_config callout needs this in the virtualenv itself
+    if node[:appinstall]
+      bash "ensure simplejson" do
+        code <<-EOH
+        easy_install --find-links=#{node[:appinstall][:package_repo]} simplejson==2.1.2
+        EOH
+      end
+    end
+
+    template "#{app_dir}/messaging.yml" do
+      source "messaging.yml.erb"
+      owner "#{node[:username]}"
+      group "#{node[:groupname]}"
+      variables(:server => node[:messaging][:broker],
+                :port => node[:messaging][:port],
+                :username => node[:messaging][:username],
+                :password => node[:messaging][:password],
+                :vhost => node[:messaging][:vhost],
+                :heartbeat => node[:messaging][:heartbeat]
+               )
+    end
+
+
+
+    # autorestart is for all processes right now, could be made more
+    # # granular if needed. Also note that it only applies in "supervised" mode.
+    autorestart = apprun.include?(:autorestart) and apprun[:autorestart]
+
+    node[:epuservices].each do |epuservice_name, epuservice_spec|
+
+      # File to create for this container:
+      abs_epuservice_config = File.join(app_dir, "#{epuservice_name}.yml")
+
+      epuservice_config abs_epuservice_config do
+        user node[:username]
+        group node[:groupname]
+        epuservice_name epuservice_name
+        epuservice_spec epuservice_spec
+      end
+
+      base_logging_dir = "#{app_dir}/logs"
+      directory "#{base_logging_dir}" do
+        owner "#{node[:username]}"
+        group "#{node[:groupname]}"
+        mode "0755"
+      end
+      logging_dir = "#{base_logging_dir}/#{epuservice_name}"
+      directory "#{logging_dir}" do
+        owner "#{node[:username]}"
+        group "#{node[:groupname]}"
+        mode "0755"
+      end
+
+      start_script = File.join(app_dir, "start-#{epuservice_name}.sh")
+      template start_script do
+        source "start-service.sh.erb"
+        owner node[:username]
+        group node[:groupname]
+        mode 0755
+        variables(:service => epuservice_name,
+                  :service_config => abs_epuservice_config,
+                  :venv_dir => venv_dir,
+                  :app_dir => app_dir,
+                  :background_process => node[:apprun][:run_method] == "sh"
+                 )
+      end
+
+      # add command to services list
+      autostart_services[epuservice_name] = {:command => start_script,
+        :autorestart => autorestart}
+    end
+
+    bash "run generate interface script for pyon" do
+      user node[:username]
+      group node[:groupname]
+      cwd app_dir
+      environment({
+        "PYTHONPATH" => "."
+      })
       code <<-EOH
-      easy_install --find-links=#{node[:appinstall][:package_repo]} simplejson==2.1.2
+      source #{venv_dir}/bin/activate
+      generate_interfaces > /tmp/generate.log 2>&1
       EOH
+      only_if "which generate_interfaces"
     end
+
+    node[:pyonservices].each do |pyonservice_name, pyonservice_spec|
+
+      pycc_path = "pycc"
+      pycc_proc = pyonservice_spec.first.fetch(:args, {}).fetch(:proc, nil)
+      pycc_args = ""
+
+      # File to create for this container:
+      abs_pyonservice_config = File.join(app_dir, "res", "config", "pyon.local.yml")
+
+      epuservice_config abs_pyonservice_config do
+        user node[:username]
+        group node[:groupname]
+        epuservice_name pyonservice_name
+        epuservice_spec pyonservice_spec
+      end
+
+      if pycc_proc
+        pycc_args << "--proc #{pycc_proc} "
+      end
+
+      start_script = File.join(app_dir, "start-#{pyonservice_name}.sh")
+      template start_script do
+        source "start-service.sh.erb"
+        owner node[:username]
+        group node[:groupname]
+        mode 0755
+        variables(:service => pycc_path,
+                  :service_config => pycc_args,
+                  :venv_dir => venv_dir,
+                  :app_dir => app_dir,
+                  :background_process => node[:apprun][:run_method] == "sh"
+                 )
+      end
+
+      # add command to services list
+      autostart_services[pyonservice_name] = {:command => start_script,
+        :autorestart => autorestart}
+    end
+
+  else raise ArgumentError, "unknown install_method #{node[:apprun][:run_method]}"
   end
-
-  template "#{app_dir}/messaging.yml" do
-    source "messaging.yml.erb"
-    owner "#{node[:username]}"
-    group "#{node[:groupname]}"
-    variables(:server => node[:messaging][:broker],
-              :port => node[:messaging][:port],
-              :username => node[:messaging][:username],
-              :password => node[:messaging][:password],
-              :vhost => node[:messaging][:vhost],
-              :heartbeat => node[:messaging][:heartbeat]
-             )
-  end
-  
-
-  
-  # autorestart is for all processes right now, could be made more
-  # # granular if needed. Also note that it only applies in "supervised" mode.
-  autorestart = apprun.include?(:autorestart) and apprun[:autorestart]
-
-  node[:epuservices].each do |epuservice_name, epuservice_spec|
-    
-    # File to create for this container:
-    abs_epuservice_config = File.join(app_dir, "#{epuservice_name}.yml")
-    
-    epuservice_config abs_epuservice_config do
-      user node[:username]
-      group node[:groupname]
-      epuservice_name epuservice_name
-      epuservice_spec epuservice_spec
-    end
-
-    base_logging_dir = "#{app_dir}/logs"
-    directory "#{base_logging_dir}" do
-      owner "#{node[:username]}"
-      group "#{node[:groupname]}"
-      mode "0755"
-    end
-    logging_dir = "#{base_logging_dir}/#{epuservice_name}"
-    directory "#{logging_dir}" do
-      owner "#{node[:username]}"
-      group "#{node[:groupname]}"
-      mode "0755"
-    end
-
-    start_script = File.join(app_dir, "start-#{epuservice_name}.sh")
-    template start_script do
-      source "start-service.sh.erb"
-      owner node[:username]
-      group node[:groupname]
-      mode 0755
-      variables(:service => epuservice_name, 
-                :service_config => abs_epuservice_config, 
-                :venv_dir => venv_dir,
-                :app_dir => app_dir,
-                :background_process => node[:apprun][:run_method] == "sh"
-               )
-    end
-
-    # add command to services list
-    autostart_services[epuservice_name] = {:command => start_script,
-      :autorestart => autorestart}
-  end
-
-  bash "run generate interface script for pyon" do
-    user node[:username]
-    group node[:groupname]
-    cwd app_dir
-    environment({
-      "PYTHONPATH" => "."
-    })
-    code <<-EOH
-    source #{venv_dir}/bin/activate
-    generate_interfaces > /tmp/generate.log 2>&1
-    EOH
-    only_if "which generate_interfaces"
-  end
-
-  node[:pyonservices].each do |pyonservice_name, pyonservice_spec|
-
-    pycc_path = "pycc"
-    pycc_proc = pyonservice_spec.first.fetch(:args, {}).fetch(:proc, nil)
-    pycc_args = ""
-
-    # File to create for this container:
-    abs_pyonservice_config = File.join(app_dir, "res", "config", "pyon.local.yml")
-
-    epuservice_config abs_pyonservice_config do
-      user node[:username]
-      group node[:groupname]
-      epuservice_name pyonservice_name
-      epuservice_spec pyonservice_spec
-    end
-
-    if pycc_proc
-      pycc_args << "--proc #{pycc_proc} "
-    end
-
-    start_script = File.join(app_dir, "start-#{pyonservice_name}.sh")
-    template start_script do
-      source "start-service.sh.erb"
-      owner node[:username]
-      group node[:groupname]
-      mode 0755
-      variables(:service => pycc_path, 
-                :service_config => pycc_args, 
-                :venv_dir => venv_dir,
-                :app_dir => app_dir,
-                :background_process => node[:apprun][:run_method] == "sh"
-               )
-    end
-
-    # add command to services list
-    autostart_services[pyonservice_name] = {:command => start_script,
-      :autorestart => autorestart}
-  end
-
-else raise ArgumentError, "unknown install_method #{node[:apprun][:run_method]}"
 end
 
 ########################################################################
 # RUN SERVICES
 ########################################################################
 
-case node[:apprun][:run_method]
-when "sh"
-  ######################################################################
-  # RUN SH
-  ######################################################################
-  autostart_services.each do |service, service_spec|
-    execute "start-service" do
+if node[:apprun]
+  case node[:apprun][:run_method]
+  when "sh"
+    ######################################################################
+    # RUN SH
+    ######################################################################
+    autostart_services.each do |service, service_spec|
+      execute "start-service" do
+        user node[:username]
+        group node[:groupname]
+        environment({
+          "HOME" => "/home/#{node[:username]}"
+        })
+        command service_spec[:command]
+      end
+    end
+
+  when "supervised"
+    ######################################################################
+    # RUN SUPERVISED
+    ######################################################################
+
+    if node[:appinstall]
+      execute "install-supervisor" do
+        user node[:username]
+        group node[:groupname]
+        command "easy_install -i #{node[:appinstall][:package_repo]} supervisor"
+      end
+    end
+
+    sup_conf = File.join(app_dir, "supervisor.conf")
+    template sup_conf do
+      source "supervisor.conf.erb"
+      mode 0400
+      owner node[:username]
+      group node[:groupname]
+      variables(:programs => autostart_services)
+    end
+
+    bash "start-supervisor" do
       user node[:username]
       group node[:groupname]
       environment({
         "HOME" => "/home/#{node[:username]}"
       })
-      command service_spec[:command]
+      code <<-EOH
+      supervisord -c #{sup_conf}
+      EOH
     end
-  end
 
-when "supervised"
-  ######################################################################
-  # RUN SUPERVISED
-  ######################################################################
-  
-  if node[:appinstall]
-    execute "install-supervisor" do
-      user node[:username]
-      group node[:groupname]
-      command "easy_install -i #{node[:appinstall][:package_repo]} supervisor"
+    # start up the monitor process, if configured
+    if node.include? :appmonitor
+      app_monitor monitor_dir do
+        conf node[:appmonitor]
+        user node[:username]
+        group node[:groupname]
+        virtualenv venv_dir
+        pythoncc node[:pythoncc]
+        universals node[:universal_app_confs]
+        supervisor_socket File.join(app_dir, "supervisor.sock")
+      end
     end
-  end
 
-  sup_conf = File.join(app_dir, "supervisor.conf")
-  template sup_conf do
-    source "supervisor.conf.erb"
-    mode 0400
-    owner node[:username]
-    group node[:groupname]
-    variables(:programs => autostart_services)
+  else raise ArgumentError, "unknown install_method #{node[:apprun][:run_method]}"
   end
-
-  bash "start-supervisor" do
-    user node[:username]
-    group node[:groupname]
-    environment({
-      "HOME" => "/home/#{node[:username]}"
-    })
-    code <<-EOH
-    supervisord -c #{sup_conf}
-    EOH
-  end
-
-  # start up the monitor process, if configured
-  if node.include? :appmonitor 
-    app_monitor monitor_dir do
-      conf node[:appmonitor]
-      user node[:username]
-      group node[:groupname]
-      virtualenv venv_dir
-      pythoncc node[:pythoncc]
-      universals node[:universal_app_confs]
-      supervisor_socket File.join(app_dir, "supervisor.sock")
-    end
-  end
-  
-else raise ArgumentError, "unknown install_method #{node[:apprun][:run_method]}"
 end
-
