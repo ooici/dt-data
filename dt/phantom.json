@@ -64,15 +64,20 @@
             "allocation": "m1.large",
             "sshkeyname": "ooi"
         },
-        "fg-alamo": {
+        "alamo": {
             "image": "${epuworker_image_id}",
             "allocation": "m1.small",
             "sshkeyname": "nimbusphantom"
         },
-        "fg-hotel": {
+        "hotel": {
             "image": "${epuworker_image_id}",
             "allocation": "m1.small",
             "sshkeyname": "nimbusphantom"
+        },
+        "hotel-H2OOwhPlTEdNFYDys8RdP": {
+            "image": "${epuworker_image_id}",
+            "allocation": "${epuworker_allocation}",
+            "sshkeyname": "${epuworker_keyname}"
         }
     }
 }
