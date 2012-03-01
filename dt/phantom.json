@@ -49,7 +49,7 @@
         "local_app_confs": { }
     },
     "sites" : {
-        "alamo": {
+        "alamo-H2OOwhPlTEdNFYDys8RdP": {
             "image": "${epuworker_image_id}",
             "allocation": "m1.small",
             "sshkeyname": "nimbusphantom"
