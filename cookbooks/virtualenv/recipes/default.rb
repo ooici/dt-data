@@ -17,7 +17,7 @@ end
 execute "create virtualenv" do
   user node[:username]
   group node[:groupname]
-  command "#{ve_exe} --python=#{py_exe} --no-site-packages #{ve_dir}"
+  command "#{ve_exe} --python=#{py_exe} #{ve_dir}"
   creates File.join(ve_dir, "bin/activate")
 end
 
