@@ -97,6 +97,12 @@ if node[:apprun]
 
     apprun = node[:apprun]
 
+    # Create apprun directory
+    directory "#{app_dir}" do
+      owner "#{node[:username]}"
+      group "#{node[:groupname]}"
+    end
+
     # Our ioncontainer_config callout needs this in the virtualenv itself
     if node[:appinstall]
       bash "ensure simplejson" do
