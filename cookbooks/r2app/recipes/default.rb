@@ -294,9 +294,7 @@ if node[:apprun]
         user node[:username]
         group node[:groupname]
         virtualenv venv_dir
-        pythoncc node[:pythoncc]
-        universals node[:universal_app_confs]
-        supervisor_socket File.join(app_dir, "supervisor.sock")
+        supervisor_socket "unix://" + File.join(app_dir, "supervisor.sock")
       end
     end
 
