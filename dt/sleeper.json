@@ -51,7 +51,7 @@
           "epuagent": {
             "heartbeat_dest": "${heartbeat_dest}",
             "heartbeat_op": "ou_heartbeat",
-            "period_seconds": 0.5,
+            "period_seconds": "${heartbeat_period_seconds}",
             "node_id": "${node_id}"
           }
         }
