@@ -23,11 +23,11 @@
         "run_method":"supervised"
       },
       "appmonitor":{
-        "retrieve_method":"${epuagent_retrieve_method}",
+        "retrieve_method":null,
         "git_repo":"${epuagent_git_repo}",
         "git_branch":"${epuagent_git_branch}",
         "git_commit":"${epuagent_git_commit}",
-        "install_method":"py_venv_setup",
+        "install_method":null,
         "package_repo":"${package_repo}",
         "config": {
           "server": {

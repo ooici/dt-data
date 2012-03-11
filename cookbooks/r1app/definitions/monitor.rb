@@ -15,17 +15,21 @@ define :app_monitor, :conf => nil, :user => nil, :group => nil,
   venv_dir = params[:virtualenv]
   supervisor_socket = params[:supervisor_socket]
 
-  retrieve_app monitor_dir do
-    conf config
-    user username
-    group groupname
+  if config[:retrieve_method]
+    retrieve_app monitor_dir do
+      conf config
+      user username
+      group groupname
+    end
   end
 
-  install_app monitor_dir do
-    conf config
-    user username
-    group groupname
-    venv_dir venv_dir
+  if config[:install_method]
+    install_app monitor_dir do
+      conf config
+      user username
+      group groupname
+      venv_dir venv_dir
+    end
   end
 
   service_name = "epu-agent"
