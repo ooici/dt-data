@@ -56,4 +56,10 @@ fi
 
 dir=`dirname $0`
 $PYEXE $dir/dt-chef-solo.py $1 &> /opt/dt-chef-solo.log
-exit $?
+CHEF_EXIT=$?
+
+# If Chef failed, output the end of the Chef log
+if [ $CHEF_EXIT != 0 ]; then
+  tail -100 /opt/dt-chef-solo.log
+fi
+exit $CHEF_EXIT
