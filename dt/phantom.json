@@ -59,5 +59,16 @@
             "allocation": "m1.small",
             "sshkeyname": "nimbusphantom"
         }
+        "alamo-zvLP0nq9LlwuY6Fl48Xi9": {
+            "image": "${epuworker_image_id}",
+            "allocation": "m1.small",
+            "sshkeyname": "nimbusphantom"
+        },
+        "hotel-zvLP0nq9LlwuY6Fl48Xi9": {
+            "image": "${epuworker_image_id}",
+            "allocation": "m1.small",
+            "sshkeyname": "nimbusphantom"
+        }
+
     }
 }
