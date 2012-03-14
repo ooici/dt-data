@@ -64,6 +64,11 @@
             "allocation": "m1.small",
             "sshkeyname": "nimbusphantom"
         },
+        "foxtrot-H2OOwhPlTEdNFYDys8RdP": {
+            "image": "${epuworker_image_id}",
+            "allocation": "m1.small",
+            "sshkeyname": "nimbusphantom"
+        },
         "alamo-zvLP0nq9LlwuY6Fl48Xi9": {
             "image": "${epuworker_image_id}",
             "allocation": "m1.small",
@@ -78,7 +83,11 @@
             "image": "${epuworker_image_id}",
             "allocation": "m1.small",
             "sshkeyname": "nimbusphantom"
+        },
+        "foxtrot-zvLP0nq9LlwuY6Fl48Xi9": {
+            "image": "${epuworker_image_id}",
+            "allocation": "m1.small",
+            "sshkeyname": "nimbusphantom"
         }
-
     }
 }
