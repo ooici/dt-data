@@ -49,6 +49,36 @@
         "local_app_confs": { }
     },
     "sites" : {
+        "hotel-EnkkcHdKnLMLPfMbo1w3O": {
+            "image": "${epuworker_image_id}",
+            "allocation": "m1.small",
+            "sshkeyname": "nimbusphantom"
+        },
+        "sierra-EnkkcHdKnLMLPfMbo1w3O": {
+            "image": "${epuworker_image_id}",
+            "allocation": "m1.small",
+            "sshkeyname": "nimbusphantom"
+        },
+        "hotel-Ky6oiHSkNJAJYvDFwyeo9": {
+            "image": "${epuworker_image_id}",
+            "allocation": "m1.small",
+            "sshkeyname": "nimbusphantom"
+        },
+        "sierra-Ky6oiHSkNJAJYvDFwyeo9": {
+            "image": "${epuworker_image_id}",
+            "allocation": "m1.small",
+            "sshkeyname": "nimbusphantom"
+        },
+        "hotel-guJCD13gODRwXOeHxk3JX": {
+            "image": "${epuworker_image_id}",
+            "allocation": "m1.small",
+            "sshkeyname": "nimbusphantom"
+        },
+        "sierra-guJCD13gODRwXOeHxk3JX": {
+            "image": "${epuworker_image_id}",
+            "allocation": "m1.small",
+            "sshkeyname": "nimbusphantom"
+        },
         "alamo-H2OOwhPlTEdNFYDys8RdP": {
             "image": "${epuworker_image_id}",
             "allocation": "m1.small",
