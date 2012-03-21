@@ -1,44 +1,45 @@
 
-directory "/etc/ssl/rabbitmq/" do
+
+directory "#{node[:certdir]}" do
   owner "root"
   mode 0755
 end
 
-directory "/etc/ssl/rabbitmq/testca/" do
+directory "#{node[:certdir]}/testca/" do
   owner "root"
   mode 0755
 end
 
-directory "/etc/ssl/rabbitmq/server" do
+directory "#{node[:certdir]}/server" do
   owner "root"
   mode 0755
 end
 
-directory "/etc/ssl/rabbitmq/testca/certs" do
+directory "#{node[:certdir]}/testca/certs" do
   owner "root"
   mode 0755
 end
 
-directory "/etc/ssl/rabbitmq/testca/private" do
+directory "#{node[:certdir]}/testca/private" do
   owner "root"
   mode 0700
 end
 
-template "/etc/ssl/rabbitmq/testca/openssl.cnf" do
+template "#{node[:certdir]}/testca/openssl.cnf" do
   source "openssl.cnf.erb"
   owner "root"
   group "root"
   mode 0644
 end
 
-template "/etc/ssl/rabbitmq/testca/serial" do
+template "#{node[:certdir]}/testca/serial" do
   source "serial.erb"
   owner "root"
   group "root"
   mode 0644
 end
 
-template "/etc/ssl/rabbitmq/testca/index.txt" do
+template "#{node[:certdir]}/testca/index.txt" do
   source "index.txt.erb"
   owner "root"
   group "root"
@@ -48,7 +49,7 @@ end
 
 bash "Create SSL CA" do
   
-  cwd "/etc/ssl/rabbitmq/testca"
+  cwd "#{node[:certdir]}/testca"
   code <<-EOH
 
   openssl req -x509 -config openssl.cnf -newkey rsa:2048 -days 365 \
@@ -56,12 +57,12 @@ bash "Create SSL CA" do
   openssl x509 -in cacert.pem -out cacert.cer -outform DER
 
   EOH
-  not_if { File.exists?("/etc/ssl/rabbitmq/testca/cacert.pem") }
+  not_if { File.exists?("#{node[:certdir]}/testca/cacert.pem") }
 end
 
 bash "Create SSL Certificates" do
 
-  cwd "/etc/ssl/rabbitmq/server"
+  cwd "#{node[:certdir]}/server"
   code <<-EOH
 
   openssl genrsa -out key.pem 2048
@@ -69,18 +70,18 @@ bash "Create SSL Certificates" do
     -subj /CN=$(hostname)/O=server/ -nodes
 
   EOH
-  not_if { File.exists?("/etc/ssl/rabbitmq/server/req.pem") }
+  not_if { File.exists?("#{node[:certdir]}/server/req.pem") }
 end
 
 bash "Create SSL Server Certificates" do
 
-  cwd "/etc/ssl/rabbitmq/testca"
+  cwd "#{node[:certdir]}/testca"
   code <<-EOH
 
 openssl ca -config openssl.cnf -in ../server/req.pem -out \
     ../server/cert.pem -notext -batch -extensions server_ca_extensions
 
   EOH
-  not_if { File.exists?("/etc/ssl/rabbitmq/server/cert.pem") }
+  not_if { File.exists?("#{node[:certdir]}/server/cert.pem") }
 end
 
