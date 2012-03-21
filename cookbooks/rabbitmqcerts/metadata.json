@@ -9,12 +9,12 @@
     },
     "providing": {
     },
-    "maintainer": "Greg Albrecht",
+    "maintainer": "John Bresnahan",
     "replacing": {
     },
     "platforms": {
     },
-    "license": "All rights reserved",
+    "license": "Apache2",
     "version": "0.0.1",
     "maintainer_email": "bresnaha@mcs.anl.gov",
     "groupings": {
