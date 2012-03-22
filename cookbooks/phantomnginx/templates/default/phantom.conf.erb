@@ -29,7 +29,7 @@ http {
 
     server {
         listen 443;
-        server_name  <%= node[:hostname] %>;
+        server_name  <%= node[:nginx][:serverhostname]%>;
 
         root /usr/share/nginx/www;
         index index.html index.htm;
