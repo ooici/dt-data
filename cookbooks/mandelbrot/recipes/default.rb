@@ -1,8 +1,8 @@
 execute "Configure meta file" do
-  command "cat <<EOF
+  command "cat > /usr/local/src/ExperimentBuilder <<EOF
 amqp://#{node[:mandelbrot][:rabbitmq_username]}:#{node[:mandelbrot][:rabbitmq_password]}@#{node[:mandelbrot][:rabbitmq_host]}:5672/
 SierraTes2
-EOF > /usr/local/src/ExperimentBuilder"
+EOF"
 end
 
 execute "Run the worker process" do
