@@ -64,6 +64,11 @@
         "archive_url":"${dtdata_archive_url}",
         "chef_debug_level":"debug"
       },
+      "mandelbrot": {
+        "rabbitmq_username": "${broker_username}",
+        "rabbitmq_password": "${broker_password}",
+        "rabbitmq_host": "${broker_ip_address}"
+      },
       "username":"cc",
       "groupname":"users",
       "appname": "epu-worker",
@@ -71,11 +76,6 @@
     },
     "vars" : {
         "local_app_confs": { }
-    },
-    "mandelbrot": {
-      "rabbitmq_username": "${broker_username}",
-      "rabbitmq_password": "${broker_password}",
-      "rabbitmq_host": "${broker_ip_address}"
     },
     "sites" : {
         "ec2-west": {
