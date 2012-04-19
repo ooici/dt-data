@@ -13,7 +13,7 @@
                   "host": "${broker_ip_address}",
                   "username": "${broker_username}",
                   "password": "${broker_password}",
-                  "exchange": "default_dashi_exchange"
+                  "exchange": "${broker_exchange}"
                 }
               },
               "eeagent": {
