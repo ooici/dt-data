@@ -1,3 +1,6 @@
+include_recipe "python"
+include_recipe "virtualenv"
+
 case node[:platform]
   when "debian","ubuntu"
     package "python-zookeeper" do
