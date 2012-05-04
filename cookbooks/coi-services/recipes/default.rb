@@ -14,6 +14,13 @@ bash "get coi-services" do
   EOH
 end
 
+
+directory "/opt/cache" do
+  owner node[:username]
+  mode "0755"
+  action :create
+end
+
 bash "setup coi-services" do
 
   cwd "/home/#{node[:username]}/coi-services"
