@@ -2,9 +2,10 @@ case node[:platform]
   when "debian","ubuntu"
     package "python-software-properties"
 
-    execute "enable couchdb ppa" do
-      command "apt-add-repository ppa:ericdrex/couchdb"
-    end
+    #couch is now in oneiric
+    #execute "enable couchdb ppa" do
+      #command "apt-add-repository ppa:ericdrex/couchdb"
+    #end
 
     package "couchdb"
 
