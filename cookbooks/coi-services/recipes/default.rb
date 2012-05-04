@@ -8,7 +8,7 @@ bash "get coi-services" do
   user node[:username]
   cwd "/home/#{node[:username]}/"
   code <<-EOH
-  wget https://nodeload.github.com/ooici/coi-services/tarball/master -o coi-services.tar.gz
+  wget https://nodeload.github.com/ooici/coi-services/tarball/master -O coi-services.tar.gz
   tar xzf coi-services.tar.gz
   mv ooici-coi-services-* coi-services
   EOH
