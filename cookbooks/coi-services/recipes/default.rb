@@ -9,7 +9,6 @@ bash "get coi-services" do
   cwd "/home/#{node[:username]}/"
   code <<-EOH
   git clone https://github.com/ooici/coi-services.git
-  git submodule update --init
   EOH
 end
 
@@ -25,6 +24,7 @@ bash "setup coi-services" do
   cwd "/home/#{node[:username]}/coi-services"
   code <<-EOH
   source #{venv_dir}/bin/activate
+  git submodule update --init
   python bootstrap.py
 
   ./bin/buildout -O -c production.cfg
