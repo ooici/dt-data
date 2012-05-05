@@ -8,9 +8,8 @@ bash "get coi-services" do
   user node[:username]
   cwd "/home/#{node[:username]}/"
   code <<-EOH
-  wget https://nodeload.github.com/ooici/coi-services/tarball/master -O coi-services.tar.gz
-  tar xzf coi-services.tar.gz
-  mv ooici-coi-services-* coi-services
+  git clone https://github.com/ooici/coi-services.git
+  git submodule update --init
   EOH
 end
 
@@ -27,6 +26,7 @@ bash "setup coi-services" do
   code <<-EOH
   source #{venv_dir}/bin/activate
   python bootstrap.py
+
   ./bin/buildout -O -c production.cfg
   ./bin/generate_interfaces
   EOH
