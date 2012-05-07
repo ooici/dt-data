@@ -21,14 +21,14 @@ bash "prepare cache" do
     mkdir /opt/cache
     cd /opt/cache
     wget #{node[:appinstall][:super_cache]}
-    tar xzf *
+    tar xzf *.tar.gz
     chmod -R 777 /opt/cache
   fi
   EOH
 end
 
 bash "setup coi-services" do
-
+  user node[:username]
   cwd "/home/#{node[:username]}/coi-services"
   code <<-EOH
   source #{venv_dir}/bin/activate
