@@ -12,11 +12,19 @@ bash "get coi-services" do
   EOH
 end
 
-
-directory "/opt/cache" do
-  owner node[:username]
-  mode "0755"
-  action :create
+bash "prepare cache" do
+  cwd "/tmp"
+  code <<-EOH
+  set -e
+  if [ ! -d /opt/cache/eggs ]; then
+    rm -rf /opt/cache
+    mkdir /opt/cache
+    cd /opt/cache
+    wget #{node[:appinstall][:super_cache]}
+    tar xzf *
+    chmod -R 777 /opt/cache
+  fi
+  EOH
 end
 
 bash "setup coi-services" do
