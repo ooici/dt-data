@@ -10,9 +10,22 @@ execute "install-supervisor" do
     end
 end
 
-template "#{app_dir}/supervisor.conf" do
+sup_conf = File.join(app_dir, "supervisor.conf")
+template sup_conf do
     source "supervisor.conf.erb"
     owner node[:username]
     group node[:groupname]
     mode 0644
 end
+
+bash "start-supervisor" do
+  user node[:username]
+  group node[:groupname]
+  environment({
+    "HOME" => "/home/#{node[:username]}"
+  })
+  code <<-EOH
+  supervisord -c #{sup_conf}
+  EOH
+end
+

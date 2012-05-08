@@ -1,7 +1,7 @@
 app_dir = node[:appdir]
 
-
-template "#{app_dir}/phantomautoscale.yml" do
+conf = File.join(app_dir, "phantomautoscale.yml")
+template conf do
     source "config.yml.erb"
     owner node[:username]
     group node[:groupname]
@@ -9,7 +9,8 @@ template "#{app_dir}/phantomautoscale.yml" do
     action :create
 end
 
-template "#{app_dir}/start-phantom.sh" do
+exe = File.join(app_dir, "start-phantom.sh")
+template exe do
     source "start_phantom.sh.erb"
     owner node[:username]
     group node[:groupname]
