@@ -18,6 +18,15 @@ template sup_conf do
     mode 0644
 end
 
+logsdir = File.join(app_dir, "logs")
+
+directory logsdir do
+    owner node[:username]
+    group node[:groupname]
+    mode "0755"
+    action :create
+end
+
 bash "start-supervisor" do
   user node[:username]
   group node[:groupname]
