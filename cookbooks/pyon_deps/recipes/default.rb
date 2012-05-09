@@ -1,4 +1,3 @@
-include_recipe "couchdb"
 
 case node[:platform]
   when "debian","ubuntu"
