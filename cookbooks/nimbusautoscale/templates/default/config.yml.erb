@@ -8,8 +8,8 @@ phantom:
         rabbit_pw: <%= node[:autoscale][:rabbit_password] %>
         rabbit_exchange: <%= node[:autoscale][:rabbit_exchange] %>
     authz:
-        type: simple_file
-        filename: /home/bresnaha/local_pw_file
+        type: sqldb
+        dburl: <%= node[:autoscale][:dburl] %>
 
 logging:
   version: 1
