@@ -1,7 +1,4 @@
 
-template "/etc/couchdb/local.ini" do
-    source "local.ini.erb"
-end
 
 case node[:platform]
   when "debian","ubuntu"
@@ -18,6 +15,10 @@ case node[:platform]
     raise "#{node[:platform]} is not supported by this recipe"
 end
 
-execute "Start couchdb" do
-  command "couchdb -b"
+template "/etc/couchdb/local.ini" do
+  source "local.ini.erb"
+end
+
+service "couchdb" do
+  action :restart
 end
