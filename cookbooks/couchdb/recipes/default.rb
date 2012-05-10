@@ -1,3 +1,8 @@
+
+template "/etc/couchdb/local.ini" do
+    source "local.ini.erb"
+end
+
 case node[:platform]
   when "debian","ubuntu"
     #package "python-software-properties"
@@ -11,10 +16,6 @@ case node[:platform]
 
   else
     raise "#{node[:platform]} is not supported by this recipe"
-end
-
-template "/etc/couchdb/local.ini" do
-    source "local.ini.erb"
 end
 
 execute "Start couchdb" do
