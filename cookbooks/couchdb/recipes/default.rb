@@ -19,6 +19,13 @@ template "/etc/couchdb/local.ini" do
   source "local.ini.erb"
 end
 
-service "couchdb" do
-  action :restart
+# Work around https://bugs.launchpad.net/ubuntu/+source/couchdb/+bug/448682
+bash "Kill Couch" do
+  code <<-EOH
+  pkill couchdb
+  EOH
+end
+
+execute "Start couchdb" do
+  command "couchdb -b"
 end
