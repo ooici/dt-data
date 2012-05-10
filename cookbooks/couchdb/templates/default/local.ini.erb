@@ -42,4 +42,6 @@ bind_address = <%= node[:couchdb][:bind_address] %>
 ; 'username = password' lines. Don't forget to restart CouchDB after
 ; changing this.
 [admins]
-;admin = mysecretpassword
+<% if node[:couchdb][:username] && node[:couchdb][:password] %>
+<%= node[:couchdb][:username] %> = <%= node[:couchdb][:password] %>
+<% end %>
