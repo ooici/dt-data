@@ -1,9 +1,9 @@
 phantom:
     system:
         type: epu
-        broker: <%= node[:autoscale][:rabbit_host] %>
-        broker_port: <%= node[:autoscale][:rabbit_port] %>
-        broker_ssl: False
+        rabbit: <%= node[:autoscale][:rabbit_host] %>
+        rabbit_port: <%= node[:autoscale][:rabbit_port] %>
+        rabbit_ssl: False
         rabbit_user: <%= node[:autoscale][:rabbit_username] %>
         rabbit_pw: <%= node[:autoscale][:rabbit_password] %>
         rabbit_exchange: <%= node[:autoscale][:rabbit_exchange] %>
