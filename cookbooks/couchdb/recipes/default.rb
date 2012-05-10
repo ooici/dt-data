@@ -22,10 +22,10 @@ end
 # Work around https://bugs.launchpad.net/ubuntu/+source/couchdb/+bug/448682
 bash "Kill Couch" do
   code <<-EOH
-  pkill couchdb
+  sudo pkill -u couchdb beam
   EOH
 end
 
-execute "Start couchdb" do
-  command "couchdb -b"
+service "couchdb" do
+  action :start
 end
