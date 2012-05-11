@@ -34,7 +34,7 @@ logging:
       class: logging.handlers.RotatingFileHandler
       formatter: detailed
       level: DEBUG
-      filename: <%= @phantom_logfile %>
+      filename: <%= node[:autoscale][:logfile] %>
       maxBytes: 1048576
       backupCount: 3
     syslog:
