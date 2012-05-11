@@ -8,7 +8,7 @@ bash "get coi-services" do
   user node[:username]
   cwd "/home/#{node[:username]}/"
   code <<-EOH
-  git clone https://github.com/ooici/coi-services.git
+  git clone #{node[:coi_services][:git_repo]}
   EOH
 end
 
