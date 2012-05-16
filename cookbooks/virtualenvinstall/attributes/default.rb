@@ -1,7 +1,0 @@
-default[:appname] = "phantom"
-default[:messaging][:broker] = "localhost"
-default[:messaging][:port] = "5672"
-default[:messaging][:username] = "guest"
-default[:messaging][:password] = "guest"
-default[:messaging][:vhost] = "/"
-default[:messaging][:heartbeat] = "30"
