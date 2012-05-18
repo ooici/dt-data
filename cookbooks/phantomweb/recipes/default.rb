@@ -23,8 +23,8 @@ end
 
 execute "run install" do
     cwd app_dir
-    user node[:username]
-    group node[:groupname]
+    user "root"
+    group "root"
     command "python setup.py install"
 end
 
