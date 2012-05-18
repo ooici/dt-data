@@ -1,5 +1,4 @@
 app_dir = node[:appdir]
-venv_dir = node[:virtualenv][:path]
 
 include_recipe "git"
 
@@ -36,14 +35,6 @@ template conf do
     group node[:groupname]
     mode 0644
     action :create
-end
-
-exe = File.join(venv_dir, "bin/venvdjango.py")
-template exe do
-    source "venvdjango.py.erb"
-    owner node[:username]
-    group node[:groupname]
-    mode 0755
 end
 
 exe = File.join(app_dir, "phantomweb/settings.py")
