@@ -3,8 +3,15 @@ venv_dir = node[:virtualenv][:path]
 
 include_recipe "git"
 
-%w{ libmysqlclient-dev python-dev }.each do |pkg|
-    package pkg
+case node[:platform]
+when "debian", "ubuntu"
+  execute "apt-get update" do
+    command "apt-get update"
+  end
+
+  %w{ libmysqlclient-dev python-dev }.each do |pkg|
+      package pkg
+  end
 end
 
 git app_dir do
