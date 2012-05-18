@@ -1,6 +1,6 @@
 <Location "/">
     SetHandler python-program
-    PythonPath "['<%= "#{node[:virtualenv][:path]}" =%>/bin/', '<%= "#{node[:appdir]}" =%>'] + sys.path]"
+    PythonPath "['<%= "#{node[:virtualenv][:path]}" =%>/bin/', '<%= "#{node[:appdir]}" =%>'] + sys.path"
     PythonHandler venvdjango
     SetEnv DJANGO_SETTINGS_MODULE phantomweb.settings
     PythonDebug <%= node[:phantomweb][:debug] =%>

@@ -46,7 +46,7 @@ template exe do
     mode 0755
 end
 
-exe = File.join(app_dir, "phantomweb/phantomweb/settings.py")
+exe = File.join(app_dir, "phantomweb/settings.py")
 template exe do
     source "settings.py.erb"
     owner node[:username]
