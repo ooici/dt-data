@@ -9,7 +9,7 @@ when "debian", "ubuntu"
     command "apt-get update"
   end
 
-  %w{ apache2 libapache2-mod-python }.each do |pkg|
+  %w{ apache2 libapache2-mod-wsgi }.each do |pkg|
       package pkg
   end
 end
