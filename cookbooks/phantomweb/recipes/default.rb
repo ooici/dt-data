@@ -9,7 +9,7 @@ when "debian", "ubuntu"
     command "apt-get update"
   end
 
-  %w{ apache2 }.each do |pkg|
+  %w{ apache2 libapache2-mod-python }.each do |pkg|
       package pkg
   end
 end
@@ -46,10 +46,18 @@ template exe do
     mode 0755
 end
 
+exe = File.join(app_dir, "phantomweb/phantomweb/settings.py")
+template exe do
+    source "settings.py.erb"
+    owner node[:username]
+    group node[:groupname]
+    mode 0755
+end
+
 execute "restart apache2" do
     cwd app_dir
-    user root
-    group root
+    user "root"
+    group "root"
     command "/etc/init.d/apache2 restart"
 end
 
