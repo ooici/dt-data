@@ -21,6 +21,14 @@ git app_dir do
   group node[:groupname]
 end
 
+exe = File.join(app_dir, "phantomweb/settings.py")
+template exe do
+    source "settings.py.erb"
+    owner node[:username]
+    group node[:groupname]
+    mode 0755
+end
+
 execute "run install" do
     cwd app_dir
     user "root"
@@ -35,14 +43,6 @@ template conf do
     group node[:groupname]
     mode 0644
     action :create
-end
-
-exe = File.join(app_dir, "phantomweb/settings.py")
-template exe do
-    source "settings.py.erb"
-    owner node[:username]
-    group node[:groupname]
-    mode 0755
 end
 
 execute "restart apache2" do
