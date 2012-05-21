@@ -43,6 +43,23 @@ execute "collect static" do
     command "python manage.py collectstatic"
 end
 
+conf = File.join(app_dir, "fixture.json")
+template conf do
+    source "fixture.json.erb"
+    owner node[:username]
+    group node[:groupname]
+    mode 0644
+    action :create
+end
+execute "do fixtures" do
+    cwd app_dir
+    user "root"
+    group "root"
+    command "python manage.py loaddata #{conf}"
+end
+
+
+
 conf = "/etc/apache2/httpd.conf"
 template conf do
     source "httpd.conf.erb"
