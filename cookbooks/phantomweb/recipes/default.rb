@@ -40,7 +40,7 @@ execute "collect static" do
     cwd app_dir
     user "root"
     group "root"
-    command "python manage.py collectstatic"
+    command "python manage.py collectstatic --noinput"
 end
 
 conf = File.join(app_dir, "fixture.json")
