@@ -36,6 +36,12 @@ execute "run install" do
     command "python setup.py install"
 end
 
+execute "syncdb" do
+    cwd app_dir
+    user "root"
+    group "root"
+    command "python manage.py syncdb --noinput"
+end
 execute "collect static" do
     cwd app_dir
     user "root"
