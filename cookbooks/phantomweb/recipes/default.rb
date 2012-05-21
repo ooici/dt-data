@@ -59,6 +59,17 @@ execute "do fixtures" do
 end
 
 
+logdir = node[:phantomweb][:logdir]
+execute "make logdir" do
+    user "root"
+    group "root"
+    command "mkdir -p #{logdir}"
+end
+execute "adjust logdir" do
+    user "root"
+    group "root"
+    command "chmod 777 #{logdir}"
+end
 
 conf = "/etc/apache2/httpd.conf"
 template conf do

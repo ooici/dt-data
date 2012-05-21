@@ -153,13 +153,13 @@ LOGGING = {
             'level': 'INFO',
             'class': 'logging.FileHandler',
             'formatter': 'verbose',
-            'filename': '<%= node[:phantomweb][:accesslog] =%>'
+            'filename': '<%= node[:phantomweb][:logdir] =%>/phantomwebaccess.log'
         },
         'file_general': {                 # define and name a second handler
             'level': 'DEBUG',
             'class': 'logging.FileHandler', # set the logging class to log to a file
             'formatter': 'verbose',         # define the formatter to associate
-            'filename': '<%= node[:phantomweb][:generallog] =%>'
+            'filename': '<%= node[:phantomweb][:logdir] =%>/phantomweb.log'
         },
     },
     'loggers': {

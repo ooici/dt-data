@@ -4,7 +4,7 @@
         "model": "phantomweb.phantominfodb",
         "fields": {
             "dburl": "mysql://<%= node[:phantomweb][:mysql_username]=%>:<%= node[:phantomweb][:mysql_password]=%>@<%= node[:phantomweb][:mysql_host]=%>:<%= node[:phantomweb][:mysql_port]=%>/<%= node[:phantomweb][:mysql_dbname]=%>",
-            "phantom_url": "http://vm-208.uc.futuregrid.org:8445"
+            "phantom_url": "<%= node[:phantomweb][:phantom_url]=%>"
         }
     },
     {
