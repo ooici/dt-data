@@ -1,0 +1,42 @@
+[
+    {
+        "pk": 1,
+        "model": "phantomweb.phantominfodb",
+        "fields": {
+            "dburl": "mysql://<%= node[:phantomweb][:mysql_username]=%>:<%= node[:phantomweb][:mysql_password]=%>@<%= node[:phantomweb][:mysql_host]=%>:<%= node[:phantomweb][:mysql_port]=%>/<%= node[:phantomweb][:mysql_dbname]=%>",
+            "phantom_url": "http://vm-208.uc.futuregrid.org:8445"
+        }
+    },
+    {
+        "pk": 1,
+        "model": "phantomweb.defaultcloudsdb",
+        "fields": {
+            "url": "https://svc.uc.futuregrid.org:8444",
+            "name": "hotel"
+        }
+    },
+    {
+        "pk": 2,
+        "model": "phantomweb.defaultcloudsdb",
+        "fields": {
+            "url": "https://s83r.idp.sdsc.futuregrid.org:8444",
+            "name": "sierra"
+        }
+    },
+    {
+        "pk": 3,
+        "model": "phantomweb.defaultcloudsdb",
+        "fields": {
+            "url": "https://master1.futuregrid.tacc.utexas.edu:8444",
+            "name": "alamo"
+        }
+    },
+    {
+        "pk": 4,
+        "model": "phantomweb.defaultcloudsdb",
+        "fields": {
+            "url": "https://f1r.idp.ufl.futuregrid.org:9444",
+            "name": "foxtrot"
+        }
+    }
+]
