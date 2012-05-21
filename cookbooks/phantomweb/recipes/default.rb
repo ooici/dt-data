@@ -36,6 +36,13 @@ execute "run install" do
     command "python setup.py install"
 end
 
+execute "collect static" do
+    cwd app_dir
+    user "root"
+    group "root"
+    command "python manage.py collectstatic"
+end
+
 conf = "/etc/apache2/httpd.conf"
 template conf do
     source "httpd.conf.erb"

@@ -1,1 +1,5 @@
 WSGIScriptAlias / <%= "#{node[:appdir]}" =%>/phantomweb/wsgi.py
+
+Alias /static/ <%= "#{node[:phantomweb][:staticfiles]} =%>
+
+
