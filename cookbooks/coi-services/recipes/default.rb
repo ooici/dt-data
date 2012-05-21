@@ -10,14 +10,6 @@ git "/home/#{node[:username]}/coi-services" do
   action :sync
 end
 
-bash "get coi-services" do
-  user node[:username]
-  cwd "/home/#{node[:username]}/"
-  code <<-EOH
-  git clone #{node[:coi_services][:git_repo]}
-  EOH
-end
-
 bash "prepare cache" do
   cwd "/tmp"
   code <<-EOH
