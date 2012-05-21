@@ -5,6 +5,7 @@ include_recipe "virtualenv"
 venv_dir = node[:virtualenv][:path]
 
 git "/home/#{node[:username]}/coi-services" do
+  user node[:username]
   repository node[:coi_services][:git_repo]
   reference node[:coi_services][:git_branch]
   action :sync
