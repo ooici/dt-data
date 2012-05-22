@@ -30,10 +30,10 @@ template exe do
 end
 
 logdir = node[:phantomweb][:logdir]
-directory "logdir" do
+directory logdir do
   owner node[:phantomweb][:apacheuser]
   group node[:phantomweb][:apachegroup]
-  mode "0755"
+  mode "0777"
   action :create
 end
 
