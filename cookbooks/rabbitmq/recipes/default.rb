@@ -2,26 +2,24 @@ package "rabbitmq-server" do
   action :install
 end
 
-service "rabbitmq-server" do
-  supports :status => true, :restart => true, :reload => true
-  action [ :enable, :start ]
-end
-
 template "/etc/rabbitmq/rabbitmq-env.conf" do
   source "rabbitmq-env.conf.erb"
   owner "root"
   group "root"
   mode 0644
-  notifies :restart, resources(:service => "rabbitmq-server"), :immediately
 end
-
 
 template "/etc/rabbitmq/rabbitmq.config" do
   source "rabbitmq.config.erb"
   owner "root"
   group "root"
   mode 0644
-  notifies :restart, resources(:service => "rabbitmq-server"), :immediately
+  notifies :restart, "service[rabbitmq-server]"
+end
+
+service "rabbitmq-server" do
+  supports :status => true, :restart => true, :reload => true
+  action [ :enable, :start ]
 end
 
 if node[:rabbitmq].include? :vhosts
