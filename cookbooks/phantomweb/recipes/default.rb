@@ -30,15 +30,11 @@ template exe do
 end
 
 logdir = node[:phantomweb][:logdir]
-execute "make logdir" do
-    user "root"
-    group "root"
-    command "mkdir -p #{logdir}"
-end
-execute "adjust logdir" do
-    user "root"
-    group "root"
-    command "chmod 777 #{logdir}"
+directory "logdir" do
+  owner node[:phantomweb][:apacheuser]
+  group node[:phantomweb][:apachegroup]
+  mode "0755"
+  action :create
 end
 
 execute "run install" do
