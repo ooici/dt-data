@@ -34,7 +34,7 @@ bash "setup coi-services" do
   git submodule update --init
   python bootstrap.py
 
-  ./bin/buildout -O -c production.cfg
+  ./bin/buildout -O -c #{node[:coi_services][:buildout_config]}
   ./bin/generate_interfaces
   EOH
 end
