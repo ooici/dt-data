@@ -29,6 +29,18 @@ template exe do
     mode 0755
 end
 
+logdir = node[:phantomweb][:logdir]
+execute "make logdir" do
+    user "root"
+    group "root"
+    command "mkdir -p #{logdir}"
+end
+execute "adjust logdir" do
+    user "root"
+    group "root"
+    command "chmod 777 #{logdir}"
+end
+
 execute "run install" do
     cwd app_dir
     user "root"
@@ -64,18 +76,6 @@ execute "do fixtures" do
     command "python manage.py loaddata #{conf}"
 end
 
-
-logdir = node[:phantomweb][:logdir]
-execute "make logdir" do
-    user "root"
-    group "root"
-    command "mkdir -p #{logdir}"
-end
-execute "adjust logdir" do
-    user "root"
-    group "root"
-    command "chmod 777 #{logdir}"
-end
 
 conf = "/etc/apache2/httpd.conf"
 template conf do
