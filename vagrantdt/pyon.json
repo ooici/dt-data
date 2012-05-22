@@ -1,0 +1,47 @@
+{
+  "pyonservices":{
+    "hello-service": [
+      {
+        "name": "hello-service-1",
+        "args": {
+            "proc": "examples.service.hello_service.HelloService"
+        },
+        "config": {
+          "server": {
+            "amqp": {
+              "host": "localhost"
+            }
+          }
+        },
+        "version": "0.1"
+      }
+    ]
+  },
+  "appinstall":{
+    "install_method":"py_venv_buildout",
+    "package_repo":"http://ooici.net/packages",
+    "super_cache":"http://ooici.net/releases/supercache.tar.gz",
+  },
+  "setupappinstall":{
+    "install_method":"py_venv_setup",
+    "build_env":{
+        "CFLAGS":"-O0"
+    }
+  },
+  "apprun":{
+    "run_method":"sh"
+  },
+  "appretrieve":{
+    "retrieve_method":"git",
+    "archive_url":"${archive_url}",
+    "git_repo":"https://github.com/ooici/pyon.git",
+    "git_branch":"master",
+    "git_commit":"HEAD"
+  },
+  "virtualenv": {
+          "path" : "/home/cc/app-venv"
+  },
+  "username":"cc",
+  "groupname":"users",
+  "recipes":["user", "rabbitmq", "pyon_deps", "r2app"]
+}

@@ -1,0 +1,1 @@
+default[:supervisord][:autorestart] = "yes"

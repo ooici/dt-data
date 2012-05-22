@@ -1,0 +1,10 @@
+#!/bin/bash
+
+source <%= "#{node[:virtualenv][:path]}/bin/activate" =%>
+
+phantomcherrypy <%= "#{node[:appdir]}/phantomautoscale.yml" =%> <%= "#{node[:autoscale][:port]}" =%>
+
+
+
+exit $?
+

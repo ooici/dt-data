@@ -1,0 +1,29 @@
+{
+    "recipes": {
+    },
+    "attributes": {
+    },
+    "conflicting": {
+    },
+    "dependencies": {
+    },
+    "providing": {
+    },
+    "maintainer": "John Bresnahan",
+    "replacing": {
+    },
+    "platforms": {
+    },
+    "license": "Apache2",
+    "version": "0.0.1",
+    "maintainer_email": "bresnaha@mcs.anl.gov",
+    "groupings": {
+    },
+    "long_description": "= DESCRIPTION:\n\n= REQUIREMENTS:\n\n= ATTRIBUTES:\n\n= USAGE:\n\n",
+    "recommendations": {
+    },
+    "name": "stunnel",
+    "description": "Creates A CA and Signed SSL Cert.",
+    "suggestions": {
+    }
+  }

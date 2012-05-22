@@ -1,0 +1,52 @@
+phantom:
+    system:
+        type: epu
+        rabbit: <%= node[:autoscale][:rabbit_host] %>
+        rabbit_port: <%= node[:autoscale][:rabbit_port] %>
+        rabbit_ssl: False
+        rabbit_user: <%= node[:autoscale][:rabbit_username] %>
+        rabbit_pw: <%= node[:autoscale][:rabbit_password] %>
+        rabbit_exchange: <%= node[:autoscale][:rabbit_exchange] %>
+    authz:
+        type: sqldb
+        dburl: <%= node[:autoscale][:dburl] %>
+
+logging:
+  version: 1
+  formatters:
+    brief:
+      format: '%(levelname)-8s %(message)s'
+    default:
+      format: '%(asctime)s %(levelname)-8s %(name)-15s %(message)s'
+      datefmt: '%Y-%m-%d %H:%M:%S'
+    detailed:
+      format: '%(asctime)s.%(msecs)03d [%(module)-15s:%(lineno)3d] %(levelname)-5s:%(message)s'
+      datefmt: '%Y-%m-%d %H:%M:%S'
+    detailednostamp:
+      format: '[%(module)-15s:%(lineno)3d] %(levelname)-5s:%(message)s'
+  handlers:
+    console:
+      class: logging.StreamHandler
+      formatter: brief
+      level: DEBUG
+      stream: ext://sys.stdout
+    file:
+      class: logging.handlers.RotatingFileHandler
+      formatter: detailed
+      level: DEBUG
+      filename: <%= node[:autoscale][:logfile] %>
+      maxBytes: 1048576
+      backupCount: 3
+    syslog:
+      class: logging.handlers.SysLogHandler
+      address: [<%= node[:autoscale][:syslog_server] %>, <%= node[:autoscale][:syslog_port] %>]
+      formatter: detailednostamp
+      level: DEBUG
+      facility: local0
+  loggers:
+    phantom:
+      level: INFO
+  root:
+    handlers: [file]
+    level: DEBUG
+

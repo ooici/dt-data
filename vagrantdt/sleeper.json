@@ -1,0 +1,37 @@
+{
+  "epuservices":{
+    "epu-worker": [
+      {
+        "name": "epu-worker-1",
+        "args": { },
+        "version": "0.1",
+        "config": {
+          "server": {
+            "amqp": {
+              "host": "localhost"
+            }
+          }
+        }
+      }
+    ]
+  },
+  "appinstall":{
+    "install_method":"py_venv_setup"
+  },
+  "apprun":{
+    "run_method":"sh"
+  },
+  "appretrieve":{
+    "retrieve_method":"git",
+    "archive_url":"${archive_url}",
+    "git_repo":"git://github.com/ooici/epu.git",
+    "git_branch":"master",
+    "git_commit":"HEAD"
+  },
+  "virtualenv": {
+          "path" : "/home/cc/app-venv"
+  },
+  "username":"cc",
+  "groupname":"users",
+  "recipes":["user", "r2app"]
+}

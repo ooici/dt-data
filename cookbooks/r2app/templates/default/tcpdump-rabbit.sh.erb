@@ -1,0 +1,17 @@
+#!/bin/bash
+
+set -e
+
+LOG=/tmp/tcpdump-rabbit.log
+
+if [ -e $LOG ]; then 
+  echo "Another installation has started tcpdump already."
+  exit 0 # Not a failure
+fi
+
+touch $LOG
+(cd <%= @app_dir %>/logs/ ; ln -s $LOG )
+
+nohup tcpdump -nnvS port 5672 > $LOG & 
+
+exit 0

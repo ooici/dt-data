@@ -60,6 +60,11 @@ define :retrieve_app, :conf => nil, :user => nil, :group => nil do
       cwd app_dir
       command "git reset --hard #{conf[:git_commit]}"
     end
+    # This does nothing when a repo has no submodules
+    execute "pull in submodules" do
+      cwd app_dir
+      command "git submodule update --init"
+    end
   else raise ArgumentError, "unknown retrieve_method #{conf[:retrieve_method]}, should be 'archive' or 'git'"
   end
   

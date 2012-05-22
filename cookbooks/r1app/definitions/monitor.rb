@@ -1,21 +1,18 @@
-define :app_monitor, :conf => nil, :user => nil, :group => nil, 
-  :virtualenv => nil, :pythoncc => nil, :universals => nil,
-  :supervisor_socket => nil do
-  
-  [:name, :conf, :user, :group, :pythoncc, :supervisor_socket].each do |p|
-    raise ArgumentError, "#{p} must be specified" if params[p].nil? or 
+define :app_monitor, :conf => nil, :user => nil, :group => nil,
+  :virtualenv => nil, :supervisor_socket => nil do
+
+  [:name, :conf, :user, :group, :supervisor_socket].each do |p|
+    raise ArgumentError, "#{p} must be specified" if params[p].nil? or
       params[p].empty?
   end
 
-  # gotta deref params because of this bug: 
+  # gotta deref params because of this bug:
   #   http://tickets.opscode.com/browse/CHEF-422
   monitor_dir = params[:name]
   config = params[:conf]
   username = params[:user]
   groupname = params[:group]
   venv_dir = params[:virtualenv]
-  pythoncc = params[:pythoncc]
-  universal_confs = params[:universals]
   supervisor_socket = params[:supervisor_socket]
 
   retrieve_app monitor_dir do
@@ -31,56 +28,41 @@ define :app_monitor, :conf => nil, :user => nil, :group => nil,
     venv_dir venv_dir
   end
 
-  template "#{monitor_dir}/res/logging/loglevels.cfg" do
-    source "loglevels.cfg.erb"
-    owner username
-    group groupname
-    variables(:log_level => pythoncc[:log_level])
+  service_name = "epu-agent"
+  abs_epuagent_config = File.join(monitor_dir, "#{service_name}.yml")
+
+  epuagent_config = config[:config].to_hash
+  epuagent_config["epuagent"].merge!({ "supervisor_socket" => supervisor_socket})
+
+  epuagent_config abs_epuagent_config do
+    user node[:username]
+    group node[:groupname]
+    epuagent_spec epuagent_config
   end
 
-  # build up local confs
-  agent_vars = {"supervisor_socket" => supervisor_socket}
-  [:node_id, :heartbeat_dest, :heartbeat_op, :heartbeat_period].each do |k|
-    agent_vars[k.to_s] = config[k]
+  base_logging_dir = "#{monitor_dir}/logs"
+  directory "#{base_logging_dir}" do
+    owner "#{node[:username]}"
+    group "#{node[:groupname]}"
+    mode "0755"
   end
-  local_confs = {"epuagent.agent" => agent_vars}
-
-  ionlocal_config File.join(monitor_dir, "res/config/ionlocal.config") do
-    user username
-    group groupname
-    universals universal_confs
-    locals local_confs
-  end
-
-  broker_username = pythoncc[:broker_username]
-  broker_password = pythoncc[:broker_password]
-  if broker_username and broker_password
-    broker_credfile = File.join(monitor_dir, "broker_creds.txt")
-    file broker_credfile do
-      owner node[:username]
-      group node[:groupname]
-      mode "0600"
-      content "#{broker_username} #{broker_password}"
-    end
-  else
-    broker_credfile = nil
+  logging_dir = "#{base_logging_dir}/#{service_name}"
+  directory "#{logging_dir}" do
+    owner "#{node[:username]}"
+    group "#{node[:groupname]}"
+    mode "0755"
   end
 
-  service = "monitor"
-  start_script = File.join(monitor_dir, "start-#{service}.sh")
+  start_script = File.join(monitor_dir, "start-#{service_name}.sh")
   template start_script do
     source "start-service.sh.erb"
     owner node[:username]
     group node[:groupname]
     mode 0755
-    variables(:service => service,
-              :service_config => config[:service_config],
+    variables(:service => service_name,
+              :service_config => abs_epuagent_config,
               :venv_dir => venv_dir,
-              :app_dir => monitor_dir,
-              :sysname => pythoncc[:sysname],
-              :broker => pythoncc[:broker],
-              :broker_heartbeat => pythoncc[:broker_heartbeat],
-              :broker_credfile => broker_credfile)
+              :app_dir => monitor_dir)
   end
 
   # app monitor is itself run via supervisord, configured to restart

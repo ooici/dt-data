@@ -21,13 +21,17 @@ define :install_app, :conf => nil, :user => nil, :group => nil do
     mode "0755"
   end
 
+  env = conf[:build_env]
+  env = env && env.to_hash
+
   case conf[:install_method]
   when "py_venv_setup"
     execute "run install" do
       cwd app_dir
       user username
       group groupname
-      command "python setup.py install"
+      environment env
+      command "env >/tmp/env ; python setup.py install"
     end
   when "py_venv_buildout", "javapy_venv_buildout_ant"
     bash "prepare cache" do
@@ -48,6 +52,7 @@ define :install_app, :conf => nil, :user => nil, :group => nil do
       cwd app_dir
       user username
       group groupname
+      environment env
       code <<-EOH
       set -e
       source #{venv_dir}/bin/activate
@@ -80,7 +85,7 @@ define :install_app, :conf => nil, :user => nil, :group => nil do
       user username
       group groupname
       code <<-EOH
-      ./bin/python /tmp/versionreport.py lib >> logs/versions.log
+      ./bin/python /tmp/versionreport.py lib >> versions.log
       EOH
     end
   when "py_venv_buildout"
@@ -89,7 +94,7 @@ define :install_app, :conf => nil, :user => nil, :group => nil do
       user username
       group groupname
       code <<-EOH
-      ./bin/python /tmp/versionreport.py >> logs/versions.log
+      ./bin/python /tmp/versionreport.py >> versions.log
       EOH
     end
   end

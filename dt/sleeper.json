@@ -1,29 +1,92 @@
 {
-    "document" : "sleeper.xml",
+    "image": "${epuworker_image_id}",
+    "chef_config" : {
+      "epuservices":{
+        "epu-worker": [
+          {
+            "name": "epu-worker-1",
+            "args": { },
+            "version": "0.1",
+            "config": {
+              "server": {
+                "amqp": {
+                  "host": "${broker_ip_address}",
+                  "username": "${broker_username}",
+                  "password": "${broker_password}"
+                }
+              }
+            }
+          }
+        ]
+      },
+      "appinstall":{
+        "install_method":"py_venv_setup",
+        "package_repo":"${package_repo}"
+      },
+      "apprun":{
+        "run_method":"supervised"
+      },
+      "appretrieve":{
+        "retrieve_method":"${retrieve_method}",
+        "archive_url":"${archive_url}",
+        "git_repo":"${git_repo}",
+        "git_branch":"${git_branch}",
+        "git_commit":"${git_commit}"
+      },
+      "appmonitor":{
+        "retrieve_method":"${epuagent_retrieve_method}",
+        "git_repo":"${epuagent_git_repo}",
+        "git_branch":"${epuagent_git_branch}",
+        "git_commit":"${epuagent_git_commit}",
+        "install_method":"py_venv_setup",
+        "package_repo":"${package_repo}",
+        "config": {
+          "server": {
+            "amqp": {
+              "host": "${broker_ip_address}",
+              "username": "${broker_username}",
+              "password": "${broker_password}"
+            }
+          },
+          "epuagent": {
+            "heartbeat_dest": "${heartbeat_dest}",
+            "heartbeat_op": "ou_heartbeat",
+            "period_seconds": "${heartbeat_period_seconds}",
+            "node_id": "${node_id}"
+          }
+        }
+      },
+      "virtualenv": {
+              "path" : "/home/cc/app-venv"
+      },
+      "dtdata":{
+        "retrieve_method":"archive",
+        "archive_url":"${dtdata_archive_url}",
+        "chef_debug_level":"debug"
+      },
+      "username":"cc",
+      "groupname":"users",
+      "appname": "epu-worker",
+      "recipes":["user", "r2app"]
+    },
     "vars" : {
         "local_app_confs": { }
     },
     "sites" : {
         "ec2-west": {
-            "work_consumer": {
-                "image": "${epuworker_image_id}", 
-                "allocation": "m1.large",
-                "sshkeyname": "ooi"
-            }
+            "image": "${epuworker_image_id}",
+            "allocation": "t1.micro",
+            "sshkeyname": "ooi"
         },
         "ec2-east": {
-            "work_consumer": {
-                "image": "${epuworker_image_id}", 
-                "allocation": "t1.micro",
-                "sshkeyname": "ooi"
-            }
+            "image": "${epuworker_image_id}",
+            "allocation": "t1.micro",
+            "sshkeyname": "ooi"
         },
         "nimbus-ucsd": {
-            "work_consumer": {
-                "image": "${epuworker_image_id}", 
-                "allocation": "m1.large",
-                "sshkeyname": "ooi"
-            }
+            "image": "${epuworker_image_id}",
+            "allocation": "m1.large",
+            "sshkeyname": "ooi"
         }
     }
 }
