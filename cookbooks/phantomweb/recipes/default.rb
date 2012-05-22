@@ -82,6 +82,13 @@ template conf do
     action :create
 end
 
+execute "remove logs" do
+    cwd logdir
+    user "root"
+    group "root"
+    command "rm -f #{logdir}/*"
+end
+
 execute "restart apache2" do
     cwd app_dir
     user "root"
