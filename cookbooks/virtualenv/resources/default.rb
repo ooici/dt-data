@@ -26,5 +26,6 @@ actions :create, :activate
 attribute :path, :kind_of => String, :name_attribute => true
 attribute :python, :default => 'python'
 attribute :virtualenv, :default => 'virtualenv'
+attribute :args, :default => ''
 attribute :owner, :kind_of => String
 attribute :group, :kind_of => String

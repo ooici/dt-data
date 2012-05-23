@@ -24,7 +24,7 @@
 action :create do
   unless exists?
     Chef::Log.info("Creating virtualenv #{@new_resource} at #{@new_resource.path}")
-    execute "#{@new_resource.virtualenv} --python=#{@new_resource.python} #{@new_resource.path}" do
+    execute "#{@new_resource.virtualenv} --python=#{@new_resource.python} #{@new_resource.args} #{@new_resource.path}" do
       user new_resource.owner if new_resource.owner
       group new_resource.group if new_resource.group
     end
