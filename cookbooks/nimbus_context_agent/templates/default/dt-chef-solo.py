@@ -23,7 +23,7 @@ import sys
 import tempfile
 import time
 import traceback
-import simplejson as json
+import json
 
 DT_DATA_DIR = '/opt/dt-data'
 
