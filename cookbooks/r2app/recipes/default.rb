@@ -1,4 +1,3 @@
-app_archive = "/tmp/app-archive.tar.gz"
 app_dir = "/home/#{node[:username]}/#{node[:appname]}"
 venv_dir = node[:virtualenv][:path]
 monitor_dir = "/home/#{node[:username]}/appmonitor"
@@ -102,30 +101,6 @@ if node[:apprun]
       owner "#{node[:username]}"
       group "#{node[:groupname]}"
     end
-
-    # Our ioncontainer_config callout needs this in the virtualenv itself
-    if node[:appinstall]
-      bash "ensure simplejson" do
-        code <<-EOH
-        easy_install --find-links=#{node[:appinstall][:package_repo]} simplejson==2.1.2
-        EOH
-      end
-    end
-
-    template "#{app_dir}/messaging.yml" do
-      source "messaging.yml.erb"
-      owner "#{node[:username]}"
-      group "#{node[:groupname]}"
-      variables(:server => node[:messaging][:broker],
-                :port => node[:messaging][:port],
-                :username => node[:messaging][:username],
-                :password => node[:messaging][:password],
-                :vhost => node[:messaging][:vhost],
-                :heartbeat => node[:messaging][:heartbeat]
-               )
-    end
-
-
 
     # autorestart is for all processes right now, could be made more
     # # granular if needed. Also note that it only applies in "supervised" mode.
