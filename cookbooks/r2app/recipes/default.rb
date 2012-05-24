@@ -6,6 +6,12 @@ monitor_dir = "/home/#{node[:username]}/appmonitor"
 include_recipe "python"
 include_recipe "virtualenv"
 
+# Other dependencies
+include_recipe "git"
+%w{ libevent-dev libncurses5-dev libzmq-dev swig }.each do |pkg|
+  package pkg
+end
+
 ########################################################################
 # RETRIEVAL
 ########################################################################
