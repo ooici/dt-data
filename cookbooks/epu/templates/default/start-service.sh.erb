@@ -1,0 +1,8 @@
+#!/bin/bash
+
+<% unless @venv_dir.nil? or @venv_dir.empty? %>
+source <%= File.join(@venv_dir, "bin/activate") %>
+<% end %>
+
+cd <%= @run_dir %>
+exec <%=@service %> <%=@service_config %> <% if @background_process %>&<% end %>
