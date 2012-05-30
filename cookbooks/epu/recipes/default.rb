@@ -23,7 +23,7 @@ ve_dir = node[:epu][:virtualenv][:path]
 [ :create, :activate ].each do |act|
   virtualenv ve_dir do
     owner node[:epu][:username]
-    owner node[:epu][:groupname]
+    group node[:epu][:groupname]
     python node[:epu][:virtualenv][:python]
     virtualenv node[:epu][:virtualenv][:virtualenv]
     action act

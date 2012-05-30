@@ -20,7 +20,7 @@ end
 [ :create, :activate ].each do |act|
   virtualenv node[:kazoo][:virtualenv][:path] do
     owner node[:kazoo][:username]
-    owner node[:kazoo][:groupname]
+    group node[:kazoo][:groupname]
     python node[:kazoo][:virtualenv][:python]
     virtualenv node[:kazoo][:virtualenv][:virtualenv]
     action act
