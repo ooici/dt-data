@@ -28,7 +28,6 @@ action :create do
       user new_resource.owner if new_resource.owner
       group new_resource.group if new_resource.group
     end
-    new_resource.updated_by_last_action(true)
   end
 end
 
