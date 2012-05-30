@@ -9,6 +9,14 @@ case node[:platform]
     end
 end
 
+user node[:kazoo][:username] do
+    comment "Dynamically created user."
+    gid "#{node[:kazoo][:groupname]}"
+    home "/home/#{node[:kazoo][:username]}"
+    shell "/bin/bash"
+    supports :manage_home => true
+end
+
 [ :create, :activate ].each do |act|
   virtualenv node[:kazoo][:virtualenv][:path] do
     owner node[:kazoo][:username]
