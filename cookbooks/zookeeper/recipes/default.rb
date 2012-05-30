@@ -16,6 +16,7 @@ end
 # Template for replicated zookeeper servers
 template "#{node[:zookeeper][:dataDir]}/myid" do
     source "myid.erb"
+    mode 0755
     variables(
         :myid => node[:zookeeper][:name].split("-")[1]
     )
