@@ -1,5 +1,6 @@
 include_recipe "python"
 include_recipe "virtualenv"
+include_recipe "git"
 
 case node[:platform]
   when "debian","ubuntu"
@@ -8,8 +9,18 @@ case node[:platform]
     end
 end
 
+[ :create, :activate ].each do |act|
+  virtualenv node[:kazoo][:virtualenv][:path] do
+    owner node[:kazoo][:username]
+    owner node[:kazoo][:groupname]
+    python node[:kazoo][:virtualenv][:python]
+    virtualenv node[:kazoo][:virtualenv][:virtualenv]
+    action act
+  end
+end
+
 execute "install kazoo" do
-  user node[:username]
-  group node[:groupname]
+  user node[:kazoo][:username]
+  group node[:kazoo][:groupname]
   command "pip install -e 'git+git://github.com/nimbusproject/kazoo.git#egg=kazoo'"
 end

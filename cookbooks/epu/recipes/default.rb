@@ -16,35 +16,18 @@ user node[:epu][:username] do
 end
 
 include_recipe "python"
+include_recipe "virtualenv"
 
-ve_exe = node[:epu][:virtualenv][:virtualenv]
-py_exe = node[:epu][:virtualenv][:python]
 ve_dir = node[:epu][:virtualenv][:path]
 
-case node[:platform]
-  when "debian","ubuntu"
-    execute "update package index" do
-      command "apt-get update"
-      action :run
-    end
-    package "python-virtualenv" do
-      action :install
-    end
-end
-
-execute "create virtualenv" do
-  user node[:epu][:username]
-  group node[:epu][:groupname]
-  creates File.join(ve_dir, "bin/activate")
-  command "#{ve_exe} --python=#{py_exe} #{ve_dir}"
-end
-
-ruby_block "set virtualenv environment variables" do
-  block do
-    ENV["VIRTUAL_ENV"] = ve_dir
-    ENV["PATH"] = File.join(ve_dir, "bin") + ":" + ENV["PATH"]
+[ :create, :activate ].each do |act|
+  virtualenv ve_dir do
+    owner node[:epu][:username]
+    owner node[:epu][:groupname]
+    python node[:epu][:virtualenv][:python]
+    virtualenv node[:epu][:virtualenv][:virtualenv]
+    action act
   end
-  not_if {ENV["VIRTUAL_ENV"] == ve_dir}
 end
 
 # Other dependencies
