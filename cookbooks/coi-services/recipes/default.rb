@@ -8,6 +8,7 @@ git "/home/#{node[:username]}/coi-services" do
   user node[:username]
   repository node[:coi_services][:git_repo]
   reference node[:coi_services][:git_branch]
+  enable_submodules true
   action :sync
 end
 
@@ -30,8 +31,6 @@ bash "setup coi-services" do
   user node[:username]
   cwd "/home/#{node[:username]}/coi-services"
   code <<-EOH
-  source #{venv_dir}/bin/activate
-  git submodule update --init
   python bootstrap.py
 
   ./bin/buildout -O -c #{node[:coi_services][:buildout_config]}
