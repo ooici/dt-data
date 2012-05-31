@@ -16,6 +16,8 @@ case node[:platform]
 end
 
 template "/etc/couchdb/local.ini" do
+  owner "couchdb"
+  mode "644"
   source "local.ini.erb"
 end
 
