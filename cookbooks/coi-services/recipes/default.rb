@@ -30,6 +30,7 @@ end
 bash "setup coi-services" do
   user node[:username]
   cwd "/home/#{node[:username]}/coi-services"
+  returns [1,0]
   code <<-EOH
   python bootstrap.py
 
