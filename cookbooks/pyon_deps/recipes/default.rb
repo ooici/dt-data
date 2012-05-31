@@ -8,12 +8,6 @@ case node[:platform]
       EOH
     end
 
-    bash "upgrade apt" do
-      code <<-EOH
-      apt-get upgrade
-      EOH
-    end
-
     # Easy to install packages
     node[:pyon][:debian_packages].each do |pkg|
       package pkg
