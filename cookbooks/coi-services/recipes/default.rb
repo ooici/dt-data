@@ -2,7 +2,7 @@
 include_recipe "pyon_deps"
 include_recipe "virtualenv"
 
-venv_dir = node[:virtualenv][:path]
+venv_dir = node[:epu][:virtualenv][:path]
 
 git "/home/#{node[:username]}/coi-services" do
   user node[:username]
