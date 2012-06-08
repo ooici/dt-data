@@ -10,7 +10,7 @@ DEBUG = <%= node[:phantomweb][:djangodebug] =%>
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (
-    # ('Your Name', 'your_email@example.com'),
+    ('John Bresnahan', 'bresnaha@mcs.anl.gov'),
 )
 
 EMAIL_HOST      = '<%= node[:phantomweb][:email_host] =%>'
@@ -21,6 +21,7 @@ EMAIL_USE_TLS   = <%= node[:phantomweb][:email_tls] =%>
 DEFAULT_FROM_EMAIL  = '<%= node[:phantomweb][:email_fromaddr] =%>'
 SERVER_EMAIL    = '<%= node[:phantomweb][:email_fromaddr] =%>'
 
+LOGIN_REDIRECT_URL='/phantom'
 
 MANAGERS = ADMINS
 
