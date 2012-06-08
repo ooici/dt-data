@@ -4,6 +4,29 @@ include_recipe "virtualenv"
 
 venv_dir = node[:epu][:virtualenv][:path]
 
+user node[:epu][:username] do
+  comment "Dynamically created user."
+  gid "#{node[:epu][:groupname]}"
+  home "/home/#{node[:epu][:username]}"
+  shell "/bin/bash"
+  supports :manage_home => true
+end
+
+include_recipe "python"
+include_recipe "virtualenv"
+
+ve_dir = node[:epu][:virtualenv][:path]
+
+[ :create, :activate ].each do |act|
+  virtualenv ve_dir do
+    owner node[:epu][:username]
+    group node[:epu][:groupname]
+    python node[:epu][:virtualenv][:python]
+    virtualenv node[:epu][:virtualenv][:virtualenv]
+    action act
+  end
+end
+
 git "/home/#{node[:username]}/coi-services" do
   user node[:username]
   repository node[:coi_services][:git_repo]
