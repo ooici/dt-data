@@ -27,8 +27,8 @@ ve_dir = node[:epu][:virtualenv][:path]
   end
 end
 
-git "/home/#{node[:username]}/coi-services" do
-  user node[:username]
+git "/home/#{node[:epu][:username]}/coi-services" do
+  user node[:epu][:username]
   repository node[:coi_services][:git_repo]
   reference node[:coi_services][:git_branch]
   enable_submodules true
@@ -51,8 +51,8 @@ bash "prepare cache" do
 end
 
 bash "setup coi-services" do
-  user node[:username]
-  cwd "/home/#{node[:username]}/coi-services"
+  user node[:epu][:username]
+  cwd "/home/#{node[:epu][:username]}/coi-services"
   returns [1,0]
   code <<-EOH
   python bootstrap.py
