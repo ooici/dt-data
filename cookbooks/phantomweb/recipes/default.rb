@@ -1,13 +1,10 @@
 app_dir = node[:appdir]
 
 include_recipe "git"
+include_recipe "python"
 
 case node[:platform]
 when "debian", "ubuntu"
-  execute "apt-get update" do
-    command "apt-get update"
-  end
-
   %w{ apache2 libapache2-mod-wsgi }.each do |pkg|
       package pkg
   end
@@ -95,4 +92,3 @@ execute "restart apache2" do
     group "root"
     command "/etc/init.d/apache2 restart"
 end
-

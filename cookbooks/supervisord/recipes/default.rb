@@ -1,4 +1,18 @@
 app_dir = node[:appdir]
+ve_dir = node[:virtualenv][:path]
+
+include_recipe "python"
+include_recipe "virtualenv"
+
+[ :create, :activate ].each do |act|
+  virtualenv ve_dir do
+    owner node[:username]
+    group node[:groupname]
+    python node[:virtualenv][:python]
+    virtualenv node[:virtualenv][:virtualenv]
+    action act
+  end
+end
 
 execute "install-supervisor" do
     user node[:username]

@@ -1,14 +1,22 @@
 app_dir = node[:appdir]
-venv_dir = node[:virtualenv][:path]
+ve_dir = node[:virtualenv][:path]
 
 include_recipe "git"
+include_recipe "python"
+include_recipe "virtualenv"
+
+[ :create, :activate ].each do |act|
+  virtualenv ve_dir do
+    owner node[:username]
+    group node[:groupname]
+    python node[:virtualenv][:python]
+    virtualenv node[:virtualenv][:virtualenv]
+    action act
+  end
+end
 
 case node[:platform]
 when "debian", "ubuntu"
-  execute "apt-get update" do
-    command "apt-get update"
-  end
-
   %w{ libmysqlclient-dev python-dev }.each do |pkg|
       package pkg
   end
