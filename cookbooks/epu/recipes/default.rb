@@ -157,7 +157,7 @@ require 'tmpdir'
         mode 0644
         variables(:name => node[app][:run_config][:name],
                   :module => node[app][:run_config][:module],
-                  :class => node[app][:run_config][:class],
+                  :class => node[app][:run_config][:class]
                  )
       end
     else
