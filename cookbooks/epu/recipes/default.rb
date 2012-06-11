@@ -7,7 +7,7 @@
 
 require 'tmpdir'
 
-[ :epu, :epuagent ].each do |app|
+[ :epu, :epuagent, :pyon ].each do |app|
 
   next if node[app].nil?
 
@@ -54,6 +54,7 @@ require 'tmpdir'
         repository node[app][:retrieve_config][:git_repo]
         reference node[app][:retrieve_config][:git_reference]
         action :sync
+        enable_submodules true
         user node[app][:username]
         group node[app][:groupname]
       end
@@ -76,19 +77,44 @@ require 'tmpdir'
         group node[app][:groupname]
         command "easy_install --find-links=#{node[app][:install_config][:package_repo]} supervisor"
       end
+    when "py_venv_buildout"
+      execute "bootstrap buildout" do
+        cwd src_dir
+        user node[app][:username]
+        group node[app][:groupname]
+        command "env >/tmp/env ; python bootstrap.py"
+      end
+      execute "run buildout" do
+        cwd src_dir
+        user node[app][:username]
+        group node[app][:groupname]
+        command "./bin/buildout -O -c #{node[app][:install_config][:buildout_file]}"
+      end
+      execute "run generate_interfaces" do
+        cwd src_dir
+        user node[app][:username]
+        group node[app][:groupname]
+        command "./bin/generate_interfaces"
+        only_if "test -x ./bin/generate_interfaces"
+      end
     else
       abort "install_method #{node[app][:install_config][:install_method]} not implemented yet"
     end
   end
 
   if node[app][:action].include?("run")
-    # Create run directory
-    run_dir = node[app][:run_config][:run_directory]
+    # Set up run directory
+    case node[:app]
+    when "pyon"
+      run_dir = src_dir
+    else
+      run_dir = node[app][:run_config][:run_directory]
 
-    # Create run directory
-    directory run_dir do
-      owner node[app][:username]
-      group node[app][:groupname]
+      # Create run directory
+      directory run_dir do
+        owner node[app][:username]
+        group node[app][:groupname]
+      end
     end
 
     # autorestart is for all processes right now, could be made more
@@ -120,7 +146,26 @@ require 'tmpdir'
       mode "0755"
     end
 
+    case node[app]
+    when "pyon"
+      rel = File.join(run_dir, "#{epuservice_name}-rel.yml")
+
+      template rel do
+        source "pyon-rel.yml.erb"
+        owner node[app][:username]
+        group node[app][:groupname]
+        mode 0644
+        variables(:name => node[app][:run_config][:name],
+                  :module => node[app][:run_config][:module],
+                  :class => node[app][:run_config][:class],
+                 )
+      end
+    else
+      rel = nil
+    end
+
     start_script = File.join(run_dir, "start-#{epuservice_name}.sh")
+
     template start_script do
       source "start-service.sh.erb"
       owner node[app][:username]
@@ -130,6 +175,7 @@ require 'tmpdir'
                 :service_config => epu_config_file,
                 :venv_dir => ve_dir,
                 :run_dir => run_dir,
+                :rel => rel,
                 :background_process => node[app][:run_config][:run_method] == "sh"
                )
     end

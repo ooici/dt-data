@@ -5,4 +5,10 @@ source <%= File.join(@venv_dir, "bin/activate") %>
 <% end %>
 
 cd <%= @run_dir %>
-exec <%=@service %> <%=@service_config %> <% if @background_process %>&<% end %>
+
+<% if @rel.nil? or @rel.empty? %>
+  exec <%=@service %> <%=@service_config %> <% if @background_process %>&<% end %>
+<% else %>
+  exec ./bin/pycc --noshell --config <%=@service_config %> --rel <%=@rel %> \
+  <% if @background_process %>&<% end %>
+<% end %>
