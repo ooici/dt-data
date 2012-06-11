@@ -35,7 +35,7 @@ require 'tmpdir'
   end
 
   # Other dependencies
-  %w{ libevent-dev libncurses5-dev libzmq-dev swig }.each do |pkg|
+  %w{ libevent-dev libncurses5-dev swig }.each do |pkg|
     package pkg
   end
 
