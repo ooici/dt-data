@@ -35,8 +35,12 @@ require 'tmpdir'
   end
 
   # Other dependencies
-  %w{ libevent-dev libncurses5-dev swig }.each do |pkg|
-    package pkg
+  case node[:platform]
+    when "debian","ubuntu"
+      %w{ libevent-dev libncurses5-dev swig }.each do |pkg|
+        package pkg
+      end
+    # dependencies expected to be present on other platforms
   end
 
   src_dir = "#{Dir.tmpdir}/#{app}"
