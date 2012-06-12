@@ -84,6 +84,23 @@ require 'tmpdir'
         group node[app][:groupname]
         command "env >/tmp/env ; python bootstrap.py"
       end
+      directory "/opt/cache" do
+        owner node[app][:username]
+        group node[app][:groupname]
+      end
+      bash "prepare cache" do
+        cwd "/tmp"
+        code <<-EOH
+        set -e
+        if [ ! -d /opt/cache/eggs ]; then
+          cd /opt/cache
+          wget #{node[:appinstall][:super_cache]}
+          tar xzf *.tar.gz
+          chmod -R 777 /opt/cache
+        fi
+        EOH
+      end
+
       execute "run buildout" do
         cwd src_dir
         user node[app][:username]
