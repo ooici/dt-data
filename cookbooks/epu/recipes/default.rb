@@ -43,7 +43,12 @@ require 'tmpdir'
     # dependencies expected to be present on other platforms
   end
 
-  src_dir = "#{Dir.tmpdir}/#{app}"
+  case app
+  when :pyon
+    src_dir = node[app][:run_config][:run_directory]
+  else
+    src_dir = "#{Dir.tmpdir}/#{app}"
+  end
 
   if node[app][:action].include?("retrieve")
     case node[app][:retrieve_config][:retrieve_method]
@@ -59,7 +64,6 @@ require 'tmpdir'
         group node[app][:groupname]
       end
     else
-      abort "retrieve_method #{node[app][:retrieve_config][:retrieve_method]} not implemented yet"
     end
   end
 
@@ -112,7 +116,7 @@ require 'tmpdir'
         user node[app][:username]
         group node[app][:groupname]
         command "./bin/generate_interfaces"
-        only_if "test -x ./bin/generate_interfaces"
+        only_if "test -x #{src_dir}/bin/generate_interfaces"
       end
       execute "install-supervisor" do
         user node[app][:username]
@@ -126,17 +130,12 @@ require 'tmpdir'
 
   if node[app][:action].include?("run")
     # Set up run directory
-    case node[:app]
-    when "pyon"
-      run_dir = src_dir
-    else
-      run_dir = node[app][:run_config][:run_directory]
+    run_dir = node[app][:run_config][:run_directory]
 
-      # Create run directory
-      directory run_dir do
-        owner node[app][:username]
-        group node[app][:groupname]
-      end
+    # Create run directory
+    directory run_dir do
+      owner node[app][:username]
+      group node[app][:groupname]
     end
 
     # autorestart is for all processes right now, could be made more
@@ -168,8 +167,8 @@ require 'tmpdir'
       mode "0755"
     end
 
-    case node[app]
-    when "pyon"
+    case app
+    when :pyon
       rel = File.join(run_dir, "#{epuservice_name}-rel.yml")
 
       template rel do
@@ -198,6 +197,7 @@ require 'tmpdir'
                 :venv_dir => ve_dir,
                 :run_dir => run_dir,
                 :rel => rel,
+                :system_name => node[app][:run_config][:system_name],
                 :background_process => node[app][:run_config][:run_method] == "sh"
                )
     end

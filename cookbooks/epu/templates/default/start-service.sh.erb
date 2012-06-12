@@ -9,6 +9,6 @@ cd <%= @run_dir %>
 <% if @rel.nil? or @rel.empty? %>
   exec <%=@service %> <%=@service_config %> <% if @background_process %>&<% end %>
 <% else %>
-  exec ./bin/pycc --noshell --config <%=@service_config %> --rel <%=@rel %> \
+    exec ./bin/pycc --noshell --sysname <%=@system_name %> --config <%=@service_config %> --rel <%=@rel %> \
   <% if @background_process %>&<% end %>
 <% end %>
