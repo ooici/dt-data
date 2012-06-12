@@ -114,6 +114,11 @@ require 'tmpdir'
         command "./bin/generate_interfaces"
         only_if "test -x ./bin/generate_interfaces"
       end
+      execute "install-supervisor" do
+        user node[app][:username]
+        group node[app][:groupname]
+        command "easy_install --find-links=#{node[app][:install_config][:package_repo]} supervisor"
+      end
     else
       abort "install_method #{node[app][:install_config][:install_method]} not implemented yet"
     end
