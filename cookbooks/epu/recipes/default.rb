@@ -9,7 +9,7 @@ require 'tmpdir'
 
 [ :epu, :epuagent, :pyon ].each do |app|
 
-  next if node[app].nil?
+  next if node[app].nil? or node[app][:action] == []
 
   user node[app][:username] do
       comment "Dynamically created user."
