@@ -79,7 +79,7 @@ require 'tmpdir'
       execute "install-supervisor" do
         user node[app][:username]
         group node[app][:groupname]
-        command "easy_install --find-links=#{node[app][:install_config][:package_repo]} supervisor"
+        command "easy_install --allow-hosts '*.ooici.net,*.python.org' --find-links=#{node[app][:install_config][:package_repo]} supervisor"
       end
     when "py_venv_buildout"
       execute "bootstrap buildout" do
@@ -121,7 +121,7 @@ require 'tmpdir'
       execute "install-supervisor" do
         user node[app][:username]
         group node[app][:groupname]
-        command "easy_install --find-links=#{node[app][:install_config][:package_repo]} supervisor"
+        command "easy_install --allow-hosts '*.ooici.net,*.python.org' --find-links=#{node[app][:install_config][:package_repo]} supervisor"
       end
     else
       abort "install_method #{node[app][:install_config][:install_method]} not implemented yet"
