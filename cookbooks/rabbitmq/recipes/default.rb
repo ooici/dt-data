@@ -14,7 +14,7 @@ template "/etc/rabbitmq/rabbitmq.config" do
   owner "root"
   group "root"
   mode 0644
-  notifies :restart, "service[rabbitmq-server]"
+  #notifies :restart, "service[rabbitmq-server]"
 end
 
 service "rabbitmq-server" do
