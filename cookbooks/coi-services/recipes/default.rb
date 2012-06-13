@@ -23,6 +23,7 @@ ve_dir = node[:epu][:virtualenv][:path]
     group node[:epu][:groupname]
     python node[:epu][:virtualenv][:python]
     virtualenv node[:epu][:virtualenv][:virtualenv]
+    args node[:epu][:virtualenv][:args]
     action act
   end
 end
