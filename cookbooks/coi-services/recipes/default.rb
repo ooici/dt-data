@@ -44,7 +44,7 @@ bash "prepare cache" do
     rm -rf /opt/cache
     mkdir /opt/cache
     cd /opt/cache
-    wget #{node[:appinstall][:super_cache]}
+    wget #{node[:coi_services][:super_cache]}
     tar xzf *.tar.gz
     chmod -R 777 /opt/cache
   fi
