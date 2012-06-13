@@ -1,0 +1,11 @@
+# This file contains mappings of Context Broker users to Query Credentials
+#
+# It is managed by Chef
+#
+# format:
+#    DN accessID secret
+# example:
+#    "/O=Grid/CN=Fakey McAllister" 1234567890 thisisasecret
+<% @users.each do |key, secret| %>
+<%= "/O=Grid/CN=#{key} #{key} #{secret}" %>
+<% end %>
