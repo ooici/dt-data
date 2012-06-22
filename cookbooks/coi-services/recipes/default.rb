@@ -42,6 +42,7 @@ bash "prepare cache" do
   set -e
   rm -rf /opt/cache
   mkdir /opt/cache
+  chmod -R 777 /opt/cache
   EOH
 end
 
