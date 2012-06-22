@@ -40,15 +40,21 @@ bash "prepare cache" do
   cwd "/tmp"
   code <<-EOH
   set -e
-  if [ ! -d /opt/cache/eggs ]; then
-    rm -rf /opt/cache
-    mkdir /opt/cache
-    cd /opt/cache
-    wget #{node[:coi_services][:super_cache]}
-    tar xzf *.tar.gz
-    chmod -R 777 /opt/cache
-  fi
+  rm -rf /opt/cache
+  mkdir /opt/cache
   EOH
+end
+
+bash "download cache" do
+  cwd "/tmp"
+  code <<-EOH
+  set -e
+  cd /opt/cache
+  wget #{node[:coi_services][:super_cache]}
+  tar xzf *.tar.gz
+  chmod -R 777 /opt/cache
+  EOH
+  not_if { not node[:coi_services][:super_cache] }
 end
 
 bash "setup coi-services" do
