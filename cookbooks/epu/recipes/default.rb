@@ -63,6 +63,28 @@ require 'tmpdir'
         user node[app][:username]
         group node[app][:groupname]
       end
+
+    when "archive"
+      archive_path = "#{Dir.tmpdir}/#{app}-#{Time.now.to_i}.tar.gz"
+      remote_file archive_path do
+        source node[app][:retrive_config][:archive_url]
+        owner node[app][:username]
+        group node[app][:groupname]
+      end
+
+      directory src_dir do
+        owner node[app][:username]
+        group node[app][:groupname]
+        mode "0755"
+      end
+
+      # using this funny style of untarring so that we don't have to care what
+      # directory name is actually inside the tarball.
+      execute "unpack #{archive_path} into #{src_dir}" do
+        user node[app][:username]
+        group node[app][:groupname]
+        command "tar xzf #{archive_path} -C #{src_dir} --strip 1"
+      end
     else
     end
   end
