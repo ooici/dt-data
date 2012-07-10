@@ -7,7 +7,7 @@
 
 require 'tmpdir'
 
-[ :epu, :epuagent, :pyon ].each do |app|
+[:pyon, :epu, :epuagent].each do |app|
 
   next if node[app].nil? or node[app][:action] == []
 
@@ -20,18 +20,24 @@ require 'tmpdir'
   end
 
   include_recipe "python"
-  include_recipe "virtualenv"
 
-  ve_dir = node[app][:virtualenv][:path]
+  if node[app].include?(:virtualenv) and node[app][:virtualenv].include?(:path)
+    include_recipe "virtualenv"
+    ve_dir = node[app][:virtualenv][:path]
 
-  [ :create, :activate ].each do |act|
-    virtualenv ve_dir do
-      owner node[app][:username]
-      group node[app][:groupname]
-      python node[app][:virtualenv][:python]
-      virtualenv node[app][:virtualenv][:virtualenv]
-      action act
+    [ :create, :activate ].each do |act|
+      virtualenv ve_dir do
+        owner node[app][:username]
+        group node[app][:groupname]
+        python node[app][:virtualenv][:python]
+        virtualenv node[app][:virtualenv][:virtualenv]
+        args node[app][:virtualenv][:args]
+        action act
+      end
     end
+
+  else
+    ve_dir = nil
   end
 
   # Other dependencies
@@ -43,14 +49,14 @@ require 'tmpdir'
     # dependencies expected to be present on other platforms
   end
 
-  case app
-  when :pyon
-    src_dir = node[app][:run_config][:run_directory]
-  else
-    src_dir = "#{Dir.tmpdir}/#{app}"
-  end
+  src_dir = "#{Dir.tmpdir}/#{app}"
 
   if node[app][:action].include?("retrieve")
+
+    if node[app][:retrieve_config].include?("retrieve_directory")
+      src_dir = node[app][:retrieve_config][:retrieve_directory]
+    end
+
     case node[app][:retrieve_config][:retrieve_method]
     when "git"
       include_recipe "git"
@@ -67,7 +73,7 @@ require 'tmpdir'
     when "archive"
       archive_path = "#{Dir.tmpdir}/#{app}-#{Time.now.to_i}.tar.gz"
       remote_file archive_path do
-        source node[app][:retrive_config][:archive_url]
+        source node[app][:retrieve_config][:archive_url]
         owner node[app][:username]
         group node[app][:groupname]
       end
@@ -120,7 +126,7 @@ require 'tmpdir'
         set -e
         if [ ! -d /opt/cache/eggs ]; then
           cd /opt/cache
-          wget #{node[:appinstall][:super_cache]}
+          wget #{node[app][:install_config][:egg_cache]}
           tar xzf *.tar.gz
           chmod -R 777 /opt/cache
         fi
@@ -147,6 +153,22 @@ require 'tmpdir'
       end
     else
       abort "install_method #{node[app][:install_config][:install_method]} not implemented yet"
+    end
+  end
+
+  if node[app][:action].include?("configure")
+    case app
+    when :pyon
+      # TODO rename this definition to be more generic
+      epu_config "#{src_dir}/res/config/pyon.local.yml" do
+        user node[app][:username]
+        group node[app][:groupname]
+        epuservice_name "pyon"
+        epuservice_spec node[app][:configure_config][:config]
+      end
+
+    else
+      abort "configure action for app #{app} not implemented yet"
     end
   end
 
