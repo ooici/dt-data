@@ -25,17 +25,6 @@ require 'tmpdir'
     include_recipe "virtualenv"
     ve_dir = node[app][:virtualenv][:path]
 
-    [ :create, :activate ].each do |act|
-      virtualenv ve_dir do
-        owner node[app][:username]
-        group node[app][:groupname]
-        python node[app][:virtualenv][:python]
-        virtualenv node[app][:virtualenv][:virtualenv]
-        args node[app][:virtualenv][:args]
-        action act
-      end
-    end
-
   else
     ve_dir = nil
   end
@@ -70,7 +59,7 @@ require 'tmpdir'
         group node[app][:groupname]
       end
 
-    when "archive"
+    when "archive", "virtualenv_archive"
       archive_path = "#{Dir.tmpdir}/#{app}-#{Time.now.to_i}.tar.gz"
       remote_file archive_path do
         source node[app][:retrieve_config][:archive_url]
@@ -78,7 +67,14 @@ require 'tmpdir'
         group node[app][:groupname]
       end
 
-      directory src_dir do
+      # virtualenv archives get unpacked directly to the virtualenv path
+      if node[app][:retrieve_config][:retrieve_method] == "virtualenv_archive"
+        unpack_dir = node[app][:virtualenv][:path]
+      else
+        unpack_dir = src_dir
+      end
+
+      directory unpack_dir do
         owner node[app][:username]
         group node[app][:groupname]
         mode "0755"
@@ -86,16 +82,44 @@ require 'tmpdir'
 
       # using this funny style of untarring so that we don't have to care what
       # directory name is actually inside the tarball.
-      execute "unpack #{archive_path} into #{src_dir}" do
+      execute "unpack #{archive_path} into #{unpack_dir}" do
         user node[app][:username]
         group node[app][:groupname]
-        command "tar xzf #{archive_path} -C #{src_dir} --strip 1"
+        command "tar xzf #{archive_path} -C #{unpack_dir} --strip 1"
       end
+
+      # virtualenv archives must be reconfigured after unpacking
+      if node[app][:retrieve_config][:retrieve_method] == "virtualenv_archive"
+        virtualenv ve_dir do
+          owner node[app][:username]
+          group node[app][:groupname]
+          python node[app][:virtualenv][:python]
+          virtualenv node[app][:virtualenv][:virtualenv]
+          args node[app][:virtualenv][:args]
+          action :reconfigure
+        end
+      end
+
     else
+      abort "retrieve_method #{node[app][:retrieve_config][:retrieve_method]} not implemented yet"
     end
   end
 
   if node[app][:action].include?("install")
+
+    if not ve_dir.nil?
+      [ :create, :activate ].each do |act|
+        virtualenv ve_dir do
+          owner node[app][:username]
+          group node[app][:groupname]
+          python node[app][:virtualenv][:python]
+          virtualenv node[app][:virtualenv][:virtualenv]
+          args node[app][:virtualenv][:args]
+          action act
+        end
+      end
+    end
+
     case node[app][:install_config][:install_method]
     when "py_venv_setup"
       execute "run install" do
@@ -173,6 +197,15 @@ require 'tmpdir'
   end
 
   if node[app][:action].include?("run")
+
+    # venv may not have been activated yet in this chef run
+    if not ve_dir.nil?
+      virtualenv ve_dir do
+        owner node[app][:username]
+        group node[app][:groupname]
+        action :activate
+      end
+    end
     # Set up run directory
     run_dir = node[app][:run_config][:run_directory]
 

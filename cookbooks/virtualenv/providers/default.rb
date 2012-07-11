@@ -31,6 +31,14 @@ action :create do
   end
 end
 
+action :reconfigure do
+  Chef::Log.info("Reconfiguring virtualenv #{@new_resource} at #{@new_resource.path}")
+  execute "#{@new_resource.virtualenv} --python=#{@new_resource.python} #{@new_resource.args} #{@new_resource.path}" do
+    user new_resource.owner if new_resource.owner
+    group new_resource.group if new_resource.group
+  end
+end
+
 action :activate do
   ruby_block "set virtualenv environment variables" do
     block do

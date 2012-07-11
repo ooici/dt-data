@@ -21,7 +21,7 @@
 # This LWR is based on the virtualenv LWR from the python cookbook, modified to
 # fit ours needs.
 
-actions :create, :activate
+actions :create, :activate, :reconfigure
 
 attribute :path, :kind_of => String, :name_attribute => true
 attribute :python, :default => 'python'
