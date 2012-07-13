@@ -14,7 +14,7 @@ bash "Install Host sFlow #{node[:hsflowd][:src_version]}" do
   code <<-EOH
   rm -rf hsflowd-#{node[:hsflowd][:src_version]}
   tar xf #{tarball_location}
-  cd hsflowd-#{node[:contextbroker][:src_version]}
+  cd hsflowd-#{node[:hsflowd][:src_version]}
   make
   make install
   EOH
