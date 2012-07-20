@@ -61,6 +61,11 @@ when "debian","ubuntu"
   %w{ ant sqlite3 oracle-java7-installer uuid-runtime }.each do |pkg|
     package pkg
   end
+
+when "redhat","centos"
+  %w{ java-1.6.0-openjdk ant sqlite }.each do |pkg|
+    package pkg
+  end
 end
 
 tarball_location = "#{Chef::Config[:file_cache_path]}/#{node[:contextbroker][:src_name]}"
