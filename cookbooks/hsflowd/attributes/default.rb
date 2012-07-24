@@ -1,6 +1,7 @@
 default[:hsflowd][:config_file] = "/etc/hsflowd.conf"
 default[:hsflowd][:collector_ip] = "127.0.0.1"
 default[:hsflowd][:collector_port] = 6343
+default[:hsflowd][:json_port] = 36343
 default[:hsflowd][:polling_interval] = 30
 default[:hsflowd][:svn_repository] = "https://host-sflow.svn.sourceforge.net/svnroot/host-sflow/trunk"
 default[:hsflowd][:src_version] = "1.21"

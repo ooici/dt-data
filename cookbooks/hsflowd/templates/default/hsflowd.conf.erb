@@ -57,6 +57,9 @@ sflow {
     ip = <%= node[:hsflowd][:collector_ip] %>
     udpport = <%= node[:hsflowd][:collector_port] %>
   }
+
+  jsonPort = <%= node[:hsflowd][:json_port] %>
+
   # add additional collectors here
 
   # iptables ULOG packet-sampling configuration
