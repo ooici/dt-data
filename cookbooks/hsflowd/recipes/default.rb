@@ -33,6 +33,19 @@ else
   end
 end
 
+node[:hsflowd][:patches].each do |patch|
+  patch_path = File.join(hsflow_source_path, "hsflow.patch")
+  remote_file patch_path do
+    source patch
+  end
+  bash "Apply patch from #{patch}" do
+    cwd hsflow_source_path
+    code <<-EOH
+    patch -p0 -i #{patch_path}
+    EOH
+  end
+end
+
 bash "Install Host sFlow #{node[:hsflowd][:src_version]}" do
   cwd "/tmp"
   code <<-EOH
