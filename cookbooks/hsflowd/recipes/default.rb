@@ -7,6 +7,10 @@ end
 
 
 if node[:hsflowd][:svn_repository]
+  package "subversion" do
+    action :install
+  end
+
   subversion "Get latest Host sFlow" do
     repository node[:hsflowd][:svn_repository]
     revision "HEAD"
