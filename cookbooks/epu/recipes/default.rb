@@ -309,7 +309,7 @@ require 'tmpdir'
           "HOME" => "/home/#{node[app][:username]}"
         })
         code <<-EOH
-        supervisord -c #{sup_conf}
+        #{node[app][:run_config][:supervisord_path]} -c #{sup_conf}
         EOH
       end
 
