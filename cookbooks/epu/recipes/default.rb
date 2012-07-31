@@ -305,6 +305,7 @@ require 'tmpdir'
       bash "start-supervisor" do
         user node[app][:username]
         group node[app][:groupname]
+        cwd run_dir
         environment({
           "HOME" => "/home/#{node[app][:username]}"
         })
