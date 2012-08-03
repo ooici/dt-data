@@ -9,4 +9,17 @@ sshkeys.each do |key|
     authorized_keys << "#{pubkey}\n"
 end
 
-log "Authz keys:\n #{authorized_keys}"
+directory node[:ssh][:directory] do
+    user node[:ssh][:user]
+    group node[:ssh][:user]
+    mode "0700"
+    action :create
+end
+
+file File.join(node[:ssh][:directory], "authorized_keys") do
+    user node[:ssh][:user]
+    group node[:ssh][:user]
+    mode "0600"
+    content authorized_keys
+    action :create
+end
