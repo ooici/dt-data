@@ -3,10 +3,28 @@ sshkeys = data_bag('sshkeys')
 authorized_keys = ""
 
 sshkeys.each do |key|
-    sshkey = data_bag_item('sshkeys', key)
+  sshkey = data_bag_item('sshkeys', key)
 
-    pubkey = sshkey['pubkey']
-    authorized_keys << "#{pubkey}\n"
+  pubkey = sshkey['pubkey']
+  authorized_keys << "#{pubkey}\n"
+end
+
+if node[:ssh][:directory]
+  ssh_directory = node[:ssh][:directory]
+
+elsif node[:ssh][:user]
+  ssh_user = node[:ssh][:user]
+
+else
+
+  case node[:platform]                                                           
+    when "ubuntu"
+      ssh_directory = "/home/ubuntu/.ssh"
+      ssh_user = "ubuntu"
+    else
+      ssh_directory = "/root/.ssh"
+      ssh_user = "root"
+  end
 end
 
 directory node[:ssh][:directory] do
@@ -15,6 +33,7 @@ directory node[:ssh][:directory] do
     mode "0700"
     action :create
 end
+
 
 authorized_keys_file = File.join(node[:ssh][:directory], "authorized_keys")
 
