@@ -16,7 +16,18 @@ directory node[:ssh][:directory] do
     action :create
 end
 
-file File.join(node[:ssh][:directory], "authorized_keys") do
+authorized_keys_file = File.join(node[:ssh][:directory], "authorized_keys")
+
+old_authz_keys_file = File.open(authorized_keys_file, "rb")
+old_authz_keys = old_authz_keys_file.read
+old_authz_keys_file.close
+
+authorized_keys = "#{old_authz_keys}\n#{authorized_keys}"
+
+# remove duplicate entries
+authorized_keys = authorized_keys.split("\n").uniq.join("\n")
+
+file authorized_keys_file do
     user node[:ssh][:user]
     group node[:ssh][:user]
     mode "0600"
