@@ -25,7 +25,10 @@ old_authz_keys_file.close
 authorized_keys = "#{old_authz_keys}\n#{authorized_keys}"
 
 # remove duplicate entries
-authorized_keys = authorized_keys.split("\n").uniq.join("\n")
+authorized_keys_list = authorized_keys.split("\n")
+authorized_keys_list = authorized_keys_list.map{|x| x.strip }
+authorized_keys_list.uniq!
+authorized_keys = authorized_keys_list.join("\n")
 
 file authorized_keys_file do
     user node[:ssh][:user]
