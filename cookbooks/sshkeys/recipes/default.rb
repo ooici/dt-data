@@ -9,37 +9,31 @@ sshkeys.each do |key|
   authorized_keys << "#{pubkey}\n"
 end
 
-if node[:ssh][:directory]
-  ssh_directory = node[:ssh][:directory]
-
-elsif node[:ssh][:user]
-  ssh_user = node[:ssh][:user]
-
-else
-
-  case node[:platform]                                                           
-    when "ubuntu"
-      ssh_directory = "/home/ubuntu/.ssh"
-      ssh_user = "ubuntu"
-    else
-      ssh_directory = "/root/.ssh"
-      ssh_user = "root"
-  end
+case node[:platform]                                                           
+  when "ubuntu"
+    ssh_directory = "/home/ubuntu/.ssh"
+    ssh_user = "ubuntu"
+  else
+    ssh_directory = "/root/.ssh"
+    ssh_user = "root"
 end
 
-directory node[:ssh][:directory] do
-    user node[:ssh][:user]
-    group node[:ssh][:user]
-    mode "0700"
-    action :create
+directory ssh_directory do
+  user ssh_user
+  group ssh_user
+  mode "0700"
+  action :create
 end
-
 
 authorized_keys_file = File.join(node[:ssh][:directory], "authorized_keys")
 
-old_authz_keys_file = File.open(authorized_keys_file, "rb")
-old_authz_keys = old_authz_keys_file.read
-old_authz_keys_file.close
+begin
+  old_authz_keys_file = File.open(authorized_keys_file, "rb")
+  old_authz_keys = old_authz_keys_file.read
+  old_authz_keys_file.close
+rescue
+  old_authz_keys = ""
+end
 
 authorized_keys = "#{old_authz_keys}\n#{authorized_keys}"
 
@@ -50,9 +44,9 @@ authorized_keys_list.uniq!
 authorized_keys = authorized_keys_list.join("\n")
 
 file authorized_keys_file do
-    user node[:ssh][:user]
-    group node[:ssh][:user]
-    mode "0600"
-    content authorized_keys
-    action :create
+  user ssh_user
+  group ssh_user
+  mode "0600"
+  content authorized_keys
+  action :create
 end
