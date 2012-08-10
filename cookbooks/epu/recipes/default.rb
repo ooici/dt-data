@@ -197,18 +197,21 @@ require 'tmpdir'
         epuservice_spec node[app][:configure_config][:config]
       end
 
-      if node[app][:configure_config].include?("logging_config_file")
-        logging_config_file = node[app][:configure_config][:logging_config_file]
-      else
-        logging_config_file = "#{src_dir}/res/config/logging.local.yml"
-      end
+      if node[app][:configure_config].include?("logging_config")
 
-      # TODO rename this definition to be more generic
-      epu_config logging_config_file do
-        user node[app][:username]
-        group node[app][:groupname]
-        epuservice_name "pyon"
-        epuservice_spec node[app][:configure_config][:logging_config]
+        if node[app][:configure_config].include?("logging_config_file")
+          logging_config_file = node[app][:configure_config][:logging_config_file]
+        else
+          logging_config_file = "#{src_dir}/res/config/logging.local.yml"
+        end
+
+        # TODO rename this definition to be more generic
+        epu_config logging_config_file do
+          user node[app][:username]
+          group node[app][:groupname]
+          epuservice_name "pyon"
+          epuservice_spec node[app][:configure_config][:logging_config]
+        end
       end
 
     else
