@@ -25,7 +25,7 @@ directory ssh_directory do
   action :create
 end
 
-authorized_keys_file = File.join(node[:ssh][:directory], "authorized_keys")
+authorized_keys_file = File.join(ssh_directory, "authorized_keys")
 
 begin
   old_authz_keys_file = File.open(authorized_keys_file, "rb")
