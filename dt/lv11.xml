@@ -76,7 +76,7 @@
   "appinstall":{
     "install_method":"py_venv_buildout",
     "package_repo":"${package_repo}",
-    "super_cache":"http://ooici.net/releases/supercache.tar.gz"
+    "super_cache":"http://sddevrepo.oceanobservatories.org/releases/supercache.tar.gz"
   },
   "apprun":{
     "run_method":"supervised",
@@ -89,9 +89,9 @@
     "git_branch":"${epuagent_git_branch}",
     "git_commit":"${epuagent_git_commit}",
     "install_method":"py_venv_buildout",
-    "super_cache":"http://ooici.net/releases/supercache.tar.gz",
+    "super_cache":"http://sddevrepo.oceanobservatories.org/releases/supercache.tar.gz",
     "service_config":"res/apps/epuagent.app",
-    "package_repo":"http://ooici.net/releases",
+    "package_repo":"http://sddevrepo.oceanobservatories.org/releases",
     "node_id":"${node_id}",
     "heartbeat_dest":"${heartbeat_dest}",
     "heartbeat_op":"heartbeat",

@@ -19,8 +19,8 @@
   },
   "appinstall":{
     "install_method":"py_venv_buildout",
-    "package_repo":"http://ooici.net/packages",
-    "super_cache":"http://ooici.net/releases/supercache.tar.gz",
+    "package_repo":"http://sddevrepo.oceanobservatories.org/releases",
+    "super_cache":"http://sddevrepo.oceanobservatories.org/releases/supercache.tar.gz",
   },
   "setupappinstall":{
     "install_method":"py_venv_setup",

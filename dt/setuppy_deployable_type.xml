@@ -49,7 +49,7 @@
     "git_commit":"HEAD",
     "install_method":"py_venv_setup",
     "service_config":"res/apps/epuagent.app",
-    "package_repo":"http://ooici.net/packages",
+    "package_repo":"http://sddevrepo.oceanobservatories.org/releases",
     "node_id":"${node_id}",
     "heartbeat_dest":"${heartbeat_dest}",
     "heartbeat_op":"heartbeat",
@@ -57,7 +57,7 @@
   },
   "dtdata":{
     "retrieve_method":"archive",
-    "archive_url":"http://ooici.net/releases/dt-data-0.1.tar.gz",
+    "archive_url":"http://sddevrepo.oceanobservatories.org/releases/dt-data-0.1.tar.gz",
     "git_repo":"https://github.com/ooici/dt-data.git",
     "git_branch":"master",
     "git_commit":"HEAD",

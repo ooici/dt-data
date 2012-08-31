@@ -2,7 +2,7 @@ include_recipe "twisted"
 include_recipe "txamqp"
 
 remote_file "/tmp/magnet.tar.gz" do
-  source "http://ooici.net/cpe/resources/magnet-latest.tar.gz"
+  source "http://sddevrepo.oceanobservatories.org/cpe/resources/magnet-latest.tar.gz"
 end
 
 bash "untar-magnet" do
