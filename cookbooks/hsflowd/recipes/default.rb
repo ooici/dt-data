@@ -53,7 +53,7 @@ bash "Install Host sFlow #{node[:hsflowd][:src_version]}" do
   make
   make install
   EOH
-  if node[:hsflowd][:force_install]
+  if not node[:hsflowd][:force_install]
     creates "/usr/sbin/hsflowd"
   end
 end
