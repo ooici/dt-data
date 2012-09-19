@@ -2,7 +2,7 @@ hostname = node[:ddns][:hostname]
 
 if hostname and !hostname.empty?
 
-  commands <<-EOH
+  commands = <<-EOH
   server #{node[:ddns][:server]}
   update delete #{hostname} cname
   update add #{hostname} #{node[:ddns][:ttl]} cname #{node[:fqdn]}
