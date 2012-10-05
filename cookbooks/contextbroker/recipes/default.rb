@@ -117,11 +117,16 @@ template File.join(node[:contextbroker][:location], "services", "etc", "nimbus-c
     variables(:users => node[:contextbroker][:users])
 end
 
-service "context-broker-service" do
-  start_command "su #{node[:contextbroker][:user]} sh -c '#{node[:contextbroker][:location]}/bin/brokerctl start'"
-  stop_command "su #{node[:contextbroker][:user]} sh -c '#{node[:contextbroker][:location]}/bin/brokerctl stop'"
-  status_command "su #{node[:contextbroker][:user]} sh -c '#{node[:contextbroker][:location]}/bin/brokerctl status'"
-  restart_command "su #{node[:contextbroker][:user]} sh -c '#{node[:contextbroker][:location]}/bin/brokerctl restart'"
+context_broker_init = File.join("", "etc", "init.d", "contextbroker")
+template context_broker_init do
+  source "contextbroker.erb"
+  mode 0755
+  owner node[:contextbroker][:user]
+  group node[:contextbroker][:group]
+  variables(:user => node[:contextbroker][:user], :init_path => "#{node[:contextbroker][:location]}/bin/brokerctl")
+end
+
+service "contextbroker" do
   supports [ :start, :stop, :status, :restart ]
   action [ :restart ]
 end

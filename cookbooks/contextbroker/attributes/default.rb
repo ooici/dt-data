@@ -6,3 +6,4 @@ set_unless[:contextbroker][:src_version] = "2.9"
 set_unless[:contextbroker][:src_name] = "nimbus-ctxbroker-#{contextbroker[:src_version]}-src.tar.gz"
 set_unless[:contextbroker][:src_mirror] = "http://www.nimbusproject.org/downloads/#{contextbroker[:src_name]}"
 set_unless[:contextbroker][:users] = []
+set_unless[:cloud][:provider] = "unknown"
