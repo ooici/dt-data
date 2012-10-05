@@ -1,8 +1,10 @@
-[program:<%= @epuservice[:program] %>]
-command=<%= @epuservice[:command] %>
-autorestart=<%= @epuservice[:autorestart] %>
+<% @epuservice_list.each do |epuservice| %>
+[program:<%= epuservice[:program] %>]
+command=<%= epuservice[:command] %>
+autorestart=<%= epuservice[:autorestart] %>
 stdout_logfile=%(here)s/logs/%(program_name)s_stdout.log
 stderr_logfile=%(here)s/logs/%(program_name)s_stderr.log
+<% end %>
 
 [unix_http_server]
 file=%(here)s/supervisor.sock

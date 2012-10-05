@@ -6,8 +6,10 @@
 #
 
 require 'tmpdir'
+require 'uuidtools'
+require 'yaml'
 
-[:pyon, :epu, :epuagent].each do |app|
+[:pyon, :epu, :epuagent, :eeagent].each do |app|
 
   next if node[app].nil? or node[app][:action] == []
 
@@ -244,95 +246,121 @@ require 'tmpdir'
 
     # Name of the service
     epuservice_name = node[app][:run_config][:program]
+    replicas = node[app][:run_config][:replicas]
 
-    # Configuration file for this service
-    epu_config_file = File.join(run_dir, "#{epuservice_name}.yml")
-    epu_spec = node[app][:run_config][:config].to_hash
-    if app == :epuagent
-      supervisor_socket = "unix://" + File.join(node[:epu][:run_config][:run_directory], "supervisor.sock")
-      epu_spec["epuagent"].merge!({ "supervisor_socket" => supervisor_socket})
-    end
+    epuservice_list = []
 
-    epu_config epu_config_file do
-      user node[app][:username]
-      group node[app][:groupname]
-      epuservice_name epuservice_name
-      epuservice_spec epu_spec
-    end
+    replicas.downto(1) do |i|
+      unique_tag = UUIDTools::UUID.random_create.to_s
+      epuservice_name_unique = "#{epuservice_name}_#{unique_tag}"
 
-    base_logging_dir = "#{run_dir}/logs"
-    directory "#{base_logging_dir}" do
-      owner "#{node[app][:username]}"
-      group "#{node[app][:groupname]}"
-      mode "0755"
-    end
-
-    case app
-    when :pyon
-      rel = File.join(run_dir, "#{epuservice_name}-rel.yml")
-
-      template rel do
-        source "pyon-rel.yml.erb"
-        owner node[app][:username]
-        group node[app][:groupname]
-        mode 0644
-        variables(:name => node[app][:run_config][:name],
-                  :module => node[app][:run_config][:module],
-                  :class => node[app][:run_config][:class]
-                 )
-      end
-    else
-      rel = nil
-    end
-
-    start_script = File.join(run_dir, "start-#{epuservice_name}.sh")
-
-    template start_script do
-      source "start-service.sh.erb"
-      owner node[app][:username]
-      group node[app][:groupname]
-      mode 0755
-      variables(:service => epuservice_name,
-                :service_config => epu_config_file,
-                :venv_dir => ve_dir,
-                :run_dir => run_dir,
-                :rel => rel,
-                :system_name => node[app][:run_config][:system_name],
-                :background_process => node[app][:run_config][:run_method] == "sh"
-               )
-    end
-
-    epuservice = {
-      :program => epuservice_name,
-      :command => start_script,
-      :autorestart => autorestart
-    }
-
-    case node[app][:run_config][:run_method]
-    when "supervised"
-      sup_conf = File.join(run_dir, "supervisor.conf")
-      template sup_conf do
-        source "supervisor.conf.erb"
-        mode 0400
-        owner node[app][:username]
-        group node[app][:groupname]
-        variables(:epuservice => epuservice)
+      # Configuration file for this service
+      epu_config_file = File.join(run_dir, "#{epuservice_name_unique}.yml")
+      epu_spec = node[app][:run_config][:config].to_hash
+      if app == :epuagent
+       supervisor_socket = "unix://" + File.join(node[:epu][:run_config][:run_directory], "supervisor.sock")
+       epu_spec["epuagent"].merge!({ "supervisor_socket" => supervisor_socket})
       end
 
-      bash "start-supervisor" do
+      if epuservice_name == "eeagent"
+        persistence_dir = epu_spec["eeagent"]["launch_type"]["persistence_directory"]
+        persistence_dir = File.join(persistence_dir, "#{epuservice_name}-#{unique_tag}")
+        epu_spec["eeagent"]["launch_type"]["persistence_directory"] = persistence_dir
+
+        directory persistence_dir do
+          owner "#{node[app][:username]}"                                          
+          group "#{node[app][:groupname]}"                                         
+          recursive true
+          mode "0755"                                                              
+        end           
+      end
+
+
+      epu_config epu_config_file do
         user node[app][:username]
         group node[app][:groupname]
-        cwd run_dir
-        environment({
-          "HOME" => "/home/#{node[app][:username]}"
-        })
-        code <<-EOH
-        #{node[app][:run_config][:supervisord_path]} -c #{sup_conf}
-        EOH
+        epuservice_name epuservice_name
+        epuservice_spec epu_spec
       end
 
-    else
-      abort "run_method #{node[app][:run_config][:run_method]} not implemented yet"
+      base_logging_dir = "#{run_dir}/logs"
+      directory "#{base_logging_dir}" do
+        owner "#{node[app][:username]}"
+        group "#{node[app][:groupname]}"
+        mode "0755"
+      end
+
+      case app
+      when :pyon
+        rel = File.join(run_dir, "#{epuservice_name_unique}-rel.yml")
+  
+        template rel do
+          source "pyon-rel.yml.erb"
+          owner node[app][:username]
+          group node[app][:groupname]
+          mode 0644
+          variables(:name => node[app][:run_config][:name],
+                    :module => node[app][:run_config][:module],
+                    :class => node[app][:run_config][:class],
+                    :unique_tag => unique_tag
+                   )
+        end
+      else
+        rel = nil
+      end
+  
+      start_script = File.join(run_dir, "start-#{epuservice_name_unique}.sh")
+
+      template start_script do
+        source "start-service.sh.erb"
+        owner node[app][:username]
+        group node[app][:groupname]
+        mode 0755
+        variables(:service => epuservice_name,
+                  :service_config => epu_config_file,
+                  :venv_dir => ve_dir,
+                  :run_dir => run_dir,
+                  :rel => rel,
+                  :system_name => node[app][:run_config][:system_name],
+                  :background_process => node[app][:run_config][:run_method] == "sh"
+                 )
+      end
+  
+      epuservice = {
+        :program => epuservice_name_unique,
+        :command => start_script,
+        :autorestart => autorestart
+      }
+
+      epuservice_list << epuservice
+  
     end
-  end
+
+    case node[app][:run_config][:run_method]
+     when "supervised"
+       sup_conf = File.join(run_dir, "supervisor.conf")
+       template sup_conf do
+         source "supervisor.conf.erb"
+         mode 0400
+         owner node[app][:username]
+         group node[app][:groupname]
+         variables(:epuservice_list => epuservice_list)
+       end
+
+       bash "start-supervisor" do
+         user node[app][:username]
+         group node[app][:groupname]
+         cwd run_dir
+         environment({
+           "HOME" => "/home/#{node[app][:username]}"
+         })
+         code <<-EOH
+         #{node[app][:run_config][:supervisord_path]} -c #{sup_conf}
+         EOH
+       end
+
+   else
+     abort "run_method #{node[app][:run_config][:run_method]} not implemented yet"
+   end
+ end
 end
