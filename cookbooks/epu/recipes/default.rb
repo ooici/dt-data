@@ -273,6 +273,10 @@ require 'yaml'
           recursive true
           mode "0755"                                                              
         end           
+
+        eeagent_name = "eeagent_#{unique_tag}"
+        epu_spec["eeagent"]["name"] = eeagent_name
+        epu_spec["agent"]["resource_id"] = eeagent_name
       end
 
 
