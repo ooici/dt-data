@@ -4,7 +4,19 @@
         "model": "phantomweb.phantominfodb",
         "fields": {
             "dburl": "mysql://<%= node[:phantomweb][:mysql_username]=%>:<%= node[:phantomweb][:mysql_password]=%>@<%= node[:phantomweb][:mysql_host]=%>:<%= node[:phantomweb][:mysql_port]=%>/<%= node[:phantomweb][:mysql_user_dbname]=%>",
-            "phantom_url": "<%= node[:phantomweb][:phantom_url]=%>"
+            "phantom_url": "<%= node[:phantomweb][:phantom_url]=%>",
+        }
+    },
+    {
+        "pk": 1,
+        "model": "phantomweb.rabbitinfodb",
+        "fields": {
+            "rabbithost": "<%= node[:phantomweb][:rabbit_host]=%>",
+            "rabbituser": "<%= node[:phantomweb][:rabbit_user]=%>",
+            "rabbitpassword": "<%= node[:phantomweb][:rabbit_password]=%>",
+            "rabbitexchange": "<%= node[:phantomweb][:rabbit_exchange]=%>",
+            "rabbitport": "<%= node[:phantomweb][:rabbit_port]=%>",
+            "rabbitssl": "<%= node[:phantomweb][:rabbit_password]=%>",
         }
     },
     {
