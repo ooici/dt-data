@@ -247,6 +247,7 @@ require 'yaml'
     # Name of the service
     epuservice_name = node[app][:run_config][:program]
     replicas = node[app][:run_config][:replicas]
+    replicas = replicas.to_i
 
     epuservice_list = []
 
