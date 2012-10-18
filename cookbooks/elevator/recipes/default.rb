@@ -1,1 +1,1 @@
-execute "echo 'noop' > /sys/class/block/vda/queue/scheduler"
+execute "echo 'noop' > /sys/class/block/sda/queue/scheduler"
