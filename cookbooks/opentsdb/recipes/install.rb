@@ -34,6 +34,6 @@ end
 
 bash "Start TSD" do
   code <<-EOH
-  tsdb tsd --port=4242 --staticroot=/usr/local/share/opentsdb/static --cachedir=/tmp/tsd --auto-metric &
+  tsdb tsd --port=#{node[:opentsdb][:port]} --staticroot=/usr/local/share/opentsdb/static --cachedir=/tmp/tsd --auto-metric &
   EOH
 end
