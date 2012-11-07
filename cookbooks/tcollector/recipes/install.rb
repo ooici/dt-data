@@ -9,6 +9,6 @@ end
 
 bash "Start tcollector" do
   code <<-EOH
-  #{tcollector_path}/tcollector.py --host #{node[:tcollector][:tsd_host]} --logfile #{node[:tcollector][:logfile]} &
+  #{tcollector_path}/tcollector.py --host #{node[:tcollector][:tsd_host]} --port#{node[:tcollector][:tsd_port]} --logfile #{node[:tcollector][:logfile]} &
   EOH
 end
