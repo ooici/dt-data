@@ -32,7 +32,8 @@ directory "/tmp/tsd" do
   action :create
 end
 
-execute "Start TSD" do
-  command "tsdb tsd --port=4242 --staticroot=staticroot --cachedir=/tmp/tsd"
-  cwd "/opt/opentsdb/build/"
+bash "Start TSD" do
+  code <<-EOH
+  tsdb tsd --port=4242 --staticroot=/usr/local/share/opentsdb/static --cachedir=/tmp/tsd --auto-metric &
+  EOH
 end
