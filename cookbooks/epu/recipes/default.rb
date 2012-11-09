@@ -185,18 +185,19 @@ require 'yaml'
   if node[app][:action].include?("configure")
     case app
     when :pyon
-      if node[app][:configure_config].include?("config_file")
-        config_file = node[app][:configure_config][:config_file]
-      else
-        config_file = "#{src_dir}/res/config/pyon.local.yml"
-      end
-
-      # TODO rename this definition to be more generic
-      epu_config config_file do
-        user node[app][:username]
-        group node[app][:groupname]
-        epuservice_name "pyon"
-        epuservice_spec node[app][:configure_config][:config]
+      if node[app][:configure_config].include?("config")
+        if node[app][:configure_config].include?("config_file")
+          config_file = node[app][:configure_config][:config_file]
+        else
+          config_file = "#{src_dir}/res/config/pyon.local.yml"
+        end
+        # TODO rename this definition to be more generic
+        epu_config config_file do
+          user node[app][:username]
+          group node[app][:groupname]
+          epuservice_name "pyon"
+          epuservice_spec node[app][:configure_config][:config]
+        end
       end
 
       if node[app][:configure_config].include?("logging_config")
