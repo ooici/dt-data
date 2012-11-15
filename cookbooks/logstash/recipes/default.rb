@@ -5,6 +5,14 @@
 # Copyright 2012, University of Chicago
 #
 
+user node[:logstash][:username] do
+  comment "Dynamically created user."
+  gid "#{node[:logstash][:groupname]}"
+  home "/home/#{node[:logstash][:username]}"
+  shell "/bin/bash"
+  supports :manage_home => true
+end
+
 execute "Install Java" do
   case node[:platform]
   when "debian","ubuntu"
