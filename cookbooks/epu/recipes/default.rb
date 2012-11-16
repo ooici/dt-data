@@ -231,6 +231,63 @@ require 'yaml'
         action :activate
       end
     end
+
+    # Ensure ZooKeeper path exists if in use
+    config = node[app][:run_config][:config].to_hash
+    if config['server'] && config['server']['zookeeper']
+      zk_hosts = config['server']['zookeeper']['hosts']
+      zk_path = config['server']['zookeeper']['path']
+      zk_username = config['server']['zookeeper']['username']
+      zk_password = config['server']['zookeeper']['password']
+
+      script "Ensure ZooKeeper path" do
+        interpreter "python"
+        user node[app][:username]
+        group node[app][:groupname]
+        cwd "/tmp"
+        code <<-EOH
+from kazoo.client import KazooClient
+from kazoo.security import make_digest_acl
+
+def get_auth_data_and_acl(username, password):
+    if username and password:
+        auth_scheme = "digest"
+        auth_credential = "%s:%s" % (username, password)
+        auth_data = [(auth_scheme, auth_credential)]
+        default_acl = [make_digest_acl(username, password, all=True)]
+    elif username or password:
+        raise ValueError("both username and password must be specified, if any")
+    else:
+        auth_data = None
+        default_acl = None
+
+    return auth_data, default_acl
+
+def get_kazoo_kwargs(username=None, password=None, timeout=None):
+    """Get KazooClient optional keyword arguments as a dictionary
+    """
+    kwargs = {}
+
+    auth_data, default_acl = get_auth_data_and_acl(username, password)
+    if auth_data:
+        kwargs['auth_data'] = auth_data
+        kwargs['default_acl'] = default_acl
+
+    if timeout:
+        kwargs['timeout'] = timeout
+
+    return kwargs
+
+kwargs = get_kazoo_kwargs(username='#{zk_username}', password='#{zk_password}',
+    timeout=5)
+zk = KazooClient(hosts='#{zk_hosts}', **kwargs)
+zk.start()
+
+zk.ensure_path('#{zk_path}')
+        EOH
+      end
+    end
+
     # Set up run directory
     run_dir = node[app][:run_config][:run_directory]
 
