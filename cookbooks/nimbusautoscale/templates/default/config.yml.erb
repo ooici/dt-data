@@ -35,8 +35,8 @@ logging:
       formatter: detailed
       level: DEBUG
       filename: <%= node[:autoscale][:logfile] %>
-      maxBytes: 1048576
-      backupCount: 3
+      maxBytes: 1073741824
+      backupCount: 4
     syslog:
       class: logging.handlers.SysLogHandler
       address: [<%= node[:autoscale][:syslog_server] %>, <%= node[:autoscale][:syslog_port] %>]
