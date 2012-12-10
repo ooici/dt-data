@@ -22,10 +22,12 @@ execute "Install OpenTSDB" do
   cwd "/opt/opentsdb/build/"
 end
 
+
+
 execute "Create HBase Tables" do
-  command "./src/create_table.sh"
+  command "JAVA_HOME=$(readlink -f /usr/bin/java | sed \"s:bin/java::\") ./src/create_table.sh"
   cwd "/opt/opentsdb"
-  environment ({'COMPRESSION' => 'none', 'HBASE_HOME' => node[:hbase][:location], 'JAVA_HOME' => '/usr/lib/jvm/java'})
+  environment ({'COMPRESSION' => 'none', 'HBASE_HOME' => node[:hbase][:location]})
 end
 
 directory "/tmp/tsd" do
