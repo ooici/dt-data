@@ -5,7 +5,21 @@
 #include_recipe "java"
 
 case node[:platform]
-when "debian","ubuntu"
+when "debian"
+  include_recipe "apt"
+
+  execute "force update apt" do
+      command "apt-get update"
+      action :run
+  end
+
+  %w{ ant sqlite3 sun-java6-jdk uuid-runtime }.each do |pkg|
+    package pkg
+  end
+
+  java_home = ""
+
+when "ubuntu"
   include_recipe "apt"
 
   execute "enable oracle java ppa" do
