@@ -22,19 +22,73 @@ when "debian", "ubuntu"
   end
 end
 
-git app_dir do
-  repository node[:autoscale][:git_repo]
-  reference node[:autoscale][:git_branch]
-  action :sync
-  user node[:username]
-  group node[:groupname]
+retrieve_method = node[:autoscale][:retrieve_method]
+src_dir = unpack_dir = "#{Dir.tmpdir}/Phantom"
+
+if retrieve_method == "offline_archive"
+  archive_path = "#{Dir.tmpdir}/Phantom-#{Time.now.to_i}.tar.gz"
+
+  remote_file archive_path do
+    source node[:autoscale][:retrieve_config][:archive_url]
+    owner node[:username]
+    group node[:groupname]
+  end
+
+  directory unpack_dir do
+    owner node[:username]
+    group node[:groupname]
+    mode "0755"
+  end
+
+  execute "unpack #{archive_path} into #{unpack_dir}" do
+    user node[:username]
+    group node[:groupname]
+    command "tar xzf #{archive_path} -C #{unpack_dir}"
+  end
+
+  execute "copy Phantom repository" do
+    user node[:username]
+    group node[:groupname]
+    command "cp -R #{unpack_dir}/Phantom #{app_dir}"
+  end
+else
+  git app_dir do
+    repository node[:autoscale][:git_repo]
+    reference node[:autoscale][:git_branch]
+    action :sync
+    user node[:username]
+    group node[:groupname]
+  end
 end
 
-execute "run install" do
+install_method = node[:autoscale][:install_method]
+
+if install_method == "py_venv_offline_setup"
+  execute "run install" do
+    cwd src_dir
+    user node[:username]
+    group node[:groupname]
+     environment({
+       "HOME" => "/home/#{node[:username]}"
+     })
+    command "env >/tmp/env ; pip install --index-url=file://`pwd`/packages/simple/ ./Phantom"
+  end
+  execute "install-supervisor" do
+    cwd src_dir
+    user node[:username]
+    group node[:groupname]
+     environment({
+       "HOME" => "/home/#{node[:username]}"
+     })
+    command "pip install --index-url=file://`pwd`/packages/simple supervisor"
+  end
+else
+  execute "run install" do
     cwd app_dir
     user node[:username]
     group node[:groupname]
     command "python setup.py install"
+  end
 end
 
 conf = File.join(app_dir, "phantomautoscale.yml")
