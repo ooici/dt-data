@@ -61,7 +61,7 @@ require 'yaml'
         group node[app][:groupname]
       end
 
-    when "archive", "virtualenv_archive"
+    when "archive", "virtualenv_archive", "offline_archive"
       archive_path = "#{Dir.tmpdir}/#{app}-#{Time.now.to_i}.tar.gz"
       remote_file archive_path do
         source node[app][:retrieve_config][:archive_url]
@@ -82,12 +82,17 @@ require 'yaml'
         mode "0755"
       end
 
-      # using this funny style of untarring so that we don't have to care what
-      # directory name is actually inside the tarball.
       execute "unpack #{archive_path} into #{unpack_dir}" do
         user node[app][:username]
         group node[app][:groupname]
-        command "tar xzf #{archive_path} -C #{unpack_dir} --strip 1"
+
+        if node[app][:retrieve_config][:retrieve_method] == "offline_archive"
+          command "tar xzf #{archive_path} -C #{unpack_dir}"
+        else
+          # using this funny style of untarring so that we don't have to care what
+          # directory name is actually inside the tarball.
+          command "tar xzf #{archive_path} -C #{unpack_dir} --strip 1"
+        end
       end
 
       # virtualenv archives must be reconfigured after unpacking
@@ -134,6 +139,25 @@ require 'yaml'
         user node[app][:username]
         group node[app][:groupname]
         command "easy_install --allow-hosts '*.ooici.net,*.python.org' --find-links=#{node[app][:install_config][:package_repo]} supervisor"
+      end
+    when "py_venv_offline_setup"
+      execute "run install" do
+        cwd src_dir
+        user node[app][:username]
+        group node[app][:groupname]
+         environment({
+           "HOME" => "/home/#{node[app][:username]}"
+         })
+        command "env >/tmp/env ; pip install --index-url=file://`pwd`/packages/simple/ #{app}"
+      end
+      execute "install-supervisor" do
+        cwd src_dir
+        user node[app][:username]
+        group node[app][:groupname]
+         environment({
+           "HOME" => "/home/#{node[app][:username]}"
+         })
+        command "pip install --index-url=file://`pwd`/packages/simple supervisor"
       end
     when "py_venv_buildout"
       execute "bootstrap buildout" do
