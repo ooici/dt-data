@@ -10,12 +10,43 @@ when "debian", "ubuntu"
   end
 end
 
-git app_dir do
-  repository node[:phantomweb][:git_repo]
-  reference node[:phantomweb][:git_branch]
-  action :sync
-  user node[:username]
-  group node[:groupname]
+retrieve_method = node[:phantomweb][:retrieve_method]
+src_dir = unpack_dir = "#{Dir.tmpdir}/PhantomWebApp"
+
+if retrieve_method == "offline_archive"
+  archive_path = "#{Dir.tmpdir}/PhantomWebApp-#{Time.now.to_i}.tar.gz"
+
+  remote_file archive_path do
+    source node[:phantomweb][:retrieve_config][:archive_url]
+    owner node[:username]
+    group node[:groupname]
+  end
+
+  directory unpack_dir do
+    owner node[:username]
+    group node[:groupname]
+    mode "0755"
+  end
+
+  execute "unpack #{archive_path} into #{unpack_dir}" do
+    user node[:username]
+    group node[:groupname]
+    command "tar xzf #{archive_path} -C #{unpack_dir}"
+  end
+
+  execute "copy PhantomWebApp repository" do
+    user node[:username]
+    group node[:groupname]
+    command "cp -R #{unpack_dir}/PhantomWebApp #{app_dir}"
+  end
+else
+  git app_dir do
+    repository node[:phantomweb][:git_repo]
+    reference node[:phantomweb][:git_branch]
+    action :sync
+    user node[:username]
+    group node[:groupname]
+  end
 end
 
 exe = File.join(app_dir, "phantomweb/settings.py")
@@ -34,11 +65,30 @@ directory logdir do
   action :create
 end
 
-execute "run install" do
+install_method = node[:phantomweb][:install_method]
+
+if install_method == "py_venv_offline_setup"
+  execute "Install newer pip" do
+    # The version of pip included in python-pip on our VM doesn't work with
+    # package directories created by pip2pi
+    command "pip install pip"
+  end
+
+  execute "run install" do
     cwd app_dir
-    user "root"
-    group "root"
-    command "python setup.py install"
+    command "env >/tmp/env ; pip install --index-url=file://#{unpack_dir}/packages/simple/ ."
+  end
+  execute "install-supervisor" do
+    cwd app_dir
+    command "pip install --index-url=file://#{unpack_dir}/packages/simple supervisor"
+  end
+else
+  execute "run install" do
+      cwd app_dir
+      user "root"
+      group "root"
+      command "python setup.py install"
+  end
 end
 
 execute "syncdb" do
