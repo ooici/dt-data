@@ -119,12 +119,11 @@ execute "do fixtures" do
     command "python manage.py loaddata #{conf}"
 end
 
-
 conf = "/etc/apache2/httpd.conf"
 template conf do
     source "httpd.conf.erb"
-    owner node[:username]
-    group node[:groupname]
+    owner "root"
+    group "root"
     mode 0644
     action :create
 end
