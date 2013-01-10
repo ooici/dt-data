@@ -52,7 +52,7 @@ end
 script "Extract HBase" do
   interpreter "bash"
   code <<-EOH
-  tar xzvf /tmp/hbase-0.95-SNAPSHOT.tar.gz
+  tar xzf /tmp/hbase-0.95-SNAPSHOT.tar.gz
   mv hbase* hbase
   EOH
   cwd "/opt"
