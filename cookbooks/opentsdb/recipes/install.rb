@@ -1,3 +1,4 @@
+
 # Git resource seems broken?
 script "Extract OpenTSDB" do
   interpreter "bash"
@@ -5,11 +6,6 @@ script "Extract OpenTSDB" do
   git clone #{node[:opentsdb][:git_url]} opentsdb
   EOH
   cwd "/opt"
-end
-
-execute "Patch OpenTSDB to fetch junit from our server" do
-  command "sed -i -e 's%http://cloud.github.com/downloads/KentBeck/junit%http://www.nimbusproject.org/downloads%' third_party/junit/include.mk"
-  cwd "/opt/opentsdb"
 end
 
 package "gnuplot" do
