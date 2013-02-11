@@ -25,6 +25,8 @@ EMAIL_USE_TLS   = <%= node[:phantomweb][:email_tls] =%>
 DEFAULT_FROM_EMAIL  = '<%= node[:phantomweb][:email_fromaddr] =%>'
 SERVER_EMAIL    = '<%= node[:phantomweb][:email_fromaddr] =%>'
 
+GOOGLE_ANALYTICS_CODE='<%= node[:phantomweb][:google_analytics_code] =%>'
+
 LOGIN_REDIRECT_URL='/phantom'
 
 MANAGERS = ADMINS
