@@ -127,6 +127,13 @@ require 'yaml'
       end
     end
 
+    if node[app][:install_config][:extras] and node[app][:install_config][:extras].length > 0
+      extras = node[app][:install_config][:extras].join(",")
+      extras = "[#{extras}]"
+    else
+      extras = nil
+    end
+
     case node[app][:install_config][:install_method]
     when "py_venv_setup"
       execute "run install" do
@@ -135,6 +142,16 @@ require 'yaml'
         group node[app][:groupname]
         command "env >/tmp/env ; python setup.py install"
       end
+
+      if not extras.nil?
+        execute "install extras" do
+          cwd src_dir
+          user node[app][:username]
+          group node[app][:groupname]
+          command "pip install #{app}#{extras}"
+        end
+      end
+
       execute "install-supervisor" do
         user node[app][:username]
         group node[app][:groupname]
@@ -149,6 +166,14 @@ require 'yaml'
            "HOME" => "/home/#{node[app][:username]}"
          })
         command "env >/tmp/env ; pip install --index-url=file://`pwd`/packages/simple/ #{app}"
+      end
+      if not extras.nil?
+        execute "install extras" do
+          cwd src_dir
+          user node[app][:username]
+          group node[app][:groupname]
+          command "pip install #{app}#{extras}"
+        end
       end
       execute "install-supervisor" do
         cwd src_dir
