@@ -186,6 +186,15 @@ LOGGING = {
             'formatter': 'verbose',         # define the formatter to associate
             'filename': '<%= node[:phantomweb][:logdir] =%>/phantomweb.log'
         },
+        <% if node[:phantomweb][:exceptional_api_key].to_s != '' %>
+        'exceptional_general': {
+            'append_log_messages': True,
+            'class': 'exceptional.ExceptionalLogHandler',
+            'level': 'ERROR',
+            'api_key': '<%= node[:phantomweb][:exceptional_api_key] %>',
+            'environment': False,
+        },
+        <% end %>
     },
     'loggers': {
         'django': {
@@ -201,7 +210,12 @@ LOGGING = {
         },
 
         'phantomweb.general': {               # define another logger
-            'handlers': ['file_general'],  # associate a different handler
+            'handlers': [
+                <% if node[:phantomweb][:exceptional_api_key].to_s != '' %>
+                'exceptional',
+                <% end %>
+                'file_general'
+            ],  # associate a different handler
             'level': 'DEBUG',                 # specify the logging level
             'propagate': True,
         },
