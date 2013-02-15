@@ -43,10 +43,22 @@ logging:
       formatter: detailednostamp
       level: DEBUG
       facility: local0
+    <% if node[:autoscale][:exceptional_api_key] %>
+    exceptional: 
+      append_log_messages: true
+      class: exceptional.ExceptionalLogHandler
+      level: ERROR
+      api_key: <%= node[:autoscale][:exceptional_api_key] %>
+      environment: false
+    <% end %>
   loggers:
     phantom:
       level: INFO
   root:
-    handlers: [file]
+    handlers:
+      - file
+      <% if node[:autoscale][:exceptional_api_key] %>
+      - exceptional
+      <% end %>
     level: DEBUG
 
