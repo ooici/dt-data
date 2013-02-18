@@ -67,6 +67,13 @@ end
 
 install_method = node[:phantomweb][:install_method]
 
+if node[:phantomweb][:install_config][:extras] and node[:phantomweb][:install_config][:extras].length > 0
+  extras = node[app][:install_config][:extras].join(",")
+  extras = "[#{extras}]"
+else
+  extras = ""
+end
+
 if install_method == "py_venv_offline_setup"
   execute "Install newer pip" do
     # The version of pip included in python-pip on our VM doesn't work with
@@ -76,7 +83,7 @@ if install_method == "py_venv_offline_setup"
 
   execute "run install" do
     cwd app_dir
-    command "env >/tmp/env ; pip install --index-url=file://#{unpack_dir}/packages/simple/ ."
+    command "env >/tmp/env ; pip install --index-url=file://#{unpack_dir}/packages/simple/ .#{extras}"
   end
   execute "install-supervisor" do
     cwd app_dir
