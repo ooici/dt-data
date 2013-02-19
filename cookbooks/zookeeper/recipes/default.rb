@@ -1,6 +1,20 @@
 service_name = nil
 case node[:platform]
-  when "debian","ubuntu"
+  when "debian"
+    bash "install cloudera repo" do
+      code <<-EOH
+      wget http://archive.cloudera.com/cdh4/one-click-install/squeeze/amd64/cdh4-repository_1.0_all.deb
+      dpkg -i cdh4-repository_1.0_all.deb
+      echo "deb [arch=amd64] http://archive.cloudera.com/cdh4/debian/squeeze/amd64/cdh squeeze-cdh4 contrib" > /etc/apt/sources.list.d/cloudera-cdh4.list
+      apt-get update
+      EOH
+    end
+
+    package "zookeeper-server"
+
+    service_name = "zookeeper-server"
+
+  when "ubuntu"
     package "zookeeperd" do
       action :install
     end
@@ -40,11 +54,11 @@ template "#{node[:zookeeper][:dataDir]}/myid" do
 end
 
 case node[:platform]
-  when "redhat","centos"
+  when "redhat","centos","debian"
     execute "/etc/init.d/zookeeper-server init"
 end
 
 service service_name do
-  supports :status => true, :restart => true, :reload => true                   
-  action [ :enable, :restart ]                                                    
-end    
+  supports :status => true, :restart => true, :reload => true
+  action [ :enable, :restart ]
+end
