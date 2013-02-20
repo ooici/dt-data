@@ -24,6 +24,18 @@ execute "install-supervisor" do
     end
 end
 
+if node[:supervisord][:memmon]
+  execute "install-superlance" do
+      user node[:username]
+      group node[:groupname]
+      if node[:supervisord][:supd_package_repo]
+          command "easy_install --find-links=#{node[:supd_package_repo]} superlance"
+      else
+          command "easy_install superlance"
+      end
+  end
+end
+
 sup_conf = File.join(app_dir, "supervisor.conf")
 template sup_conf do
     source "supervisor.conf.erb"

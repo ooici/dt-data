@@ -16,3 +16,9 @@ supervisor.rpcinterface_factory = supervisor.rpcinterface:make_main_rpcinterface
 
 [supervisorctl]
 serverurl=unix://%(here)s/supervisor.sock
+
+<% if node[:supervisord][:memmon] %>
+[eventlistener:memmon]
+command=memmon -a <%= node[:supervisord][:memmon][:maxmb] %>MB
+events=TICK_60
+<% end %>
