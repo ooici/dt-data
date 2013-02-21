@@ -22,6 +22,8 @@ when "debian"
 when "ubuntu"
   include_recipe "apt"
 
+  package "python-software-properties"
+
   execute "enable oracle java ppa" do
       command "add-apt-repository -y ppa:webupd8team/java"
       action :run
@@ -32,11 +34,18 @@ when "ubuntu"
       action :run
   end
 
+  execute "Accept licence" do
+    command <<-EOH
+    echo debconf shared/accepted-oracle-license-v1-1 select true | sudo debconf-set-selections
+    echo debconf shared/accepted-oracle-license-v1-1 seen true | sudo debconf-set-selections
+    EOH
+  end
+
   %w{ ant sqlite3 oracle-java7-installer uuid-runtime }.each do |pkg|
     package pkg
   end
 
-  java_home = ""
+  java_home = "/usr/lib/jvm/java-7-oracle"
 
 when "redhat","centos"
   %w{ java-1.6.0-openjdk ant sqlite }.each do |pkg|
