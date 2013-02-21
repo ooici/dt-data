@@ -15,6 +15,12 @@ end
 
 case node[:platform]
 when "debian","ubuntu"
+  execute "Accept java licence" do
+    command <<-EOH
+    echo "sun-java6-jdk shared/accepted-sun-dlj-v1-1 select true" | debconf-set-selections
+    echo "sun-java6-jre shared/accepted-sun-dlj-v1-1 select true" | debconf-set-selections
+    EOH
+  end
   package "default-jre-headless"
 end
 
