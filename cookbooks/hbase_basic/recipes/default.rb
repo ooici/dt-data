@@ -56,6 +56,7 @@ end
 
 remote_file "/tmp/hbase-0.95-SNAPSHOT.tar.gz" do
   source node[:hbase][:source]
+  checksum "34a74454cffe2a0e0cee71432a041e79f119c9c1ab4ead88f4a20f49c8f09bd2"
 end
 
 script "Extract HBase" do
