@@ -25,6 +25,7 @@ remote_file "/home/#{node[:logstash][:username]}/#{logstash_jar}" do
   mode "0644"
   owner node[:logstash][:username]
   group node[:logstash][:groupname]
+  checksum "e444e89a90583a75c2d6539e5222e2803621baa0ae94cb77dbbcebacdc0c3fc7"
 end
 
 cookbook_file "/home/#{node[:logstash][:username]}/logstash.conf" do
