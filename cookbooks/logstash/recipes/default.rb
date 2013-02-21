@@ -13,14 +13,9 @@ user node[:logstash][:username] do
   supports :manage_home => true
 end
 
-execute "Install Java" do
-  case node[:platform]
-  when "debian","ubuntu"
-    command <<-EOH
-    apt-get update
-    apt-get -y install default-jre-headless
-    EOH
-  end
+case node[:platform]
+when "debian","ubuntu"
+  package "default-jre-headless"
 end
 
 logstash_jar = "logstash-1.1.9-monolithic.jar"
