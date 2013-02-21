@@ -1,3 +1,4 @@
+include_recipe "git"
 
 # Git resource seems broken?
 script "Extract OpenTSDB" do
