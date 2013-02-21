@@ -23,8 +23,10 @@ execute "Install Java" do
   end
 end
 
-remote_file "/home/#{node[:logstash][:username]}/logstash-1.1.1-monolithic.jar" do
-  source "http://semicomplete.com/files/logstash/logstash-1.1.1-monolithic.jar"
+logstash_jar = "logstash-1.1.9-monolithic.jar"
+
+remote_file "/home/#{node[:logstash][:username]}/#{logstash_jar}" do
+  source "http://build.nimbusproject.org:8000/logstash/#{logstash_jar}"
   mode "0644"
   owner node[:logstash][:username]
   group node[:logstash][:groupname]
@@ -53,5 +55,5 @@ execute "Run logstash" do
     'METRICS_USERNAME' => node[:logstash][:metrics_username],
     'METRICS_PASSWORD' => node[:logstash][:metrics_password]
   })
-  command "nohup java -jar logstash-1.1.1-monolithic.jar agent -f logstash.conf &"
+  command "nohup java -jar #{logstash_jar} agent -f logstash.conf &"
 end
