@@ -3,16 +3,12 @@ package "rsyslog" do
 end
 
 directory node[:rsyslog][:directory] do
-  owner node[:rsyslog][:user]
-  group node[:rsyslog][:user]
   mode "0755"
   action :create
 end
 
 template "/etc/rsyslog.d/#{node[:rsyslog][:config_priority]}-#{node[:rsyslog][:name]}.conf" do
   source "rsyslog.conf.erb"
-  owner node[:rsyslog][:user]
-  group node[:rsyslog][:user]
 end
 
 bash "register with loggly" do
