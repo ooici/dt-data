@@ -14,22 +14,11 @@ phantom:
 logging:
   version: 1
   formatters:
-    brief:
-      format: '%(levelname)-8s %(message)s'
-    default:
-      format: '%(asctime)s %(levelname)-8s %(name)-15s %(message)s'
-      datefmt: '%Y-%m-%d %H:%M:%S'
     detailed:
-      format: '%(asctime)s.%(msecs)03d [%(module)-15s:%(lineno)3d] %(levelname)-5s:%(message)s'
-      datefmt: '%Y-%m-%d %H:%M:%S'
+      format: '%(asctime)s %(name)-25s:%(lineno)4d[%(process)5d] %(levelname)s: %(message)s'
     detailednostamp:
-      format: '[%(module)-15s:%(lineno)3d] %(levelname)-5s:%(message)s'
+      format: '%(name)-25s:%(lineno)4d[%(process)5d] %(levelname)s: %(message)s'
   handlers:
-    console:
-      class: logging.StreamHandler
-      formatter: brief
-      level: DEBUG
-      stream: ext://sys.stdout
     file:
       class: logging.handlers.RotatingFileHandler
       formatter: detailed
@@ -57,8 +46,8 @@ logging:
   root:
     handlers:
       - file
+      - syslog
       <% if node[:autoscale][:exceptional_api_key].to_s != '' %>
       - exceptional
       <% end %>
     level: DEBUG
-
