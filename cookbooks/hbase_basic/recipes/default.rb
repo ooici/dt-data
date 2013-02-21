@@ -66,6 +66,7 @@ script "Extract HBase" do
   mv hbase* hbase
   EOH
   cwd "/opt"
+  creates "/opt/hbase"
 end
 
 template "/opt/hbase/conf/hbase-site.xml" do
