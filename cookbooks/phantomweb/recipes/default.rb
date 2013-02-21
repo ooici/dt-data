@@ -83,7 +83,7 @@ if install_method == "py_venv_offline_setup"
 
   execute "run install" do
     cwd app_dir
-    command "env >/tmp/env ; pip install --index-url=file://#{unpack_dir}/packages/simple/ .#{extras}"
+    command "env >/tmp/env ; pip install -r requirements.txt --index-url=file://#{unpack_dir}/packages/simple/ .#{extras}"
   end
   execute "install-supervisor" do
     cwd app_dir
