@@ -1,5 +1,9 @@
 include_recipe "git"
 
+execute "Remove OpenTSDB source" do
+  command "rm -rf /opt/opentsdb"
+end
+
 # Git resource seems broken?
 script "Extract OpenTSDB" do
   interpreter "bash"
