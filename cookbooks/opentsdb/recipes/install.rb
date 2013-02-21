@@ -13,8 +13,11 @@ script "Extract OpenTSDB" do
   cwd "/opt"
 end
 
-package "gnuplot" do
-  action :install
+case node[:platform]
+when "debian","ubuntu"
+  %w{ autoconf gnuplot }.each do |pkg|
+    package pkg
+  end
 end
 
 execute "Build OpenTSDB" do
@@ -26,8 +29,6 @@ execute "Install OpenTSDB" do
   command "make install"
   cwd "/opt/opentsdb/build/"
 end
-
-
 
 execute "Create HBase Tables" do
   command "JAVA_HOME=$(readlink -f /usr/bin/java | sed \"s:bin/java::\") ./src/create_table.sh"
