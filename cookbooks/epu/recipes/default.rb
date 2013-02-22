@@ -165,7 +165,7 @@ require 'yaml'
          environment({
            "HOME" => "/home/#{node[app][:username]}"
          })
-        command "env >/tmp/env ; pip install --index-url=file://`pwd`/packages/simple/ #{app}"
+        command "env >/tmp/env ; pip install -r ./#{app}/requirements.txt --index-url=file://`pwd`/packages/simple/ #{app}"
       end
       if not extras.nil?
         execute "install extras" do
