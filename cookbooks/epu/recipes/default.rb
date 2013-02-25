@@ -357,8 +357,8 @@ zk.ensure_path('#{zk_path}')
 
     epuservice_list = []
 
-    replicas.downto(1) do |i|
-      unique_tag = UUIDTools::UUID.random_create.to_s
+    1.upto(replicas) do |i|
+      unique_tag = i
       epuservice_name_unique = "#{epuservice_name}_#{unique_tag}"
 
       # Configuration file for this service
