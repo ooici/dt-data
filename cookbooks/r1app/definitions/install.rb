@@ -52,10 +52,10 @@ define :install_app, :conf => nil, :user => nil, :group => nil do
       set -e
       source #{venv_dir}/bin/activate
       if [ -f autolaunch.cfg ]; then
-        python ./bootstrap.py -c autolaunch.cfg
+        python ./bootstrap.py -c autolaunch.cfg -v 1.7
         bin/buildout -O -c autolaunch.cfg
       else
-        python ./bootstrap.py
+        python ./bootstrap.py -v 1.7
         bin/buildout
       fi
       echo 'export PATH="#{app_dir}/bin:$PATH"' >> #{venv_dir}/bin/activate
