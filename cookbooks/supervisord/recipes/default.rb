@@ -37,6 +37,7 @@ if node[:supervisord][:memmon]
 end
 
 sup_conf = File.join(app_dir, "supervisor.conf")
+sup_sock = File.join(app_dir, "supervisor.sock")
 template sup_conf do
     source "supervisor.conf.erb"
     owner node[:username]
@@ -60,7 +61,10 @@ bash "start-supervisor" do
     "HOME" => "/home/#{node[:username]}"
   })
   code <<-EOH
-  supervisord -c #{sup_conf}
+  if [ -e #{sup_sock} ]; then
+    supervisorctl -c #{sup_conf} restart all
+  else
+    supervisord -c #{sup_conf}
+  fi
   EOH
 end
-
