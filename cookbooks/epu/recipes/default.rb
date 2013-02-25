@@ -450,6 +450,7 @@ zk.ensure_path('#{zk_path}')
     case node[app][:run_config][:run_method]
      when "supervised"
        sup_conf = File.join(run_dir, "supervisor.conf")
+       sup_sock = File.join(run_dir, "supervisor.sock")
        template sup_conf do
          source "supervisor.conf.erb"
          mode 0400
@@ -458,7 +459,7 @@ zk.ensure_path('#{zk_path}')
          variables(:epuservice_list => epuservice_list)
        end
 
-       bash "start-supervisor" do
+       bash "Start supervisord or restart services" do
          user node[app][:username]
          group node[app][:groupname]
          cwd run_dir
@@ -466,7 +467,11 @@ zk.ensure_path('#{zk_path}')
            "HOME" => "/home/#{node[app][:username]}"
          })
          code <<-EOH
-         #{node[app][:run_config][:supervisord_path]} -c #{sup_conf}
+         if [ -e #{sup_sock} ]; then
+           #{node[app][:run_config][:supervisorctl_path]} -c #{sup_conf} restart all
+         else
+           #{node[app][:run_config][:supervisord_path]} -c #{sup_conf}
+         fi
          EOH
        end
 
