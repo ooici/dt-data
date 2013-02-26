@@ -25,18 +25,18 @@ end
 retrieve_method = node[:autoscale][:retrieve_method]
 src_dir = unpack_dir = "#{Dir.tmpdir}/Phantom"
 
-directory app_dir do
-  owner node[:username]
-  group node[:groupname]
-end
-
-directory "#{app_dir}/logs" do
-  owner node[:username]
-  group node[:groupname]
-end
-
 if retrieve_method == "offline_archive"
   archive_path = "#{Dir.tmpdir}/Phantom-#{Time.now.to_i}.tar.gz"
+
+  directory app_dir do
+    owner node[:username]
+    group node[:groupname]
+  end
+
+  directory "#{app_dir}/logs" do
+    owner node[:username]
+    group node[:groupname]
+  end
 
   remote_file archive_path do
     source node[:autoscale][:retrieve_config][:archive_url]
