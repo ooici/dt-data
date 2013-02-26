@@ -77,6 +77,7 @@ script "Start HBase" do
   interpreter "bash"
   environment ({"JAVA_HOME" => java_home})
   code <<-EOH
+  ./bin/stop-hbase.sh
   ./bin/start-hbase.sh
   EOH
   cwd "/opt/hbase/"
