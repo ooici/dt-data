@@ -55,6 +55,12 @@ if retrieve_method == "offline_archive"
     group node[:groupname]
     command "tar xzf #{archive_path} -C #{unpack_dir}"
   end
+
+  execute "Synchronize Phantom sandbox repository" do
+    user node[:username]
+    group node[:groupname]
+    command "rm -rf #{app_dir}/sandbox && cp -R #{unpack_dir}/Phantom/sandbox #{app_dir}/sandbox"
+  end
 else
   git app_dir do
     repository node[:autoscale][:git_repo]
