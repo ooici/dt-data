@@ -34,10 +34,10 @@ if retrieve_method == "offline_archive"
     command "tar xzf #{archive_path} -C #{unpack_dir}"
   end
 
-  execute "copy PhantomWebApp repository" do
+  execute "Synchronize PhantomWebApp repository" do
     user node[:username]
     group node[:groupname]
-    command "cp -R #{unpack_dir}/PhantomWebApp #{app_dir}"
+    command "rm -rf #{app_dir} && cp -R #{unpack_dir}/PhantomWebApp #{app_dir}"
   end
 else
   git app_dir do
