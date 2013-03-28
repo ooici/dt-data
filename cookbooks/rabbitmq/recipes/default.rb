@@ -43,6 +43,12 @@ if node[:rabbitmq].include? :users and not node[:rabbitmq][:users].empty?
       returns [0,2] # if the user already exists, that's ok
       command "rabbitmqctl -q add_user #{username} #{spec[:password]}"
     end
+
+    if spec.include? :tag
+      execute "Set #{spec[:tag]} on #{username}" do
+        command "rabbitmqctl -q set_user_tags #{username} #{spec[:tag]}"
+      end
+    end
     
     if spec.include? :permissions
       spec[:permissions].each do |vhost, perms|
