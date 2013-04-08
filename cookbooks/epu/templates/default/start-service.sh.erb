@@ -1,7 +1,9 @@
 #!/bin/bash
 
 <% unless @venv_dir.nil? or @venv_dir.empty? %>
-source <%= File.join(@venv_dir, "bin/activate") %>
+if [ -d <%= @venv_dir %> ]; then
+  source <%= File.join(@venv_dir, "bin/activate") %>
+fi
 <% end %>
 
 cd <%= @run_dir %>
