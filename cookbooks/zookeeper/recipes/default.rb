@@ -11,6 +11,7 @@ case node[:platform]
     yum_key "RPM-GPG-KEY-cloudera" do
       url "http://archive.cloudera.com/cdh4/redhat/6/x86_64/cdh/RPM-GPG-KEY-cloudera"
       action :add
+      not_if "yum search zookeeper-server | grep Matched"
     end
 
     yum_repository "cloudera-cdh4" do
@@ -18,6 +19,7 @@ case node[:platform]
       url "http://archive.cloudera.com/cdh4/redhat/6/x86_64/cdh/4/"
       key "RPM-GPG-KEY-cloudera"
       action :add
+      not_if "yum search zookeeper-server | grep Matched"
     end
 
     package "zookeeper-server"
