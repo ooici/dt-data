@@ -16,6 +16,7 @@ archive_path = "#{Dir.tmpdir}/coi-services-#{Time.now.to_i}.tar.gz"
 
 remote_file archive_path do
   source node[:coi_services][:archive_url]
+  retries node[:coi_services][:download_retries]
   owner node[:epu][:username]
   group node[:epu][:groupname]
 end

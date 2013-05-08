@@ -1,10 +1,15 @@
 #Cookbook Name: nimbus_context_agent
 
+context_agent_tarball = "/tmp/nimbus-ctx-agent-2.3.0.tar.gz"
+remote_file cache_tarball do
+  source "http://www.nimbusproject.org/downloads/nimbus-ctx-agent-2.3.0.tar.gz"
+  retries 20
+end
+
 bash "install-nimbus-context-agent" do
   code <<-EOH
     if [ ! -d /opt/nimbus ]; then
-      wget http://www.nimbusproject.org/downloads/nimbus-ctx-agent-2.3.0.tar.gz
-      tar zxf nimbus-ctx-agent-2.3.0.tar.gz
+      tar zxf #{context_agent_tarball}
       mv nimbus-ctx-agent-2.3.0/ /opt/nimbus/
     fi
   EOH

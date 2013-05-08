@@ -75,6 +75,7 @@ end
 
 remote_file tarball_location do
   checksum node[:contextbroker][:checksum]
+  retries node[:contextbroker][:download_retries]
   source node[:contextbroker][:src_mirror]
   user node[:contextbroker][:user]
   group node[:contextbroker][:group]

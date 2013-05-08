@@ -19,6 +19,7 @@ if node[:hsflowd][:svn_repository]
 
 elsif node[:hsflowd][:src_tarball_url]
   remote_file tarball_location do
+    retries node[:hsflowd][:download_retries]
     checksum node[:hsflowd][:checksum]
     source node[:hsflowd][:src_tarball_url]
   end
@@ -35,6 +36,7 @@ end
 node[:hsflowd][:patches].each do |patch|
   patch_path = File.join(hsflow_source_path, "hsflow.patch")
   remote_file patch_path do
+    retries node[:hsflowd][:download_retries]
     source patch
   end
   bash "Apply patch from #{patch}" do

@@ -46,13 +46,18 @@ bash "prepare cache" do
   EOH
 end
 
+cache_tarball = "/tmp/coi-services-cache.tar.gz"
+remote_file cache_tarball do
+  source node[:coi_services][:super_cache]
+  retries node[:coi_services][:download_retries]
+end
+
 bash "download cache" do
   cwd "/tmp"
   code <<-EOH
   set -e
   cd /opt/cache
-  wget #{node[:coi_services][:super_cache]}
-  tar xzf *.tar.gz
+  tar xzf #{cache_tarball}
   chmod -R 777 /opt/cache
   EOH
   not_if { not node[:coi_services][:super_cache] }

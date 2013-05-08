@@ -65,6 +65,7 @@ require 'yaml'
       archive_path = "#{Dir.tmpdir}/#{app}-#{Time.now.to_i}.tar.gz"
       remote_file archive_path do
         source node[app][:retrieve_config][:archive_url]
+        retries node[app][:retrieve_config][:download_retries]
         owner node[app][:username]
         group node[app][:groupname]
       end
@@ -146,14 +147,20 @@ require 'yaml'
         owner node[app][:username]
         group node[app][:groupname]
       end
+
+      cache_tarball = "/tmp/epu-egg-cache-#{Time.now.to_i}.tar.gz"
+      remote_file cache_tarball do
+        source node[app][:install_config][:egg_cache]
+        retries node[app][:install_config][:download_retries]
+      end
+
       bash "prepare cache" do
         cwd "/tmp"
         code <<-EOH
         set -e
         if [ ! -d /opt/cache/eggs ]; then
           cd /opt/cache
-          wget #{node[app][:install_config][:egg_cache]}
-          tar xzf *.tar.gz
+          tar xzf #{cache_tarball}
           chmod -R 777 /opt/cache
         fi
         EOH
