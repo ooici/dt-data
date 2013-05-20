@@ -1,7 +1,7 @@
 #Cookbook Name: nimbus_context_agent
 
 context_agent_tarball = "/tmp/nimbus-ctx-agent-2.3.0.tar.gz"
-remote_file cache_tarball do
+remote_file context_agent_tarball do
   source "http://www.nimbusproject.org/downloads/nimbus-ctx-agent-2.3.0.tar.gz"
   retries 20
 end

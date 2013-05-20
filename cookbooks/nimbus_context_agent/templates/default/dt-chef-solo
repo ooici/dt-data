@@ -11,6 +11,6 @@ CHEF_EXIT=$?
 
 # If Chef failed, output the end of the Chef log
 if [ $CHEF_EXIT != 0 ]; then
-  tail -100 /opt/dt-chef-solo.log
+  tail -100 /opt/dt-chef-solo.log | sed 's/[\x01-\x1F\x7F]//g'
 fi
 exit $CHEF_EXIT
