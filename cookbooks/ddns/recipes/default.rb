@@ -1,6 +1,7 @@
 hostname = node[:ddns][:hostname]
 
-if hostname and !hostname.empty?
+# TODO: None is only ever passed here because of a bug in dtrs
+if hostname and !hostname.empty? and hostname != "None"
 
   commands = <<-EOH
   server #{node[:ddns][:server]}
