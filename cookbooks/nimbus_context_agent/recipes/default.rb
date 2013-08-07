@@ -2,7 +2,7 @@
 
 context_agent_tarball = "/tmp/nimbus-ctx-agent-2.3.0.tar.gz"
 remote_file context_agent_tarball do
-  source "http://www.nimbusproject.org/downloads/nimbus-ctx-agent-2.3.0.tar.gz"
+  source "http://www.nimbusproject.org/downloads/nimbus-ctx-agent-2.3.0-OOI.tar.gz"
   retries 20
 end
 
