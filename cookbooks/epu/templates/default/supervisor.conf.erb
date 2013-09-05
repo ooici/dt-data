@@ -7,14 +7,14 @@ stderr_logfile=%(here)s/logs/%(program_name)s_stderr.log
 <% end %>
 
 [unix_http_server]
-file=%(here)s/supervisor.sock
+file=%(here)s/<%= @epuservice_name %>-supervisor.sock
 
 [supervisord]
-logfile=%(here)s/logs/supervisord.log
-pidfile=%(here)s/supervisord.pid
+logfile=%(here)s/logs/<%= @epuservice_name %>-supervisord.log
+pidfile=%(here)s/<%= @epuservice_name %>-supervisord.pid
 
 [rpcinterface:supervisor]
 supervisor.rpcinterface_factory = supervisor.rpcinterface:make_main_rpcinterface
 
 [supervisorctl]
-serverurl=unix://%(here)s/supervisor.sock
+serverurl=unix://%(here)s/<%= @epuservice_name %>-supervisor.sock

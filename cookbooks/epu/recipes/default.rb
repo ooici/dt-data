@@ -351,13 +351,13 @@ require 'yaml'
 
     case node[app][:run_config][:run_method]
      when "supervised"
-       sup_conf = File.join(run_dir, "supervisor.conf")
+       sup_conf = File.join(run_dir, "#{epuservice_name}-supervisor.conf")
        template sup_conf do
          source "supervisor.conf.erb"
          mode 0400
          owner node[app][:username]
          group node[app][:groupname]
-         variables(:epuservice_list => epuservice_list)
+         variables(:epuservice_list => epuservice_list, :epuservice_name => epuservice_name)
        end
 
        bash "start-supervisor" do
