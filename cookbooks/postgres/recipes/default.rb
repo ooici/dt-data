@@ -19,7 +19,7 @@ end
 
 execute "create-admin-user" do
     code = <<-EOH
-    psql -U postgres -c "select * from pg_user'" | grep -c #{node['postgres']['admin_username']}
+    psql -U postgres -c "select * from pg_user;" | grep -c #{node['postgres']['admin_username']}
     EOH
     user "postgres"
     command <<-EOH
@@ -30,7 +30,7 @@ end
 
 execute "create-db-user" do
     code = <<-EOH
-    psql -U postgres -c "select * from pg_user'" | grep -c #{node['postgres']['username']}
+    psql -U postgres -c "select * from pg_user;" | grep -c #{node['postgres']['username']}
     EOH
     user "postgres"
     command <<-EOH
